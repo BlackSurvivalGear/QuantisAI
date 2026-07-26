@@ -6,8 +6,8 @@
     <title>QuantisAI - AI Construction Estimating for Modern Builders</title>
     <meta name="description" content="Generate professional construction quotations in minutes using intelligent document analysis. Premium AI platform for contractors, builders, and consultants.">
     <!-- Favicon and PWA icons -->
-    <link rel="icon" type="image/png" href="images/QuantisAI.png">
-    <link rel="apple-touch-icon" href="images/QuantisAI.png">
+    <link rel="icon" type="image/png" href="images/QuantisAIFavi.png">
+    <link rel="apple-touch-icon" href="images/QuantisAIFavi.png">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -68,10 +68,17 @@
             <div class="flex items-center justify-between h-20">
                 <!-- Logo with fallback logic -->
                 <div class="flex-shrink-0 flex items-center">
-                    <a href="#" class="flex items-center gap-3 group">
-                        <div id="logo-container" class="h-10 flex items-center">
+                    <a href="#" class="flex items-center gap-3 group py-1">
+                        <div id="logo-container" class="h-12 md:h-14 flex items-center gap-2.5">
                             <!-- JS will inject fallback text logo if image fails -->
-                            <img id="brand-logo" src="images/QuantisAI.png" alt="QuantisAI Logo" class="h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-105" onerror="handleLogoError()">
+                            <!-- Mobile icon-only version -->
+                            <img id="brand-logo-mobile" src="images/QuantisAIFavi.png" alt="QuantisAI Icon" class="block sm:hidden h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
+                            <!-- Tablet/Desktop full logo version (icon + text) -->
+                            <img id="brand-logo" src="images/QuantisAI.png" alt="QuantisAI Logo" class="hidden sm:block h-12 md:h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105" onerror="handleLogoError()">
+                            <!-- Brand Text (Hidden on mobile, displayed as part of full logo on tablet/desktop) -->
+                            <span class="hidden sm:block text-2xl md:text-3xl font-extrabold tracking-tight text-white transition-colors duration-300 group-hover:text-brand-gold">
+                                Quantis<span class="text-brand-gold">AI</span>
+                            </span>
                         </div>
                     </a>
                 </div>
