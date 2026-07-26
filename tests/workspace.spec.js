@@ -319,4 +319,39 @@ test.describe('QuantisAI Workspace Integration Suite', () => {
         await expect(page.locator('#workspace-tab-construction-law')).toBeVisible();
     });
 
+    test('should dynamically toggle responsive logos based on light and dark mode themes', async ({ page }) => {
+        const brandLogo = page.locator('#brand-logo');
+        await expect(brandLogo).toBeVisible();
+
+        // Check initial theme class on HTML element
+        const isLightModeInitial = await page.locator('html').evaluate(el => el.classList.contains('light-mode'));
+
+        let logoSrc = await brandLogo.getAttribute('src');
+        if (isLightModeInitial) {
+            expect(logoSrc).toBe('images/logolong.png');
+        } else {
+            expect(logoSrc).toBe('images/logolongDark.png');
+        }
+
+        // Toggle to change the mode
+        const themeToggle = page.locator('#theme-toggle');
+        await themeToggle.click();
+
+        logoSrc = await brandLogo.getAttribute('src');
+        if (isLightModeInitial) {
+            expect(logoSrc).toBe('images/logolongDark.png');
+        } else {
+            expect(logoSrc).toBe('images/logolong.png');
+        }
+
+        // Toggle back
+        await themeToggle.click();
+        logoSrc = await brandLogo.getAttribute('src');
+        if (isLightModeInitial) {
+            expect(logoSrc).toBe('images/logolong.png');
+        } else {
+            expect(logoSrc).toBe('images/logolongDark.png');
+        }
+    });
+
 });
