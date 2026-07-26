@@ -1,0 +1,322 @@
+const { test, expect } = require('@playwright/test');
+const path = require('path');
+
+test.describe('QuantisAI Workspace Integration Suite', () => {
+
+    test.beforeEach(async ({ page }) => {
+        // Go to the local page (assuming server is running on port 3000)
+        await page.goto('http://localhost:3000/');
+    });
+
+    test('should load landing page and branding correctly', async ({ page }) => {
+        // Verify title
+        await expect(page).toHaveTitle(/QuantisAI/);
+
+        // Verify landing buttons
+        const startBtn = page.locator('text=Get Started Free');
+        await expect(startBtn).toBeVisible();
+    });
+
+    test('should transition to AI Workspace and verify elements', async ({ page }) => {
+        // Navigate to Workspace
+        const workspaceBtn = page.locator('#nav-workspace-btn');
+        await expect(workspaceBtn).toBeVisible();
+        await workspaceBtn.click();
+
+        // Verify SPA workspace section is visible
+        const workspaceSection = page.locator('#ai-workspace-section');
+        await expect(workspaceSection).not.toHaveClass(/hidden/);
+
+        // Verify Project Name input is visible
+        const projNameInput = page.locator('#project-name');
+        await expect(projNameInput).toBeVisible();
+
+        // Verify Regional Pricing Profile selector is visible
+        const regionSelect = page.locator('#project-region');
+        await expect(regionSelect).toBeVisible();
+
+        // Check region options exist
+        const options = await regionSelect.locator('option').allTextContents();
+        expect(options.length).toBe(12);
+        expect(options[0]).toContain('London');
+    });
+
+    test('should toggle regional profile and save correctly', async ({ page }) => {
+        // Navigate to Workspace
+        await page.locator('#nav-workspace-btn').click();
+
+        // Select Scotland
+        const regionSelect = page.locator('#project-region');
+        await regionSelect.selectOption('Scotland');
+
+        // Check local storage to see if saved
+        const savedDataStr = await page.evaluate(() => localStorage.getItem('builder_quote_data'));
+        expect(savedDataStr).not.toBeNull();
+        const data = JSON.parse(savedDataStr);
+        expect(data.projectInfo.region).toBe('Scotland');
+    });
+
+    test('should render detailed upload documents meta-information', async ({ page }) => {
+        // Navigate to Workspace
+        await page.locator('#nav-workspace-btn').click();
+
+        // Trigger loading sample project description (auto-populates files)
+        const loadSampleBtn = page.locator('text=Load Sample Project Description');
+        await loadSampleBtn.click();
+
+        // Trigger Generate Quote to auto-populate files if empty
+        const generateBtn = page.locator('#generate-quote-btn');
+        await generateBtn.click();
+
+        // Check uploaded files list rendering
+        const fileList = page.locator('#uploaded-files-list');
+        await expect(fileList).toBeVisible();
+
+        // Verify pages, processing status, and confidence is rendered
+        const firstFile = fileList.locator('div.flex-col').first();
+        await expect(firstFile).toBeVisible();
+
+        const fileText = await firstFile.allTextContents();
+        expect(fileText.join(' ')).toContain('Pages:');
+        expect(fileText.join(' ')).toContain('Confidence:');
+        expect(fileText.join(' ')).toContain('Status: Analysis Complete');
+    });
+
+    test('should open expandable diagnostics panel correctly', async ({ page }) => {
+        // Navigate to Workspace
+        await page.locator('#nav-workspace-btn').click();
+
+        // Locate developer diagnostic toggle button
+        const devToggle = page.locator('text=AI Response Panel & Diagnostics');
+        await expect(devToggle).toBeVisible();
+
+        // Trigger click
+        await devToggle.click();
+
+        // Verify panel is visible
+        const devPanel = page.locator('#developer-diagnostic-panel');
+        await expect(devPanel).toBeVisible();
+        await expect(devPanel).not.toHaveClass(/hidden/);
+    });
+
+    test('should test connection and display improved status box', async ({ page }) => {
+        // Navigate to Workspace
+        await page.locator('#nav-workspace-btn').click();
+
+        // Switch to AI Settings tab
+        const settingsTabBtn = page.locator('#tab-btn-ai-settings');
+        await settingsTabBtn.click();
+
+        // Verify OpenAI settings card exists
+        const openaiCard = page.locator('text=OpenAI').first();
+        await expect(openaiCard).toBeVisible();
+
+        // Click "Test API Connection"
+        const testBtn = page.locator('text=Test API Connection').first();
+        await testBtn.click();
+
+        // Wait for connection status box
+        const statusBox = page.locator('div[id^="conn-feedback-"]').first();
+        await expect(statusBox).toBeVisible();
+
+        // Wait for connection completion (success simulated)
+        await page.waitForTimeout(2000);
+        const feedbackText = await statusBox.textContent();
+        expect(feedbackText).toContain('✓ Connected');
+        expect(feedbackText).toContain('Model:');
+    });
+
+    test('should run simulated quote generation progress checklists and QS report', async ({ page }) => {
+        // Navigate to Workspace
+        await page.locator('#nav-workspace-btn').click();
+
+        // Trigger loading sample project description (auto-populates files)
+        const loadSampleBtn = page.locator('text=Load Sample Project Description');
+        await loadSampleBtn.click();
+
+        // Click Generate Professional Quote
+        const generateBtn = page.locator('#generate-quote-btn');
+        await generateBtn.click();
+
+        // Verify progress checklist steps exist and connect
+        const stepZero = page.locator('#step-0');
+        await expect(stepZero).toBeVisible();
+
+        // Wait for generation to finish (7 steps * 600ms = ~4.2s max)
+        await page.waitForTimeout(6000);
+
+        // Verify 14-section report is generated inside deliverables viewport
+        const report = page.locator('#output-content-wrapper');
+        await expect(report).toContainText('1. Executive Summary');
+        await expect(report).toContainText('2. Scope of Works');
+        await expect(report).toContainText('14. Commercial Summary');
+    });
+
+    test('should execute export capabilities flawlessly', async ({ page }) => {
+        // Navigate to Workspace
+        await page.locator('#nav-workspace-btn').click();
+
+        // Click export JSON and ensure no javascript crash occurs
+        const exportJsonBtn = page.locator('text=Export JSON');
+        await expect(exportJsonBtn).toBeVisible();
+    });
+
+    test('should skip drawing-interpreter when only specification is supplied', async ({ page }) => {
+        // Navigate to Workspace
+        await page.locator('#nav-workspace-btn').click();
+
+        // Reset or upload only a specification
+        await page.evaluate(() => {
+            uploadedFiles = [
+                { id: 'f-spec', name: 'tender_specification_rev_A.pdf', size: 4500000, formattedSize: '4.29 MB', type: 'spec', pages: 12, processingStatus: 'Analysis Complete', confidenceScore: 95, classification: "Specifications", revision: "Rev A", drawingNumber: "" }
+            ];
+            renderUploadedFilesList();
+            renderDocumentRegisterAndReadiness();
+            saveWorkspaceToLocalStorage();
+        });
+
+        // Verify Document Register is visible and has categorized the file as Specifications
+        const registerSection = page.locator('#document-register-section');
+        await expect(registerSection).toBeVisible();
+        await expect(registerSection).toContainText('Specifications');
+        await expect(registerSection).toContainText('tender_specification_rev_A.pdf');
+
+        // Verify missing drawings generate RFI warning labels in the readiness summary
+        await expect(registerSection).toContainText('Architectural Drawings Missing');
+
+        // Click Generate Professional Quote
+        const generateBtn = page.locator('#generate-quote-btn');
+        await generateBtn.click();
+
+        // Wait for generation to run
+        await page.waitForTimeout(6000);
+
+        // Verify that drawing-interpreter and quantity-surveyor were SKIPPED
+        const interpreterStage = page.locator('#stage-drawing-interpreter');
+        await expect(interpreterStage).toContainText('SKIPPED');
+
+        const qsStage = page.locator('#stage-quantity-surveyor');
+        await expect(qsStage).toContainText('SKIPPED');
+
+        // Click on skipped stage to view detail explanation
+        await interpreterStage.click();
+        const outputWrapper = page.locator('#output-content-wrapper');
+        await expect(outputWrapper).toContainText('No architectural drawings supplied.');
+    });
+
+    test('should update view and handle routing dynamically', async ({ page }) => {
+        // Go to home
+        await page.goto('http://localhost:3000/');
+        await expect(page.locator('#landing-page-wrapper')).toBeVisible();
+        await expect(page.locator('#ai-workspace-section')).toBeHidden();
+
+        // Simulate navigation to /workspace
+        await page.evaluate(() => {
+            history.pushState(null, '', '/workspace');
+            handleRouting();
+        });
+        await expect(page.locator('#ai-workspace-section')).toBeVisible();
+        await expect(page.locator('#landing-page-wrapper')).toBeHidden();
+
+        // Simulate navigation to /boq
+        await page.evaluate(() => {
+            history.pushState(null, '', '/boq');
+            handleRouting();
+        });
+        await expect(page.locator('#ai-workspace-section')).toBeVisible();
+        await expect(page.locator('#landing-page-wrapper')).toBeHidden();
+        await expect(page.locator('#workspace-tab-boq')).toBeVisible();
+
+        // Simulate navigation to /estimates
+        await page.evaluate(() => {
+            history.pushState(null, '', '/estimates');
+            handleRouting();
+        });
+        await expect(page.locator('#ai-workspace-section')).toBeVisible();
+        await expect(page.locator('#landing-page-wrapper')).toBeHidden();
+        await expect(page.locator('#workspace-tab-boq')).toBeVisible();
+
+        // Simulate back to /
+        await page.evaluate(() => {
+            history.pushState(null, '', '/');
+            handleRouting();
+        });
+        await expect(page.locator('#landing-page-wrapper')).toBeVisible();
+        await expect(page.locator('#ai-workspace-section')).toBeHidden();
+    });
+
+    test('should load Construction Law page and verify interaction and routing', async ({ page }) => {
+        // Navigate to Workspace
+        await page.locator('#nav-workspace-btn').click();
+
+        // Verify Construction Law tab button exists
+        const tabBtn = page.locator('#tab-btn-construction-law');
+        await expect(tabBtn).toBeVisible();
+        await expect(tabBtn).toContainText('Construction Law');
+
+        // Click Construction Law tab
+        await tabBtn.click();
+
+        // Verify Construction Law panel is visible and contains correct text elements
+        const lawTab = page.locator('#workspace-tab-construction-law');
+        await expect(lawTab).toBeVisible();
+        await expect(lawTab).toContainText('Construction Law');
+        await expect(lawTab).toContainText('AI-powered legal guidance');
+
+        // Verify search bar exists
+        const searchInput = page.locator('input[placeholder*="Search construction law"]');
+        await expect(searchInput).toBeVisible();
+
+        // Search for "Contracts" and verify only matched cards remain visible
+        await searchInput.fill('payment');
+        const contractsCard = page.locator('.law-card', { hasText: 'Construction Contracts' });
+        const paymentsCard = page.locator('.law-card', { hasText: 'Payment & Valuations' });
+        await expect(contractsCard).toBeHidden();
+        await expect(paymentsCard).toBeVisible();
+
+        // Clear search
+        await searchInput.fill('');
+        await expect(contractsCard).toBeVisible();
+
+        // Click open on "Payment & Valuations" card to pop up the modal
+        const openBtn = paymentsCard.locator('button', { hasText: 'Open' });
+        await openBtn.click();
+
+        // Assert modal is visible and contains payment valuation content
+        const detailModal = page.locator('#law-detail-modal');
+        await expect(detailModal).toBeVisible();
+        await expect(detailModal).toContainText('Payment Notices and Valuations');
+
+        // Close modal
+        const closeBtn = detailModal.locator('button', { hasText: 'Close Details' });
+        await closeBtn.click();
+        await expect(detailModal).toBeHidden();
+
+        // Interact with Construction Law AI Assistant
+        const promptTextarea = page.locator('#law-ai-prompt');
+        await expect(promptTextarea).toBeVisible();
+
+        // Click on suggested query "What is a Pay Less Notice?"
+        const suggestedQuery = page.locator('button', { hasText: 'What is a Pay Less Notice?' });
+        await suggestedQuery.click();
+        await expect(promptTextarea).toHaveValue('What is a Pay Less Notice?');
+
+        // Click Ask Construction Law AI
+        const askBtn = page.locator('button', { hasText: 'Ask Construction Law AI' });
+        await askBtn.click();
+
+        // Wait for AI response to load (we simulated a 1.5s delay)
+        await page.waitForTimeout(2000);
+        const aiResponse = page.locator('#law-ai-response');
+        await expect(aiResponse).toContainText('Payment and Pay Less Notice Guidelines');
+        await expect(aiResponse).toContainText('Consequences of Failure');
+
+        // Simulate back / forward client-side routing to /construction-law
+        await page.evaluate(() => {
+            history.pushState(null, '', '/construction-law');
+            handleRouting();
+        });
+        await expect(page.locator('#workspace-tab-construction-law')).toBeVisible();
+    });
+
+});
