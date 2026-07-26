@@ -181,9 +181,14 @@ function initThemeToggle() {
     }
 
     function applyTheme(light) {
+        const brandLogo = document.getElementById('brand-logo');
         if (light) {
             document.documentElement.classList.add('light-mode');
             localStorage.setItem('quantis_theme', 'light');
+
+            if (brandLogo) {
+                brandLogo.src = 'images/logolong.png';
+            }
 
             // Show sun icon, hide moon icon (for light mode we want moon to toggle to dark)
             if (sunIcon) sunIcon.classList.remove('hidden');
@@ -193,6 +198,10 @@ function initThemeToggle() {
         } else {
             document.documentElement.classList.remove('light-mode');
             localStorage.setItem('quantis_theme', 'dark');
+
+            if (brandLogo) {
+                brandLogo.src = 'images/logolongDark.png';
+            }
 
             // Show moon icon, hide sun icon (for dark mode we want sun to toggle to light)
             if (sunIcon) sunIcon.classList.add('hidden');
@@ -2952,29 +2961,13 @@ function triggerWorkflowDemoAnimation() {
 }
 
 /* Fallback Logo Display Logic */
-// These globally accessible functions are invoked if the QuantisAI.png assets are missing
+// Ignored as the new design uses direct image files
 function handleLogoError() {
-    const container = document.getElementById('logo-container');
-    if (container) {
-        container.innerHTML = `
-            <span class="text-xl font-extrabold tracking-tight text-white flex items-center gap-2">
-                <span class="text-brand-gold font-black bg-brand-gold-muted px-2 py-1 rounded-lg border border-brand-gold-border text-lg font-mono">Q</span>
-                Quantis<span class="text-brand-gold">AI</span>
-            </span>
-        `;
-    }
+    console.error("Failed to load branding logo image.");
 }
 
 function handleFooterLogoError() {
-    const container = document.getElementById('footer-logo-container');
-    if (container) {
-        container.innerHTML = `
-            <span class="text-lg font-bold tracking-tight text-white flex items-center gap-1.5 justify-center md:justify-start">
-                <span class="text-brand-gold font-extrabold bg-brand-gold-muted px-1.5 py-0.5 rounded border border-brand-gold-border text-sm font-mono">Q</span>
-                Quantis<span class="text-brand-gold">AI</span>
-            </span>
-        `;
-    }
+    console.error("Failed to load footer logo image.");
 }
 
 /* Success Feedback Toast & Form Actions */

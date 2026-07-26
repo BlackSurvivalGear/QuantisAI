@@ -66,19 +66,14 @@
     <header class="sticky top-0 z-50 w-full bg-brand-glass backdrop-blur-md border-b border-brand-glass-border transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
-                <!-- Logo with fallback logic -->
+                <!-- Logo with responsive theme switching -->
                 <div class="flex-shrink-0 flex items-center">
-                    <a href="#" class="flex items-center gap-3 group py-1">
-                        <div id="logo-container" class="h-12 md:h-14 flex items-center gap-2.5">
-                            <!-- JS will inject fallback text logo if image fails -->
+                    <a href="#" class="flex items-center group py-1 pl-0">
+                        <div id="logo-container" class="h-14 md:h-16 flex items-center">
                             <!-- Mobile icon-only version -->
                             <img id="brand-logo-mobile" src="images/QuantisAIFavi.png" alt="QuantisAI Icon" class="block sm:hidden h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
-                            <!-- Tablet/Desktop full logo version (icon + text) -->
-                            <img id="brand-logo" src="images/QuantisAI.png" alt="QuantisAI Logo" class="hidden sm:block h-12 md:h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105" onerror="handleLogoError()">
-                            <!-- Brand Text (Hidden on mobile, displayed as part of full logo on tablet/desktop) -->
-                            <span class="hidden sm:block text-2xl md:text-3xl font-extrabold tracking-tight text-white transition-colors duration-300 group-hover:text-brand-gold">
-                                Quantis<span class="text-brand-gold">AI</span>
-                            </span>
+                            <!-- Tablet/Desktop full long logo version -->
+                            <img id="brand-logo" src="images/logolongDark.png" alt="QuantisAI Logo" class="hidden sm:block h-14 md:h-16 w-auto object-contain transition-transform duration-300 group-hover:scale-105" onerror="handleLogoError()">
                         </div>
                     </a>
                 </div>
