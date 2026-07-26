@@ -13,7 +13,7 @@ test.describe('QuantisAI Workspace Integration Suite', () => {
         await expect(page).toHaveTitle(/QuantisAI/);
 
         // Verify landing buttons
-        const startBtn = page.locator('text=Get Started Free');
+        const startBtn = page.locator('text=Get Started in AI Workspace');
         await expect(startBtn).toBeVisible();
     });
 

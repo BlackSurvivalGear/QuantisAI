@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 labelMonthly.classList.replace('text-white', 'text-gray-400');
 
                 // Update prices with 30% discount
-                animatePriceChange(priceStarter, 55);
+                animatePriceChange(priceStarter, 34);
                 animatePriceChange(priceProfessional, 139);
             } else {
                 toggleKnob.classList.replace('translate-x-7', 'translate-x-0');
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 labelMonthly.classList.replace('text-gray-400', 'text-white');
 
                 // Reset to standard prices
-                animatePriceChange(priceStarter, 79);
+                animatePriceChange(priceStarter, 49);
                 animatePriceChange(priceProfessional, 199);
             }
         });
