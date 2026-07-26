@@ -1,0 +1,2084 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantisAI - AI Construction Estimating for Modern Builders</title>
+    <meta name="description" content="Generate professional construction quotations in minutes using intelligent document analysis. Premium AI platform for contractors, builders, and consultants.">
+    <!-- Favicon and PWA icons -->
+    <link rel="icon" type="image/png" href="images/QuantisAI.png">
+    <link rel="apple-touch-icon" href="images/QuantisAI.png">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            matte: 'var(--color-bg-matte)',
+                            graphite: 'var(--color-bg-graphite)',
+                            dark: 'var(--color-bg-dark)',
+                            gold: 'var(--color-brand-blue)',
+                            'gold-hover': 'var(--color-brand-blue-hover)',
+                            'gold-muted': 'var(--color-brand-blue-muted)',
+                            'gold-border': 'var(--color-brand-blue-border)',
+                            glass: 'var(--color-glass)',
+                            'glass-border': 'var(--color-glass-border)',
+                            'glass-hover': 'var(--color-glass-hover)',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'radial-glow': 'radial-gradient(circle at center, rgba(59, 130, 246, 0.12) 0%, transparent 65%)',
+                        'radial-glow-top': 'radial-gradient(circle at top, rgba(59, 130, 246, 0.15) 0%, transparent 70%)',
+                    },
+                    boxShadow: {
+                        'gold-glow': '0 0 25px -5px rgba(59, 130, 246, 0.4)',
+                        'gold-glow-sm': '0 0 15px -3px rgba(59, 130, 246, 0.25)',
+                        'glass-shadow': '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- PDF.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+</head>
+<body class="bg-brand-matte text-white antialiased selection:bg-brand-gold selection:text-brand-matte relative min-h-screen overflow-x-hidden">
+
+    <!-- Glowing Radial Background Elements -->
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1400px] h-[800px] bg-radial-glow-top pointer-events-none z-0"></div>
+    <div class="absolute top-[1200px] right-[-200px] w-[600px] h-[600px] bg-radial-glow pointer-events-none z-0"></div>
+    <div class="absolute bottom-[800px] left-[-200px] w-[600px] h-[600px] bg-radial-glow pointer-events-none z-0"></div>
+
+    <!-- Header / Navigation -->
+    <header class="sticky top-0 z-50 w-full bg-brand-glass backdrop-blur-md border-b border-brand-glass-border transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo with fallback logic -->
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="#" class="flex items-center gap-3 group">
+                        <div id="logo-container" class="h-10 flex items-center">
+                            <!-- JS will inject fallback text logo if image fails -->
+                            <img id="brand-logo" src="images/QuantisAI.png" alt="QuantisAI Logo" class="h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-105" onerror="handleLogoError()">
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex items-center space-x-6">
+                    <a href="#" id="nav-home-btn" class="text-sm font-semibold text-brand-gold transition-colors duration-200">Home</a>
+                    <a href="#features" class="text-sm font-medium text-gray-300 hover:text-brand-gold transition-colors duration-200">Features</a>
+                    <a href="#pricing" class="text-sm font-medium text-gray-300 hover:text-brand-gold transition-colors duration-200">Pricing</a>
+                    <a href="#about" class="text-sm font-medium text-gray-300 hover:text-brand-gold transition-colors duration-200">About</a>
+                    <a href="#contact" class="text-sm font-medium text-gray-300 hover:text-brand-gold transition-colors duration-200">Contact</a>
+                    <button id="nav-workspace-btn" class="px-3.5 py-1.5 text-xs font-bold rounded-lg bg-brand-gold-muted border border-brand-gold-border text-brand-gold hover:bg-brand-gold hover:text-brand-matte hover:shadow-gold-glow-sm transition-all duration-300 flex items-center gap-1.5">
+                        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-brand-gold"></i>
+                        AI Workspace
+                    </button>
+                </nav>
+
+                <!-- Navigation CTAs -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <button id="theme-toggle" class="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-brand-glass-hover border border-brand-glass-border/40 focus:outline-none transition-all flex items-center justify-center" aria-label="Toggle theme">
+                        <i data-lucide="sun" id="theme-sun-icon" class="w-4 h-4 hidden"></i>
+                        <i data-lucide="moon" id="theme-moon-icon" class="w-4 h-4"></i>
+                    </button>
+                    <a href="#contact" class="px-5 py-2 text-sm font-semibold rounded-lg bg-transparent border border-brand-gold/40 text-brand-gold hover:bg-brand-gold/10 hover:border-brand-gold transition-all duration-300">
+                        Request Demo
+                    </a>
+                    <button onclick="toggleView(true)" class="px-5 py-2 text-sm font-semibold rounded-lg bg-brand-gold text-brand-matte hover:bg-brand-gold-hover hover:shadow-gold-glow transition-all duration-300">
+                        Get Started
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center gap-2">
+                    <button id="theme-toggle-mobile" class="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-brand-glass-hover border border-brand-glass-border/40 focus:outline-none transition-all flex items-center justify-center" aria-label="Toggle theme">
+                        <i data-lucide="sun" id="theme-sun-icon-mobile" class="w-4 h-4 hidden"></i>
+                        <i data-lucide="moon" id="theme-moon-icon-mobile" class="w-4 h-4"></i>
+                    </button>
+                    <button id="mobile-menu-btn" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-brand-glass-hover focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-gold transition-all" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <i data-lucide="menu" id="menu-icon" class="h-6 w-6"></i>
+                        <i data-lucide="x" id="close-icon" class="h-6 w-6 hidden"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-brand-matte/95 backdrop-blur-lg border-b border-brand-glass-border">
+            <div class="px-2 pt-2 pb-4 space-y-1 sm:px-3">
+                <a href="#" class="mobile-nav-link block px-3 py-3 rounded-md text-base font-medium text-gray-300 hover:text-brand-gold hover:bg-brand-glass-hover transition-all">Home</a>
+                <a href="#features" class="mobile-nav-link block px-3 py-3 rounded-md text-base font-medium text-gray-300 hover:text-brand-gold hover:bg-brand-glass-hover transition-all">Features</a>
+                <a href="#pricing" class="mobile-nav-link block px-3 py-3 rounded-md text-base font-medium text-gray-300 hover:text-brand-gold hover:bg-brand-glass-hover transition-all">Pricing</a>
+                <a href="#about" class="mobile-nav-link block px-3 py-3 rounded-md text-base font-medium text-gray-300 hover:text-brand-gold hover:bg-brand-glass-hover transition-all">About</a>
+                <a href="#contact" class="mobile-nav-link block px-3 py-3 rounded-md text-base font-medium text-gray-300 hover:text-brand-gold hover:bg-brand-glass-hover transition-all">Contact</a>
+                <button onclick="toggleView(true)" class="mobile-nav-link w-full text-left px-3 py-3 rounded-md text-base font-bold text-brand-gold hover:bg-brand-gold-muted/30 transition-all flex items-center gap-2">
+                    <i data-lucide="sparkles" class="w-4 h-4 text-brand-gold animate-pulse"></i>
+                    AI Workspace
+                </button>
+                <div class="pt-4 pb-2 border-t border-brand-glass-border flex flex-col gap-3 px-3">
+                    <a href="#contact" class="w-full text-center py-2.5 rounded-lg bg-transparent border border-brand-gold/40 text-brand-gold hover:bg-brand-gold/10 transition-all font-semibold">
+                        Request Demo
+                    </a>
+                    <button onclick="toggleView(true)" class="w-full text-center py-2.5 rounded-lg bg-brand-gold text-brand-matte hover:bg-brand-gold-hover hover:shadow-gold-glow transition-all font-semibold">
+                        Get Started
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Unified AI Workspace View (Hidden by Default) -->
+    <section id="ai-workspace-section" class="hidden py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 relative z-10">
+        <!-- Workspace Header / Nav Bar -->
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-brand-glass-border pb-6">
+                <div>
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-brand-gold-muted border border-brand-gold-border text-brand-gold text-[11px] font-bold tracking-wider uppercase mb-2">
+                        <span class="w-1.5 h-1.5 bg-brand-gold rounded-full animate-ping"></span>
+                        AI Takeoff & Pricing Environment
+                    </span>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">AI Quantity Surveyor & BOQ Workspace</h1>
+                </div>
+                <!-- Action / Mode Selector -->
+                <div class="flex items-center gap-3">
+                    <button onclick="toggleView(false)" class="px-4 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:bg-brand-glass-hover text-gray-300 hover:text-white transition-all flex items-center gap-1.5">
+                        <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+                        Back to Landing
+                    </button>
+                    <!-- Workspace Tabs -->
+                    <div class="bg-brand-graphite border border-brand-glass-border rounded-lg p-1 flex items-center">
+                        <button onclick="switchWorkspaceTab('boq')" id="tab-btn-boq" class="px-3 py-1.5 text-xs font-bold rounded-md bg-brand-gold text-brand-matte transition-all flex items-center gap-1.5">
+                            <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5"></i>
+                            BOQ & Estimates
+                        </button>
+                        <button onclick="switchWorkspaceTab('construction-law')" id="tab-btn-construction-law" class="px-3 py-1.5 text-xs font-medium rounded-md text-gray-400 hover:text-white transition-all flex items-center gap-1.5">
+                            <i data-lucide="scale" class="w-3.5 h-3.5"></i>
+                            Construction Law
+                        </button>
+                        <button onclick="switchWorkspaceTab('ai-settings')" id="tab-btn-ai-settings" class="px-3 py-1.5 text-xs font-medium rounded-md text-gray-400 hover:text-white transition-all flex items-center gap-1.5">
+                            <i data-lucide="cpu" class="w-3.5 h-3.5"></i>
+                            AI Settings
+                        </button>
+                        <button onclick="switchWorkspaceTab('dev-logs')" id="tab-btn-dev-logs" class="px-3 py-1.5 text-xs font-medium rounded-md text-gray-400 hover:text-white transition-all flex items-center gap-1.5">
+                            <i data-lucide="terminal" class="w-3.5 h-3.5"></i>
+                            Dev Logs
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 1: BOQ & ESTIMATES WORKSPACE -->
+            <div id="workspace-tab-boq" class="space-y-8">
+                <!-- Row 1: Project Info & Document input -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    <!-- Project Information Card (Left 5 cols) -->
+                    <div class="lg:col-span-5 bg-brand-graphite border border-brand-glass-border rounded-xl p-6 space-y-4">
+                        <h2 class="text-lg font-bold text-white flex items-center gap-2 border-b border-brand-glass-border pb-3">
+                            <i data-lucide="building" class="w-5 h-5 text-brand-gold"></i>
+                            Project Information
+                        </h2>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Project Name</label>
+                                <input type="text" id="project-name" class="w-full bg-brand-matte border border-brand-glass-border focus:border-brand-gold text-white rounded-lg px-3 py-2 text-sm focus:outline-none transition-colors" placeholder="e.g. Modern Residential Extension">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Client Name</label>
+                                <input type="text" id="project-client" class="w-full bg-brand-matte border border-brand-glass-border focus:border-brand-gold text-white rounded-lg px-3 py-2 text-sm focus:outline-none transition-colors" placeholder="e.g. David Smith & Emma Smith">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Site Address</label>
+                                <input type="text" id="project-site" class="w-full bg-brand-matte border border-brand-glass-border focus:border-brand-gold text-white rounded-lg px-3 py-2 text-sm focus:outline-none transition-colors" placeholder="e.g. 45 Maple Close, Altrincham">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Quote Number</label>
+                                    <input type="text" id="project-quote-no" class="w-full bg-brand-matte border border-brand-glass-border focus:border-brand-gold text-white rounded-lg px-3 py-2 text-sm focus:outline-none transition-colors font-mono" placeholder="e.g. BQ-2024-001">
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Quote Date</label>
+                                    <input type="date" id="project-date" class="w-full bg-brand-matte border border-brand-glass-border focus:border-brand-gold text-white rounded-lg px-3 py-2 text-sm focus:outline-none transition-colors">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Project Currency</label>
+                                <select id="project-currency" onchange="updateCurrencySymbols()" class="w-full bg-brand-matte border border-brand-glass-border focus:border-brand-gold text-white rounded-lg px-3 py-2 text-sm focus:outline-none transition-colors">
+                                    <option value="GBP">GBP (£) - British Pound</option>
+                                    <option value="USD">USD ($) - United States Dollar</option>
+                                    <option value="EUR">EUR (€) - Euro</option>
+                                    <option value="NGN">NGN (₦) - Nigerian Naira</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Regional Pricing Profile</label>
+                                <select id="project-region" class="w-full bg-brand-matte border border-brand-glass-border focus:border-brand-gold text-white rounded-lg px-3 py-2 text-sm focus:outline-none transition-colors">
+                                    <option value="London">London (Base Rate x1.30)</option>
+                                    <option value="South East England">South East England (Base Rate x1.15)</option>
+                                    <option value="South West England">South West England (Base Rate x1.00)</option>
+                                    <option value="East of England">East of England (Base Rate x1.05)</option>
+                                    <option value="East Midlands">East Midlands (Base Rate x0.95)</option>
+                                    <option value="West Midlands">West Midlands (Base Rate x0.98)</option>
+                                    <option value="North West England">North West England (Base Rate x0.96)</option>
+                                    <option value="North East England">North East England (Base Rate x0.90)</option>
+                                    <option value="Yorkshire & Humber">Yorkshire & Humber (Base Rate x0.92)</option>
+                                    <option value="Wales">Wales (Base Rate x0.91)</option>
+                                    <option value="Scotland">Scotland (Base Rate x1.02)</option>
+                                    <option value="Northern Ireland">Northern Ireland (Base Rate x0.88)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Project Specification Level</label>
+                                <select id="workspace-project-specification" onchange="syncWorkspaceSpecToHomepage(this.value)" class="w-full bg-brand-matte border border-brand-glass-border focus:border-brand-gold text-white rounded-lg px-3 py-2 text-sm focus:outline-none transition-colors">
+                                    <option value="Standard">Standard (Developer specification, cost-effective materials)</option>
+                                    <option value="Premium" selected>Premium (High-quality residential finishes)</option>
+                                    <option value="Luxury">Luxury (Bespoke specification, premium fixtures & finishes)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Document Input & Project Description (Right 7 cols) -->
+                    <div class="lg:col-span-7 bg-brand-graphite border border-brand-glass-border rounded-xl p-6 space-y-4">
+                        <h2 class="text-lg font-bold text-white flex items-center gap-2 border-b border-brand-glass-border pb-3">
+                            <i data-lucide="file-text" class="w-5 h-5 text-brand-gold"></i>
+                            Project Documents
+                        </h2>
+                        <div class="space-y-4">
+                            <!-- Drag & Drop Multiple Documents Upload Simulator -->
+                            <div id="workspace-upload-zone" class="border border-dashed border-brand-gold/30 hover:border-brand-gold rounded-xl p-5 text-center cursor-pointer transition-all duration-300 bg-brand-matte/40 group relative overflow-hidden" onclick="simulateFileUpload()">
+                                <input type="file" id="workspace-file-input" class="hidden" accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg,.dwg" multiple onchange="handleWorkspaceFiles(event)">
+                                <div class="space-y-2">
+                                    <div class="mx-auto w-10 h-10 rounded-lg bg-brand-gold-muted border border-brand-gold-border flex items-center justify-center text-brand-gold group-hover:scale-110 transition-transform duration-300">
+                                        <i data-lucide="cloud-upload" class="w-5 h-5"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs font-semibold">Upload Project Documents</p>
+                                        <p class="text-[10px] text-gray-400 mt-0.5">Supports PDF Drawings, Architectural/Structural/M&E specs, BOQs, Word, Excel, and Site Photos</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Uploaded files list -->
+                            <div id="uploaded-files-list" class="space-y-2 max-h-[150px] overflow-y-auto pr-1">
+                                <!-- JS Dynamic Injection -->
+                            </div>
+
+                            <!-- Paste Area for Project Description -->
+                            <div class="space-y-2">
+                                <div class="flex justify-between items-center">
+                                    <label class="block text-[11px] font-bold text-gray-400 uppercase tracking-wider">Project Description / Additional Information</label>
+                                    <button onclick="loadSampleProjectDescription()" class="text-[10px] text-brand-gold hover:underline">Load Sample Project Description</button>
+                                </div>
+                                <textarea id="workspace-project-description" rows="5" class="w-full bg-brand-matte border border-brand-glass-border focus:border-brand-gold text-white rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors resize-none font-sans leading-relaxed" placeholder="Describe the project details, scope of works, finishes, structural elements, heights, or any other relevant details. QuantisAI will automatically analyze this alongside your uploaded documents to build the complete quote."></textarea>
+                            </div>
+
+                            <!-- One-Click Premium Gold Generate Button -->
+                            <button id="generate-quote-btn" onclick="triggerOneClickQuote()" class="w-full py-4 px-6 rounded-xl bg-brand-gold text-brand-matte hover:bg-brand-gold-hover hover:shadow-gold-glow font-extrabold text-base tracking-wider uppercase transition-all duration-300 flex items-center justify-center gap-2.5 mt-4">
+                                <i data-lucide="sparkles" class="w-5 h-5 text-brand-matte"></i>
+                                Generate Professional Quote
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Document Register & Project Readiness Summary -->
+                <div id="document-register-section" class="bg-brand-graphite border border-brand-glass-border rounded-xl p-6 space-y-6 hidden">
+                    <div class="flex items-center gap-3 border-b border-brand-glass-border pb-4">
+                        <div class="w-10 h-10 rounded-lg bg-brand-gold-muted border border-brand-gold-border flex items-center justify-center text-brand-gold">
+                            <i data-lucide="folder-check" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-bold text-white">Document Register & Project Readiness</h2>
+                            <p class="text-xs text-gray-400">Intelligent Quantity Surveyor review of the uploaded tender package.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+                        <!-- Project Readiness Summary (5 cols) -->
+                        <div class="lg:col-span-5 bg-brand-matte/40 border border-brand-glass-border/60 rounded-xl p-5 space-y-4 flex flex-col justify-between">
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center">
+                                    <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Project Readiness</h3>
+                                    <span id="readiness-status-badge" class="px-2.5 py-1 text-[10px] font-bold rounded-lg bg-green-500/10 border border-green-500/30 text-green-400 font-mono">PROJECT READY</span>
+                                </div>
+
+                                <div class="space-y-2">
+                                    <p class="text-xs text-gray-400">The Tender Package has been analyzed. Checklists indicate document availability:</p>
+                                    <div class="grid grid-cols-2 gap-2 text-xs font-medium" id="readiness-found-checklist">
+                                        <!-- Checkboxes list -->
+                                    </div>
+                                </div>
+
+                                <div class="space-y-1.5 pt-2" id="readiness-missing-box">
+                                    <p class="text-xs font-bold text-yellow-400 flex items-center gap-1.5">
+                                        <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+                                        Missing / Incomplete Information
+                                    </p>
+                                    <ul class="list-disc pl-5 text-[11px] text-gray-400 space-y-1" id="readiness-missing-list">
+                                        <!-- Missing items -->
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="border-t border-brand-glass-border/30 pt-3 flex items-center justify-between">
+                                <span class="text-xs text-gray-500 uppercase font-mono">Estimated Readiness</span>
+                                <span id="readiness-confidence-score" class="text-lg font-black text-brand-gold">96%</span>
+                            </div>
+                        </div>
+
+                        <!-- Document Relationships Flow Graph (7 cols) -->
+                        <div class="lg:col-span-7 bg-brand-matte/40 border border-brand-glass-border/60 rounded-xl p-5 space-y-4 flex flex-col justify-between">
+                            <div class="space-y-2">
+                                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+                                    <i data-lucide="git-branch" class="w-4 h-4 text-brand-gold"></i>
+                                    Intelligent Document Relationships
+                                </h3>
+                                <p class="text-xs text-gray-400">AI cross-referencing and trace graph constructed internally across your drawings, schedules, and specs.</p>
+                            </div>
+
+                            <!-- Styled Flowchart -->
+                            <div class="p-4 bg-brand-graphite/40 border border-brand-glass-border/40 rounded-xl overflow-x-auto">
+                                <div class="flex items-center justify-around min-w-[500px] py-2 text-center" id="relationships-graph-container">
+                                    <!-- Dynamic Flowchart Nodes -->
+                                </div>
+                            </div>
+
+                            <p class="text-[10px] text-gray-500 font-mono leading-tight">✓ Verification complete: Drawing elements cross-checked against window schedules, finishes schedules, and structural calculation chapters.</p>
+                        </div>
+                    </div>
+
+                    <!-- Permanent Document Register Table -->
+                    <div class="space-y-3">
+                        <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+                            <i data-lucide="table" class="w-4 h-4 text-brand-gold"></i>
+                            Permanent Document Register
+                        </h3>
+                        <div class="overflow-x-auto border border-brand-glass-border/30 rounded-xl bg-brand-matte/20">
+                            <table class="w-full text-left text-xs border-collapse">
+                                <thead>
+                                    <tr class="bg-brand-matte/80 border-b border-brand-glass-border text-[10px] text-gray-400 font-bold uppercase">
+                                        <th class="p-3">AI Classification</th>
+                                        <th class="p-3">File Name</th>
+                                        <th class="p-3">Drawing No.</th>
+                                        <th class="p-3 text-center">Pages</th>
+                                        <th class="p-3 text-center">Revision</th>
+                                        <th class="p-3 text-center">Status</th>
+                                        <th class="p-3 text-right">Confidence</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="document-register-tbody" class="divide-y divide-brand-glass-border/20 text-gray-300">
+                                    <!-- Dynamic rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Project Review Panel -->
+                <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-6 space-y-6" id="ai-project-review-panel">
+                    <div class="flex items-center gap-3 border-b border-brand-glass-border pb-4">
+                        <div class="w-10 h-10 rounded-lg bg-brand-gold-muted border border-brand-gold-border flex items-center justify-center text-brand-gold">
+                            <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-bold text-white">AI Project Review Panel</h2>
+                            <p class="text-xs text-gray-400">Consolidated analytics from parsed architectural documents and site specifications.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                        <div class="bg-brand-matte/40 border border-brand-glass-border/60 p-4 rounded-xl space-y-1">
+                            <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider">Documents Processed</span>
+                            <p class="text-lg font-extrabold text-white" id="stat-docs-processed">0 Documents</p>
+                        </div>
+                        <div class="bg-brand-matte/40 border border-brand-glass-border/60 p-4 rounded-xl space-y-1">
+                            <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider">Pages Analysed</span>
+                            <p class="text-lg font-extrabold text-white" id="stat-pages-analysed">0 Pages</p>
+                        </div>
+                        <div class="bg-brand-matte/40 border border-brand-glass-border/60 p-4 rounded-xl space-y-1">
+                            <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider">Gross Internal Area</span>
+                            <p class="text-lg font-extrabold text-white" id="stat-gia">180 sq m</p>
+                        </div>
+                        <div class="bg-brand-matte/40 border border-brand-glass-border/60 p-4 rounded-xl space-y-1">
+                            <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider">Trade Packages Detected</span>
+                            <p class="text-lg font-extrabold text-white" id="stat-trades">0 Packages</p>
+                        </div>
+                        <div class="bg-brand-matte/40 border border-brand-glass-border/60 p-4 rounded-xl space-y-1">
+                            <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider">Rooms Detected</span>
+                            <p class="text-lg font-extrabold text-white" id="stat-rooms">14 Rooms</p>
+                        </div>
+                        <div class="bg-brand-matte/40 border border-brand-glass-border/60 p-4 rounded-xl space-y-1">
+                            <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider">Structural Elements</span>
+                            <p class="text-lg font-extrabold text-white" id="stat-structural">8 Elements</p>
+                        </div>
+                        <div class="bg-brand-matte/40 border border-brand-glass-border/60 p-4 rounded-xl space-y-1">
+                            <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider">BOQ Items Generated</span>
+                            <p class="text-lg font-extrabold text-white" id="stat-boq-items">0 Items</p>
+                        </div>
+                        <div class="bg-brand-matte/40 border border-brand-glass-border/60 p-4 rounded-xl space-y-1">
+                            <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider">Regional Pricing</span>
+                            <p class="text-lg font-extrabold text-brand-gold" id="stat-regional">London (x1.30)</p>
+                        </div>
+                        <div class="bg-brand-matte/40 border border-brand-glass-border/60 p-4 rounded-xl space-y-1">
+                            <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider">Specification Level</span>
+                            <p class="text-lg font-extrabold text-brand-gold" id="stat-specification">Premium</p>
+                        </div>
+                        <div class="bg-brand-matte/40 border border-brand-glass-border/60 p-4 rounded-xl space-y-1">
+                            <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider">AI Confidence Score</span>
+                            <p class="text-lg font-extrabold text-green-400" id="stat-confidence">94%</p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 p-5 bg-brand-gold-muted/10 border border-brand-gold-border/30 rounded-2xl">
+                        <div>
+                            <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider">Estimated Project Value</span>
+                            <p class="text-3xl font-black text-white tracking-tight" id="calc-grand-total">£0.00</p>
+                            <p id="calc-unavail-reason" class="text-[11px] text-yellow-500 font-mono mt-1 hidden">Reason: Measured quantities have not yet been produced.</p>
+                            <!-- Hidden indicators to keep any other legacy calculation script happy -->
+                            <div class="hidden" id="calc-raw-subtotal">£0.00</div>
+                            <div class="hidden" id="calc-waste-cost">£0.00</div>
+                            <div class="hidden" id="calc-contingency-cost">£0.00</div>
+                            <div class="hidden" id="calc-net-subtotal">£0.00</div>
+                            <div class="hidden" id="calc-profit-cost">£0.00</div>
+                            <div class="hidden" id="calc-discount-cost">£0.00</div>
+                            <div class="hidden" id="calc-taxable-net">£0.00</div>
+                            <div class="hidden" id="calc-vat-cost">£0.00</div>
+                            <input type="hidden" id="input-waste" value="5">
+                            <input type="hidden" id="input-contingency" value="10">
+                            <input type="hidden" id="input-profit" value="15">
+                            <input type="hidden" id="input-discount" value="0">
+                            <input type="checkbox" id="input-vat-enable" checked class="hidden">
+                            <input type="hidden" id="input-vat-rate" value="20">
+                            <div class="hidden" id="val-waste">5%</div>
+                            <div class="hidden" id="val-contingency">10%</div>
+                            <div class="hidden" id="val-profit">15%</div>
+                            <div class="hidden" id="val-discount">0%</div>
+                            <div class="hidden" id="val-vat">20%</div>
+                        </div>
+                        <div class="flex flex-wrap gap-3">
+                            <button onclick="openBOQViewerModal()" class="px-5 py-3 text-sm font-extrabold rounded-xl border border-brand-gold-border bg-brand-gold-muted text-brand-gold hover:bg-brand-gold hover:text-brand-matte transition-all flex items-center gap-2">
+                                <i data-lucide="eye" class="w-4 h-4"></i>
+                                View Full BOQ
+                            </button>
+                            <button onclick="triggerOneClickQuote()" class="px-5 py-3 text-sm font-extrabold rounded-xl bg-brand-gold text-brand-matte hover:bg-brand-gold-hover hover:shadow-gold-glow transition-all flex items-center gap-2">
+                                <i data-lucide="sparkles" class="w-4 h-4"></i>
+                                Generate Professional Quote
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Surveyor Engine Actions Dashboard -->
+                <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-6 space-y-6">
+                    <div>
+                        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                            <i data-lucide="sparkles" class="w-5 h-5 text-brand-gold"></i>
+                            AI Quantity Surveyor Generative Actions
+                        </h2>
+                        <p class="text-xs text-gray-400 mt-1">
+                            Deploy fine-tuned algorithmic models to automate quantity surveys, optimise costs, and craft client-ready contract deliverables.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-9 gap-3">
+                        <!-- Button 1: Generate BOQ -->
+                        <button onclick="triggerAIWorkspaceAction('generate-boq')" class="flex flex-col items-center justify-center p-3 rounded-xl border border-brand-glass-border bg-brand-matte/40 hover:border-brand-gold hover:bg-brand-gold-muted/20 hover:scale-[1.03] transition-all duration-200 text-center space-y-2 group min-h-[110px]">
+                            <div class="w-8 h-8 rounded-lg bg-brand-gold-muted border border-brand-gold-border flex items-center justify-center text-brand-gold group-hover:scale-110 transition-transform">
+                                <i data-lucide="wand-2" class="w-4 h-4"></i>
+                            </div>
+                            <span class="text-[10px] font-bold text-gray-300 group-hover:text-white leading-tight">Generate BOQ</span>
+                        </button>
+                        <!-- Button 2: Improve Description -->
+                        <button onclick="triggerAIWorkspaceAction('improve-desc')" class="flex flex-col items-center justify-center p-3 rounded-xl border border-brand-glass-border bg-brand-matte/40 hover:border-brand-gold hover:bg-brand-gold-muted/20 hover:scale-[1.03] transition-all duration-200 text-center space-y-2 group min-h-[110px]">
+                            <div class="w-8 h-8 rounded-lg bg-brand-gold-muted border border-brand-gold-border flex items-center justify-center text-brand-gold group-hover:scale-110 transition-transform">
+                                <i data-lucide="pencil-line" class="w-4 h-4"></i>
+                            </div>
+                            <span class="text-[10px] font-bold text-gray-300 group-hover:text-white leading-tight">Improve Desc</span>
+                        </button>
+                        <!-- Button 3: Suggest Materials -->
+                        <button onclick="triggerAIWorkspaceAction('suggest-materials')" class="flex flex-col items-center justify-center p-3 rounded-xl border border-brand-glass-border bg-brand-matte/40 hover:border-brand-gold hover:bg-brand-gold-muted/20 hover:scale-[1.03] transition-all duration-200 text-center space-y-2 group min-h-[110px]">
+                            <div class="w-8 h-8 rounded-lg bg-brand-gold-muted border border-brand-gold-border flex items-center justify-center text-brand-gold group-hover:scale-110 transition-transform">
+                                <i data-lucide="package-search" class="w-4 h-4"></i>
+                            </div>
+                            <span class="text-[10px] font-bold text-gray-300 group-hover:text-white leading-tight">Suggest Materials</span>
+                        </button>
+                        <!-- Button 4: Suggest Labour -->
+                        <button onclick="triggerAIWorkspaceAction('suggest-labour')" class="flex flex-col items-center justify-center p-3 rounded-xl border border-brand-glass-border bg-brand-matte/40 hover:border-brand-gold hover:bg-brand-gold-muted/20 hover:scale-[1.03] transition-all duration-200 text-center space-y-2 group min-h-[110px]">
+                            <div class="w-8 h-8 rounded-lg bg-brand-gold-muted border border-brand-gold-border flex items-center justify-center text-brand-gold group-hover:scale-110 transition-transform">
+                                <i data-lucide="users" class="w-4 h-4"></i>
+                            </div>
+                            <span class="text-[10px] font-bold text-gray-300 group-hover:text-white leading-tight">Suggest Labour</span>
+                        </button>
+                        <!-- Button 5: Detect Missing Items -->
+                        <button onclick="triggerAIWorkspaceAction('detect-missing')" class="flex flex-col items-center justify-center p-3 rounded-xl border border-brand-glass-border bg-brand-matte/40 hover:border-brand-gold hover:bg-brand-gold-muted/20 hover:scale-[1.03] transition-all duration-200 text-center space-y-2 group min-h-[110px]">
+                            <div class="w-8 h-8 rounded-lg bg-brand-gold-muted border border-brand-gold-border flex items-center justify-center text-brand-gold group-hover:scale-110 transition-transform">
+                                <i data-lucide="shield-alert" class="w-4 h-4"></i>
+                            </div>
+                            <span class="text-[10px] font-bold text-gray-300 group-hover:text-white leading-tight">Detect Missing</span>
+                        </button>
+                        <!-- Button 6: Optimise Costs -->
+                        <button onclick="triggerAIWorkspaceAction('optimise-costs')" class="flex flex-col items-center justify-center p-3 rounded-xl border border-brand-glass-border bg-brand-matte/40 hover:border-brand-gold hover:bg-brand-gold-muted/20 hover:scale-[1.03] transition-all duration-200 text-center space-y-2 group min-h-[110px]">
+                            <div class="w-8 h-8 rounded-lg bg-brand-gold-muted border border-brand-gold-border flex items-center justify-center text-brand-gold group-hover:scale-110 transition-transform">
+                                <i data-lucide="trending-down" class="w-4 h-4"></i>
+                            </div>
+                            <span class="text-[10px] font-bold text-gray-300 group-hover:text-white leading-tight">Optimise Costs</span>
+                        </button>
+                        <!-- Button 7: Generate Method Statement -->
+                        <button onclick="triggerAIWorkspaceAction('generate-method')" class="flex flex-col items-center justify-center p-3 rounded-xl border border-brand-glass-border bg-brand-matte/40 hover:border-brand-gold hover:bg-brand-gold-muted/20 hover:scale-[1.03] transition-all duration-200 text-center space-y-2 group min-h-[110px]">
+                            <div class="w-8 h-8 rounded-lg bg-brand-gold-muted border border-brand-gold-border flex items-center justify-center text-brand-gold group-hover:scale-110 transition-transform">
+                                <i data-lucide="terminal" class="w-4 h-4"></i>
+                            </div>
+                            <span class="text-[10px] font-bold text-gray-300 group-hover:text-white leading-tight">Method Statement</span>
+                        </button>
+                        <!-- Button 8: Generate Scope of Works -->
+                        <button onclick="triggerAIWorkspaceAction('generate-scope')" class="flex flex-col items-center justify-center p-3 rounded-xl border border-brand-glass-border bg-brand-matte/40 hover:border-brand-gold hover:bg-brand-gold-muted/20 hover:scale-[1.03] transition-all duration-200 text-center space-y-2 group min-h-[110px]">
+                            <div class="w-8 h-8 rounded-lg bg-brand-gold-muted border border-brand-gold-border flex items-center justify-center text-brand-gold group-hover:scale-110 transition-transform">
+                                <i data-lucide="file-check" class="w-4 h-4"></i>
+                            </div>
+                            <span class="text-[10px] font-bold text-gray-300 group-hover:text-white leading-tight">Scope of Works</span>
+                        </button>
+                        <!-- Button 9: Explain Pricing -->
+                        <button onclick="triggerAIWorkspaceAction('explain-pricing')" class="flex flex-col items-center justify-center p-3 rounded-xl border border-brand-glass-border bg-brand-matte/40 hover:border-brand-gold hover:bg-brand-gold-muted/20 hover:scale-[1.03] transition-all duration-200 text-center space-y-2 group min-h-[110px]">
+                            <div class="w-8 h-8 rounded-lg bg-brand-gold-muted border border-brand-gold-border flex items-center justify-center text-brand-gold group-hover:scale-110 transition-transform">
+                                <i data-lucide="help-circle" class="w-4 h-4"></i>
+                            </div>
+                            <span class="text-[10px] font-bold text-gray-300 group-hover:text-white leading-tight">Explain Pricing</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Live AI Terminal / Console Panel & Generated Contract Output -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                    <!-- AI Status Panel (Left 5 Cols) -->
+                    <div class="lg:col-span-5 bg-brand-graphite border border-brand-glass-border rounded-xl p-5 flex flex-col justify-between space-y-4 relative">
+                        <div class="absolute top-4 right-4 flex items-center gap-1.5">
+                            <span id="console-status-dot" class="w-2.5 h-2.5 rounded-full bg-green-400"></span>
+                            <span id="console-status-text" class="text-[10px] font-bold uppercase tracking-wider text-green-400">IDLE</span>
+                        </div>
+                        <div class="space-y-4">
+                            <h3 class="text-sm font-bold text-brand-gold flex items-center gap-2 border-b border-brand-glass-border/40 pb-3">
+                                <i data-lucide="activity" class="w-4 h-4 text-brand-gold"></i>
+                                AI Takeoff & Progress Panel
+                            </h3>
+
+                            <!-- Animated Checklist (14-stage official pipeline monitor) -->
+                            <div id="ai-progress-checklist" class="space-y-1.5 text-xs max-h-[300px] overflow-y-auto pr-1">
+                                <!-- Replaced dynamically, but structured base container here -->
+                                <div id="stage-upload-documents" class="flex items-center justify-between p-1 rounded hover:bg-brand-glass-hover text-gray-400">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="circle" class="w-3.5 h-3.5 shrink-0 text-gray-500 status-icon"></i>
+                                        <span class="font-medium">1. Upload Documents <span id="step-0" class="inline-block w-1 h-1"></span></span>
+                                    </div>
+                                    <span class="status-badge text-[9px] font-mono tracking-wider font-bold">WAITING</span>
+                                </div>
+                                <div id="stage-ocr" class="flex items-center justify-between p-1 rounded hover:bg-brand-glass-hover text-gray-400">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="circle" class="w-3.5 h-3.5 shrink-0 text-gray-500 status-icon"></i>
+                                        <span class="font-medium">2. OCR <span id="step-1" class="inline-block w-1 h-1"></span></span>
+                                    </div>
+                                    <span class="status-badge text-[9px] font-mono tracking-wider font-bold">WAITING</span>
+                                </div>
+                                <div id="stage-metadata-extraction" class="flex items-center justify-between p-1 rounded hover:bg-brand-glass-hover text-gray-400">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="circle" class="w-3.5 h-3.5 shrink-0 text-gray-500 status-icon"></i>
+                                        <span class="font-medium">3. Metadata Extraction <span id="step-2" class="inline-block w-1 h-1"></span></span>
+                                    </div>
+                                    <span class="status-badge text-[9px] font-mono tracking-wider font-bold">WAITING</span>
+                                </div>
+                                <div id="stage-update-project-state" class="flex items-center justify-between p-1 rounded hover:bg-brand-glass-hover text-gray-400">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="circle" class="w-3.5 h-3.5 shrink-0 text-gray-500 status-icon"></i>
+                                        <span class="font-medium">4. Replace Active Project State <span id="step-3" class="inline-block w-1 h-1"></span></span>
+                                    </div>
+                                    <span class="status-badge text-[9px] font-mono tracking-wider font-bold">WAITING</span>
+                                </div>
+                                <div id="stage-validation" class="flex items-center justify-between p-1 rounded hover:bg-brand-glass-hover text-gray-400">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="circle" class="w-3.5 h-3.5 shrink-0 text-gray-500 status-icon"></i>
+                                        <span class="font-medium">5. Validation <span id="step-4" class="inline-block w-1 h-1"></span></span>
+                                    </div>
+                                    <span class="status-badge text-[9px] font-mono tracking-wider font-bold">WAITING</span>
+                                </div>
+                                <div id="stage-document-classification" class="flex items-center justify-between p-1 rounded hover:bg-brand-glass-hover text-gray-400">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="circle" class="w-3.5 h-3.5 shrink-0 text-gray-500 status-icon"></i>
+                                        <span class="font-medium">6. Document Classification <span id="step-5" class="inline-block w-1 h-1"></span></span>
+                                    </div>
+                                    <span class="status-badge text-[9px] font-mono tracking-wider font-bold">WAITING</span>
+                                </div>
+                                <div id="stage-document-intelligence" class="flex items-center justify-between p-1 rounded hover:bg-brand-glass-hover text-gray-400">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="circle" class="w-3.5 h-3.5 shrink-0 text-gray-500 status-icon"></i>
+                                        <span class="font-medium">7. Document Intelligence <span id="step-6" class="inline-block w-1 h-1"></span></span>
+                                    </div>
+                                    <span class="status-badge text-[9px] font-mono tracking-wider font-bold">WAITING</span>
+                                </div>
+                                <div id="stage-drawing-interpreter" class="flex items-center justify-between p-1 rounded hover:bg-brand-glass-hover text-gray-400">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="circle" class="w-3.5 h-3.5 shrink-0 text-gray-500 status-icon"></i>
+                                        <span class="font-medium">8. Drawing Detection <span id="step-7" class="inline-block w-1 h-1"></span></span>
+                                    </div>
+                                    <span class="status-badge text-[9px] font-mono tracking-wider font-bold">WAITING</span>
+                                </div>
+                                <div id="stage-boq-generator" class="flex items-center justify-between p-1 rounded hover:bg-brand-glass-hover text-gray-400">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="circle" class="w-3.5 h-3.5 shrink-0 text-gray-500 status-icon"></i>
+                                        <span class="font-medium">9. BOQ Generation <span id="step-8" class="inline-block w-1 h-1"></span></span>
+                                    </div>
+                                    <span class="status-badge text-[9px] font-mono tracking-wider font-bold">WAITING</span>
+                                </div>
+                                <div id="stage-quantity-surveyor" class="flex items-center justify-between p-1 rounded hover:bg-brand-glass-hover text-gray-400">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="circle" class="w-3.5 h-3.5 shrink-0 text-gray-500 status-icon"></i>
+                                        <span class="font-medium">10. Quantity Survey <span id="step-9" class="inline-block w-1 h-1"></span></span>
+                                    </div>
+                                    <span class="status-badge text-[9px] font-mono tracking-wider font-bold">WAITING</span>
+                                </div>
+                                <div id="stage-cost-estimator" class="flex items-center justify-between p-1 rounded hover:bg-brand-glass-hover text-gray-400">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="circle" class="w-3.5 h-3.5 shrink-0 text-gray-500 status-icon"></i>
+                                        <span class="font-medium">11. Cost Estimation <span id="step-10" class="inline-block w-1 h-1"></span></span>
+                                    </div>
+                                    <span class="status-badge text-[9px] font-mono tracking-wider font-bold">WAITING</span>
+                                </div>
+                                <div id="stage-material-analysis" class="flex items-center justify-between p-1 rounded hover:bg-brand-glass-hover text-gray-400">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="circle" class="w-3.5 h-3.5 shrink-0 text-gray-500 status-icon"></i>
+                                        <span class="font-medium">12. Material Analysis <span id="step-11" class="inline-block w-1 h-1"></span></span>
+                                    </div>
+                                    <span class="status-badge text-[9px] font-mono tracking-wider font-bold">WAITING</span>
+                                </div>
+                                <div id="stage-labour-analysis" class="flex items-center justify-between p-1 rounded hover:bg-brand-glass-hover text-gray-400">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="circle" class="w-3.5 h-3.5 shrink-0 text-gray-500 status-icon"></i>
+                                        <span class="font-medium">13. Labour Analysis <span id="step-12" class="inline-block w-1 h-1"></span></span>
+                                    </div>
+                                    <span class="status-badge text-[9px] font-mono tracking-wider font-bold">WAITING</span>
+                                </div>
+                                <div id="stage-quotation-generator" class="flex items-center justify-between p-1 rounded hover:bg-brand-glass-hover text-gray-400">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="circle" class="w-3.5 h-3.5 shrink-0 text-gray-500 status-icon"></i>
+                                        <span class="font-medium">14. Final Report <span id="step-13" class="inline-block w-1 h-1"></span></span>
+                                    </div>
+                                    <span class="status-badge text-[9px] font-mono tracking-wider font-bold">WAITING</span>
+                                </div>
+                            </div>
+                            <!-- Real-time Progress message box -->
+                            <div class="bg-brand-matte/50 p-2.5 rounded-lg border border-brand-glass-border/30 text-[11px] text-gray-400 flex items-center gap-2" id="pipeline-progress-msg-box">
+                                <i data-lucide="info" class="w-4 h-4 text-brand-gold shrink-0"></i>
+                                <span id="pipeline-progress-msg" class="italic">Pipeline idle. Upload a project and trigger professional quotation.</span>
+                            </div>
+                        </div>
+
+                        <!-- Confidence Score Widget -->
+                        <div class="border-t border-brand-glass-border/40 pt-4 space-y-3">
+                            <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+                                <i data-lucide="shield-check" class="w-4 h-4 text-brand-gold"></i>
+                                AI Estimation Confidence
+                            </h4>
+                            <div class="grid grid-cols-2 gap-3 text-[10px] font-semibold">
+                                <div class="bg-brand-matte/40 border border-brand-glass-border/55 p-2.5 rounded-lg">
+                                    <div class="flex justify-between text-gray-400 mb-1">
+                                        <span>Document Understanding</span>
+                                        <span id="score-doc" class="text-brand-gold font-bold">0%</span>
+                                    </div>
+                                    <div class="w-full h-1 bg-brand-matte rounded-full overflow-hidden">
+                                        <div id="bar-doc" class="h-full bg-brand-gold transition-all duration-500" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                                <div class="bg-brand-matte/40 border border-brand-glass-border/55 p-2.5 rounded-lg">
+                                    <div class="flex justify-between text-gray-400 mb-1">
+                                        <span>Measurement Confidence</span>
+                                        <span id="score-measure" class="text-brand-gold font-bold">0%</span>
+                                    </div>
+                                    <div class="w-full h-1 bg-brand-matte rounded-full overflow-hidden">
+                                        <div id="bar-measure" class="h-full bg-brand-gold transition-all duration-500" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                                <div class="bg-brand-matte/40 border border-brand-glass-border/55 p-2.5 rounded-lg">
+                                    <div class="flex justify-between text-gray-400 mb-1">
+                                        <span>Pricing Confidence</span>
+                                        <span id="score-pricing" class="text-brand-gold font-bold">0%</span>
+                                    </div>
+                                    <div class="w-full h-1 bg-brand-matte rounded-full overflow-hidden">
+                                        <div id="bar-pricing" class="h-full bg-brand-gold transition-all duration-500" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                                <div class="bg-brand-matte/40 border border-brand-glass-border/55 p-2.5 rounded-lg">
+                                    <div class="flex justify-between text-gray-400 mb-1">
+                                        <span>Overall Estimate Confidence</span>
+                                        <span id="score-overall" class="text-brand-gold font-bold">0%</span>
+                                    </div>
+                                    <div class="w-full h-1 bg-brand-matte rounded-full overflow-hidden">
+                                        <div id="bar-overall" class="h-full bg-brand-gold transition-all duration-500" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Expandable Developer Diagnostics Panel (AI Response Panel) -->
+                        <div class="border-t border-brand-glass-border/40 pt-4 space-y-2">
+                            <button type="button" onclick="toggleDeveloperPanel()" class="w-full flex items-center justify-between text-xs font-bold text-gray-400 hover:text-white uppercase tracking-wider transition-colors">
+                                <span class="flex items-center gap-1.5">
+                                    <i data-lucide="terminal" class="w-4 h-4 text-brand-gold"></i>
+                                    AI Response Panel & Diagnostics
+                                </span>
+                                <i data-lucide="chevron-down" id="dev-panel-chevron" class="w-4 h-4 transition-transform duration-200"></i>
+                            </button>
+
+                            <div id="developer-diagnostic-panel" class="hidden bg-brand-matte/60 border border-brand-glass-border/40 rounded-lg p-3 space-y-2.5 font-mono text-[10px] text-gray-400 overflow-y-auto max-h-[220px]">
+                                <div class="flex justify-between border-b border-brand-glass-border/15 pb-1">
+                                    <span>Selected Provider:</span>
+                                    <span id="console-provider" class="text-white font-bold">Simulated Local Core</span>
+                                </div>
+                                <div class="flex justify-between border-b border-brand-glass-border/15 pb-1">
+                                    <span>Selected Model:</span>
+                                    <span id="console-model" class="text-white font-bold">Sovereign-Llama3-8B</span>
+                                </div>
+                                <div class="flex justify-between border-b border-brand-glass-border/15 pb-1">
+                                    <span>AI Status:</span>
+                                    <span id="console-panel-status" class="text-green-400 font-bold">IDLE</span>
+                                </div>
+                                <div class="flex justify-between border-b border-brand-glass-border/15 pb-1">
+                                    <span>Request Time:</span>
+                                    <span id="console-request-time" class="text-white font-bold">--</span>
+                                </div>
+                                <div class="flex justify-between border-b border-brand-glass-border/15 pb-1">
+                                    <span>Response Time:</span>
+                                    <span id="console-rt" class="text-brand-gold font-bold">-- ms</span>
+                                </div>
+                                <div class="flex justify-between border-b border-brand-glass-border/15 pb-1">
+                                    <span>Token Usage:</span>
+                                    <span id="console-tokens" class="text-white font-bold">-- tok</span>
+                                </div>
+                                <div class="flex justify-between border-b border-brand-glass-border/15 pb-1">
+                                    <span>JSON Validation:</span>
+                                    <span id="console-json-valid" class="text-green-400 font-bold">✓ Valid JSON</span>
+                                </div>
+                                <div class="space-y-1">
+                                    <span>AI Response Body (Raw Segment):</span>
+                                    <pre id="console-response-raw" class="bg-brand-matte/90 p-2 rounded border border-brand-glass-border/20 text-[9px] text-gray-300 overflow-x-auto whitespace-pre-wrap max-h-[100px]">Awaiting generative trigger...</pre>
+                                </div>
+                                <!-- Kept hidden element to avoid any other legacy script reference issues -->
+                                <pre id="console-prompt-sent" class="hidden">No prompt sent yet.</pre>
+                            </div>
+                        </div>
+
+                        <!-- Temporary AI Debug Console -->
+                        <div class="border-t border-brand-glass-border/40 pt-4 space-y-2">
+                            <div class="flex items-center justify-between text-xs font-bold text-gray-400 uppercase tracking-wider">
+                                <span class="flex items-center gap-1.5 text-brand-gold">
+                                    <span class="w-2 h-2 rounded-full bg-brand-gold animate-ping"></span>
+                                    TEMPORARY AI DEBUG CONSOLE
+                                </span>
+                            </div>
+                            <div id="ai-debug-console" class="bg-brand-matte border border-brand-gold/30 rounded-xl p-4 space-y-3 font-mono text-[10px] text-gray-300">
+                                <div>
+                                    <span class="text-gray-500 block mb-1 uppercase tracking-wider font-bold">1. Extracted PDF Text (First 500 chars):</span>
+                                    <pre id="debug-extracted-text" class="bg-brand-graphite p-2.5 rounded border border-brand-glass-border/40 text-gray-400 overflow-x-auto whitespace-pre-wrap max-h-[100px]">Awaiting file upload...</pre>
+                                </div>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <span class="text-gray-500 block mb-1 uppercase tracking-wider font-bold">2. Model Selected:</span>
+                                        <div id="debug-model" class="text-white bg-brand-graphite p-2 rounded border border-brand-glass-border/40">Sovereign-Llama3-8B</div>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-500 block mb-1 uppercase tracking-wider font-bold">3. API Endpoint:</span>
+                                        <div id="debug-endpoint" class="text-white bg-brand-graphite p-2 rounded border border-brand-glass-border/40 font-bold text-yellow-500">Local Simulation</div>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-3 gap-3">
+                                    <div>
+                                        <span class="text-gray-500 block mb-1 uppercase tracking-wider font-bold">4. HTTP Status:</span>
+                                        <div id="debug-http-status" class="text-white bg-brand-graphite p-2 rounded border border-brand-glass-border/40 font-bold text-green-400">200 OK</div>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-500 block mb-1 uppercase tracking-wider font-bold">5. Tokens Used:</span>
+                                        <div id="debug-tokens" class="text-white bg-brand-graphite p-2 rounded border border-brand-glass-border/40">0 tok</div>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-500 block mb-1 uppercase tracking-wider font-bold">6. Execution Time:</span>
+                                        <div id="debug-execution-time" class="text-white bg-brand-graphite p-2 rounded border border-brand-glass-border/40 font-bold text-brand-gold">0 ms</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <span class="text-gray-500 block mb-1 uppercase tracking-wider font-bold">7. Prompt Sent to Model (Redacted API key):</span>
+                                    <pre id="debug-prompt-sent" class="bg-brand-graphite p-2.5 rounded border border-brand-glass-border/40 text-gray-400 overflow-x-auto whitespace-pre-wrap max-h-[150px]">Awaiting pipeline trigger...</pre>
+                                </div>
+                                <div>
+                                    <span class="text-gray-500 block mb-1 uppercase tracking-wider font-bold">8. Raw AI Response (Before Parsing):</span>
+                                    <pre id="debug-raw-response" class="bg-brand-graphite p-2.5 rounded border border-brand-glass-border/40 text-gray-400 overflow-x-auto whitespace-pre-wrap max-h-[150px]">Awaiting response stream...</pre>
+                                </div>
+                                <div>
+                                    <span class="text-gray-500 block mb-1 uppercase tracking-wider font-bold">9. Parsed JSON Output:</span>
+                                    <pre id="debug-parsed-json" class="bg-brand-graphite p-2.5 rounded border border-brand-glass-border/40 text-gray-400 overflow-x-auto whitespace-pre-wrap max-h-[150px]">Awaiting validation schemas...</pre>
+                                </div>
+                                <div>
+                                    <span class="text-red-500 block mb-1 uppercase tracking-wider font-bold">10. API Errors (If Any):</span>
+                                    <pre id="debug-errors" class="bg-brand-graphite/40 p-2.5 rounded border border-red-500/20 text-red-400 overflow-x-auto whitespace-pre-wrap max-h-[80px]">No errors logged.</pre>
+                                </div>
+                                <div>
+                                    <span class="text-brand-gold block mb-1 uppercase tracking-wider font-bold text-xs">11. Active Project State Object (After Replace Active Project State):</span>
+                                    <pre id="debug-active-project-state" class="bg-brand-graphite/50 p-2.5 rounded border border-brand-gold/30 text-white overflow-x-auto whitespace-pre-wrap max-h-[150px] font-mono text-[10px]">No active project loaded.</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Beautiful Output Render Panel & Actions (Right 7 Cols) -->
+                    <div class="lg:col-span-7 bg-brand-graphite border border-brand-glass-border rounded-xl p-6 flex flex-col justify-between space-y-6">
+                        <div class="flex justify-between items-center border-b border-brand-glass-border pb-3">
+                            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                                <i data-lucide="award" class="w-5 h-5 text-brand-gold"></i>
+                                Premium Quote Output & Deliverables
+                            </h3>
+                            <span class="text-[10px] bg-brand-gold-muted border border-brand-gold-border text-brand-gold px-2 py-0.5 rounded font-mono font-bold uppercase">Ready</span>
+                        </div>
+
+                        <!-- Generated Content viewport -->
+                        <div id="output-content-wrapper" class="bg-brand-matte/50 border border-brand-glass-border rounded-xl p-5 min-h-[300px] max-h-[450px] overflow-y-auto text-sm leading-relaxed text-gray-300 prose prose-invert prose-sm max-w-none">
+                            <div class="text-center py-12 text-gray-500">
+                                <i data-lucide="sparkles" class="w-10 h-10 mx-auto text-brand-gold/30 mb-3 animate-pulse"></i>
+                                <p class="font-bold text-sm text-gray-400">Awaiting Generation Outcome</p>
+                                <p class="text-xs text-gray-500 max-w-xs mx-auto mt-1">Select an AI Quantity Surveyor generative action above to synthesize professional client quotations.</p>
+                            </div>
+                        </div>
+
+                        <!-- Export Options Row -->
+                        <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 pt-2">
+                            <button onclick="exportWorkspace('print')" class="px-3 py-2 text-xs font-bold rounded-lg border border-brand-gold/30 text-brand-gold bg-brand-gold-muted hover:bg-brand-gold hover:text-brand-matte transition-all flex items-center justify-center gap-1.5">
+                                <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+                                Print
+                            </button>
+                            <button onclick="exportWorkspace('pdf')" class="px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-gray-500 text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
+                                <i data-lucide="file-text" class="w-3.5 h-3.5 text-red-400"></i>
+                                Export PDF
+                            </button>
+                            <button onclick="exportWorkspace('csv')" class="px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-gray-500 text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
+                                <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5 text-green-400"></i>
+                                Export Excel
+                            </button>
+                            <button onclick="exportWorkspace('json')" class="px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-gray-500 text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
+                                <i data-lucide="code" class="w-3.5 h-3.5 text-blue-400"></i>
+                                Export JSON
+                            </button>
+                            <button onclick="exportWorkspace('save')" class="col-span-2 sm:col-span-1 px-3 py-2 text-xs font-bold rounded-lg bg-brand-gold text-brand-matte hover:bg-brand-gold-hover hover:shadow-gold-glow-sm transition-all flex items-center justify-center gap-1.5">
+                                <i data-lucide="save" class="w-3.5 h-3.5"></i>
+                                Save Local
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 4: CONSTRUCTION LAW PAGE -->
+            <div id="workspace-tab-construction-law" class="hidden space-y-8">
+                <!-- Header -->
+                <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-6">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-lg bg-brand-gold-muted border border-brand-gold-border flex items-center justify-center text-brand-gold">
+                                <i data-lucide="scale" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-bold text-white">Construction Law</h2>
+                                <p class="text-xs text-gray-400">AI-powered legal guidance for quantity surveyors, contractors, project managers, developers, and construction professionals.</p>
+                            </div>
+                        </div>
+
+                        <!-- Search Bar -->
+                        <div class="relative w-full md:w-96">
+                            <i data-lucide="search" class="absolute left-3 top-2.5 h-4 w-4 text-gray-400"></i>
+                            <input type="text" oninput="filterLawCards(this.value)" class="w-full bg-brand-matte border border-brand-glass-border focus:border-brand-gold text-white rounded-lg pl-9 pr-4 py-2 text-sm focus:outline-none transition-colors" placeholder="Search construction law, contracts, disputes, or regulations...">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cards Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="law-cards-grid">
+                    <!-- Construction Contracts -->
+                    <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-gold-glow-sm transition-all duration-300 flex flex-col justify-between h-full law-card" data-title="construction contracts jct nec fidic ice design build traditional procurement management contracting epc">
+                        <div class="space-y-4">
+                            <div class="w-10 h-10 rounded-lg bg-brand-gold-muted/30 border border-brand-gold-border/30 flex items-center justify-center text-brand-gold">
+                                <i data-lucide="file-text" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="text-base font-bold text-white">Construction Contracts</h3>
+                            <p class="text-xs text-gray-400 leading-relaxed">Learn about JCT, NEC, FIDIC, ICE, Design & Build, Traditional Procurement, Management Contracting, and EPC contracts.</p>
+                        </div>
+                        <div class="pt-5">
+                            <button onclick="openLawDetail('contracts')" class="w-full px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-brand-gold text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
+                                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                Open
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Payment & Valuations -->
+                    <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-gold-glow-sm transition-all duration-300 flex flex-col justify-between h-full law-card" data-title="payment valuations interim pay notices less retention final accounts valuation procedures">
+                        <div class="space-y-4">
+                            <div class="w-10 h-10 rounded-lg bg-brand-gold-muted/30 border border-brand-gold-border/30 flex items-center justify-center text-brand-gold">
+                                <i data-lucide="coins" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="text-base font-bold text-white">Payment & Valuations</h3>
+                            <p class="text-xs text-gray-400 leading-relaxed">Guidance on interim payments, payment notices, pay less notices, retention, final accounts, and valuation procedures.</p>
+                        </div>
+                        <div class="pt-5">
+                            <button onclick="openLawDetail('payment')" class="w-full px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-brand-gold text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
+                                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                Open
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Claims & Disputes -->
+                    <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-gold-glow-sm transition-all duration-300 flex flex-col justify-between h-full law-card" data-title="claims disputes extension of time loss expense variations delay liquidated damages adjudication arbitration mediation litigation">
+                        <div class="space-y-4">
+                            <div class="w-10 h-10 rounded-lg bg-brand-gold-muted/30 border border-brand-gold-border/30 flex items-center justify-center text-brand-gold">
+                                <i data-lucide="scale" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="text-base font-bold text-white">Claims & Disputes</h3>
+                            <p class="text-xs text-gray-400 leading-relaxed">Extension of Time, Loss & Expense, Variations, Delay Claims, Liquidated Damages, Adjudication, Arbitration, Mediation, and Litigation.</p>
+                        </div>
+                        <div class="pt-5">
+                            <button onclick="openLawDetail('claims')" class="w-full px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-brand-gold text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
+                                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                Open
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Contract Administration -->
+                    <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-gold-glow-sm transition-all duration-300 flex flex-col justify-between h-full law-card" data-title="contract administration architect instructions compensation events early warning notices site practical completion defects certificates final accounts">
+                        <div class="space-y-4">
+                            <div class="w-10 h-10 rounded-lg bg-brand-gold-muted/30 border border-brand-gold-border/30 flex items-center justify-center text-brand-gold">
+                                <i data-lucide="clipboard-list" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="text-base font-bold text-white">Contract Administration</h3>
+                            <p class="text-xs text-gray-400 leading-relaxed">Architect's Instructions, Compensation Events, Early Warning Notices, Site Instructions, Practical Completion, Defects, Certificates, and Final Accounts.</p>
+                        </div>
+                        <div class="pt-5">
+                            <button onclick="openLawDetail('administration')" class="w-full px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-brand-gold text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
+                                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                Open
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Procurement -->
+                    <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-gold-glow-sm transition-all duration-300 flex flex-col justify-between h-full law-card" data-title="procurement tendering procedures framework agreements contractor selection public bid evaluation">
+                        <div class="space-y-4">
+                            <div class="w-10 h-10 rounded-lg bg-brand-gold-muted/30 border border-brand-gold-border/30 flex items-center justify-center text-brand-gold">
+                                <i data-lucide="briefcase" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="text-base font-bold text-white">Procurement</h3>
+                            <p class="text-xs text-gray-400 leading-relaxed">Tendering procedures, framework agreements, contractor selection, public procurement, and bid evaluation.</p>
+                        </div>
+                        <div class="pt-5">
+                            <button onclick="openLawDetail('procurement')" class="w-full px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-brand-gold text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
+                                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                Open
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Health & Safety -->
+                    <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-gold-glow-sm transition-all duration-300 flex flex-col justify-between h-full law-card" data-title="health safety cdm regulations principal designer duties contractor responsibilities rams ppe site requirements">
+                        <div class="space-y-4">
+                            <div class="w-10 h-10 rounded-lg bg-brand-gold-muted/30 border border-brand-gold-border/30 flex items-center justify-center text-brand-gold">
+                                <i data-lucide="shield-alert" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="text-base font-bold text-white">Health & Safety</h3>
+                            <p class="text-xs text-gray-400 leading-relaxed">CDM Regulations, Principal Designer duties, Principal Contractor responsibilities, RAMS, PPE, and site safety requirements.</p>
+                        </div>
+                        <div class="pt-5">
+                            <button onclick="openLawDetail('safety')" class="w-full px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-brand-gold text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
+                                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                Open
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Planning & Building Regulations -->
+                    <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-gold-glow-sm transition-all duration-300 flex flex-col justify-between h-full law-card" data-title="planning building regulations permission listed buildings conservation areas control compliance">
+                        <div class="space-y-4">
+                            <div class="w-10 h-10 rounded-lg bg-brand-gold-muted/30 border border-brand-gold-border/30 flex items-center justify-center text-brand-gold">
+                                <i data-lucide="milestone" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="text-base font-bold text-white">Planning & Building Regulations</h3>
+                            <p class="text-xs text-gray-400 leading-relaxed">Planning Permission, Building Regulations, Listed Buildings, Conservation Areas, Building Control, and Compliance.</p>
+                        </div>
+                        <div class="pt-5">
+                            <button onclick="openLawDetail('planning')" class="w-full px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-brand-gold text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
+                                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                Open
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Insurance & Bonds -->
+                    <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-gold-glow-sm transition-all duration-300 flex flex-col justify-between h-full law-card" data-title="insurance bonds professional indemnity public liability car performance parent company guarantees warranties">
+                        <div class="space-y-4">
+                            <div class="w-10 h-10 rounded-lg bg-brand-gold-muted/30 border border-brand-gold-border/30 flex items-center justify-center text-brand-gold">
+                                <i data-lucide="shield-check" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="text-base font-bold text-white">Insurance & Bonds</h3>
+                            <p class="text-xs text-gray-400 leading-relaxed">Professional Indemnity, Public Liability, CAR Insurance, Performance Bonds, Parent Company Guarantees, and Warranties.</p>
+                        </div>
+                        <div class="pt-5">
+                            <button onclick="openLawDetail('insurance')" class="w-full px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-brand-gold text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
+                                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                Open
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Construction Legislation -->
+                    <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-gold-glow-sm transition-all duration-300 flex flex-col justify-between h-full law-card" data-title="construction legislation housing grants regeneration act building safety cdm health regulations uk laws">
+                        <div class="space-y-4">
+                            <div class="w-10 h-10 rounded-lg bg-brand-gold-muted/30 border border-brand-gold-border/30 flex items-center justify-center text-brand-gold">
+                                <i data-lucide="book-open" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="text-base font-bold text-white">Construction Legislation</h3>
+                            <p class="text-xs text-gray-400 leading-relaxed">Reference the Housing Grants, Construction and Regeneration Act, Building Safety Act, CDM Regulations, Health & Safety legislation, and other key UK construction laws.</p>
+                        </div>
+                        <div class="pt-5">
+                            <button onclick="openLawDetail('legislation')" class="w-full px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-brand-gold text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
+                                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                Open
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- AI Contract Review -->
+                    <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-gold-glow-sm transition-all duration-300 flex flex-col justify-between h-full law-card" data-title="ai contract review upload contracts analysis clause explanations risk identification missing provisions summaries recommendations">
+                        <div class="space-y-4">
+                            <div class="w-10 h-10 rounded-lg bg-brand-gold-muted/30 border border-brand-gold-border/30 flex items-center justify-center text-brand-gold">
+                                <i data-lucide="brain" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="text-base font-bold text-white">AI Contract Review</h3>
+                            <p class="text-xs text-gray-400 leading-relaxed">Upload contracts for AI analysis. Receive clause explanations, risk identification, missing provisions, plain-English summaries, and recommendations.</p>
+                        </div>
+                        <div class="pt-5">
+                            <button onclick="openLawDetail('review')" class="w-full px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-brand-gold text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
+                                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                Open
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Legal Templates -->
+                    <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-gold-glow-sm transition-all duration-300 flex flex-col justify-between h-full law-card" data-title="legal templates downloadable payment notices pay less extension of time requests variation orders delay letters before action practical completion certificates final account">
+                        <div class="space-y-4">
+                            <div class="w-10 h-10 rounded-lg bg-brand-gold-muted/30 border border-brand-gold-border/30 flex items-center justify-center text-brand-gold">
+                                <i data-lucide="folder-open" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="text-base font-bold text-white">Legal Templates</h3>
+                            <p class="text-xs text-gray-400 leading-relaxed">Access downloadable templates including Payment Notices, Pay Less Notices, Extension of Time Requests, Variation Orders, Delay Notices, Letters Before Action, Practical Completion Certificates, and Final Account documents.</p>
+                        </div>
+                        <div class="pt-5">
+                            <button onclick="openLawDetail('templates')" class="w-full px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-brand-gold text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
+                                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                Open
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Featured AI Assistant Section -->
+                <div class="bg-gradient-to-r from-brand-graphite to-[#18181C] border border-brand-gold/30 rounded-2xl p-6 md:p-8 space-y-6 relative overflow-hidden">
+                    <!-- Background Glow Accent -->
+                    <div class="absolute -right-16 -top-16 w-48 h-48 rounded-full bg-brand-gold/5 blur-3xl pointer-events-none"></div>
+                    <div class="absolute -left-16 -bottom-16 w-48 h-48 rounded-full bg-brand-gold/5 blur-3xl pointer-events-none"></div>
+
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-brand-glass-border pb-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-brand-gold-muted border border-brand-gold-border flex items-center justify-center text-brand-gold shrink-0">
+                                <i data-lucide="bot" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                                    🤖 Construction Law AI Assistant
+                                    <span class="text-[10px] bg-brand-gold/10 text-brand-gold border border-brand-gold/20 px-2 py-0.5 rounded-full font-mono font-normal">Active Premium</span>
+                                </h2>
+                                <p class="text-xs text-gray-400 mt-1">Sovereign Artificial Intelligence trained on UK JCT/NEC contracts, Housing Grants Act, and commercial dispute precedents.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Input Workspace -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        <!-- Left Side: Prompt Input and Example Tags (7 cols) -->
+                        <div class="lg:col-span-7 space-y-4">
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Legal AI Prompt Inquiry</label>
+                                <textarea id="law-ai-prompt" rows="3" class="w-full bg-brand-matte border border-brand-glass-border focus:border-brand-gold text-white rounded-xl p-4 text-sm focus:outline-none transition-all placeholder:text-gray-500" placeholder="Describe your legal issue, ask about a contract clause, or request advice on payment terms..."></textarea>
+                            </div>
+
+                            <!-- Clickable Prompt Questions -->
+                            <div class="space-y-2">
+                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider">Suggested Queries</label>
+                                <div class="flex flex-wrap gap-2">
+                                    <button onclick="setLawPrompt('Explain this NEC clause.')" class="px-2.5 py-1 text-[11px] rounded-lg border border-brand-glass-border hover:border-brand-gold text-gray-400 hover:text-white bg-brand-matte/50 transition-all">Explain this NEC clause.</button>
+                                    <button onclick="setLawPrompt('What is a Pay Less Notice?')" class="px-2.5 py-1 text-[11px] rounded-lg border border-brand-glass-border hover:border-brand-gold text-gray-400 hover:text-white bg-brand-matte/50 transition-all">What is a Pay Less Notice?</button>
+                                    <button onclick="setLawPrompt('Can I claim an Extension of Time?')" class="px-2.5 py-1 text-[11px] rounded-lg border border-brand-glass-border hover:border-brand-gold text-gray-400 hover:text-white bg-brand-matte/50 transition-all">Can I claim an Extension of Time?</button>
+                                    <button onclick="setLawPrompt('Summarize this contract.')" class="px-2.5 py-1 text-[11px] rounded-lg border border-brand-glass-border hover:border-brand-gold text-gray-400 hover:text-white bg-brand-matte/50 transition-all">Summarize this contract.</button>
+                                    <button onclick="setLawPrompt('Review this JCT contract.')" class="px-2.5 py-1 text-[11px] rounded-lg border border-brand-glass-border hover:border-brand-gold text-gray-400 hover:text-white bg-brand-matte/50 transition-all">Review this JCT contract.</button>
+                                    <button onclick="setLawPrompt('Explain Liquidated Damages.')" class="px-2.5 py-1 text-[11px] rounded-lg border border-brand-glass-border hover:border-brand-gold text-gray-400 hover:text-white bg-brand-matte/50 transition-all">Explain Liquidated Damages.</button>
+                                    <button onclick="setLawPrompt('Draft a Variation Order.')" class="px-2.5 py-1 text-[11px] rounded-lg border border-brand-glass-border hover:border-brand-gold text-gray-400 hover:text-white bg-brand-matte/50 transition-all">Draft a Variation Order.</button>
+                                    <button onclick="setLawPrompt('Generate a Payment Notice.')" class="px-2.5 py-1 text-[11px] rounded-lg border border-brand-glass-border hover:border-brand-gold text-gray-400 hover:text-white bg-brand-matte/50 transition-all">Generate a Payment Notice.</button>
+                                </div>
+                            </div>
+
+                            <button onclick="askLawAI()" class="px-5 py-3 text-xs font-bold rounded-lg bg-brand-gold text-brand-matte hover:bg-brand-gold-hover hover:shadow-gold-glow-sm transition-all flex items-center gap-2">
+                                <i data-lucide="scale" class="w-4 h-4"></i>
+                                Ask Construction Law AI
+                            </button>
+                        </div>
+
+                        <!-- Right Side: AI Output Box (5 cols) -->
+                        <div class="lg:col-span-5 flex flex-col justify-between border border-brand-glass-border bg-brand-matte rounded-xl p-5 min-h-[250px] relative">
+                            <div class="space-y-4 flex-1">
+                                <div class="flex items-center justify-between border-b border-brand-glass-border/30 pb-2">
+                                    <span class="text-[10px] font-bold text-brand-gold uppercase tracking-wider flex items-center gap-1.5">
+                                        <span class="w-1.5 h-1.5 bg-brand-gold rounded-full animate-pulse"></span>
+                                        AI Response Engine
+                                    </span>
+                                    <span class="text-[10px] text-gray-500 font-mono">Output Status: Ready</span>
+                                </div>
+
+                                <!-- Live Interactive Legal Content Output -->
+                                <div id="law-ai-response" class="text-xs text-gray-300 leading-relaxed max-h-[300px] overflow-y-auto space-y-3">
+                                    <div class="flex flex-col items-center justify-center py-12 text-center text-gray-500 space-y-2">
+                                        <i data-lucide="gavel" class="w-8 h-8 text-gray-600"></i>
+                                        <p class="font-medium text-gray-400">No Query Submitted Yet</p>
+                                        <p class="max-w-xs text-[11px]">Select a suggested query or type a prompt above to receive structured legal analysis and advice.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: AI SETTINGS PAGE -->
+            <div id="workspace-tab-ai-settings" class="hidden space-y-6">
+                <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-6">
+                    <div class="flex items-center gap-3 border-b border-brand-glass-border pb-4 mb-6">
+                        <div class="w-10 h-10 rounded-lg bg-brand-gold-muted border border-brand-gold-border flex items-center justify-center text-brand-gold">
+                            <i data-lucide="cpu" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-bold text-white">AI Provider Configuration</h2>
+                            <p class="text-xs text-gray-400">Enable live Large Language Models. API keys are strictly retained in your local browser storage.</p>
+                        </div>
+                    </div>
+
+                    <!-- Provider List Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="ai-providers-grid">
+                        <!-- Dynamic JS will inject the 8 providers: OpenAI, Claude, Gemini, Grok, OpenRouter, Mistral, DeepSeek, Ollama -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: DEVELOPER LOGS PAGE -->
+            <div id="workspace-tab-dev-logs" class="hidden space-y-6">
+                <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-6 space-y-4">
+                    <div class="flex items-center justify-between border-b border-brand-glass-border pb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-lg bg-brand-gold-muted border border-brand-gold-border flex items-center justify-center text-brand-gold">
+                                <i data-lucide="terminal" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-lg font-bold text-white">Enterprise AI Developer Mode</h2>
+                                <p class="text-xs text-gray-400">Detailed transaction trace logs for all 12 specialisation modules.</p>
+                            </div>
+                        </div>
+                        <button onclick="clearPipelineLogs()" class="px-3.5 py-1.5 rounded-lg border border-brand-glass-border text-xs text-gray-400 hover:text-white hover:bg-brand-glass-hover transition-all">Clear Traces</button>
+                    </div>
+
+                    <!-- Log Table -->
+                    <div class="overflow-x-auto border border-brand-glass-border/30 rounded-xl">
+                        <table class="w-full text-left text-xs border-collapse font-mono">
+                            <thead>
+                                <tr class="bg-brand-matte border-b border-brand-glass-border text-[10px] text-gray-400 font-bold uppercase">
+                                    <th class="p-3">Stage</th>
+                                    <th class="p-3">Start/End</th>
+                                    <th class="p-3">Duration</th>
+                                    <th class="p-3">Provider / Model</th>
+                                    <th class="p-3 text-right">Tokens</th>
+                                    <th class="p-3 text-center">Status</th>
+                                    <th class="p-3">Validation Result</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pipeline-logs-tbody" class="divide-y divide-brand-glass-border/20 text-gray-300">
+                                <tr>
+                                    <td colspan="7" class="p-8 text-center text-gray-500 italic">No transactions executed yet. Run the Quotation pipeline to see detailed logs.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Landing Content Wrapper -->
+        <main id="landing-page-wrapper" class="relative z-10">
+            <!-- Hero Section -->
+        <section class="relative pt-12 pb-24 md:pt-20 md:pb-32 overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+
+                    <!-- Left Hero Content -->
+                    <div class="lg:col-span-7 space-y-8 text-center lg:text-left">
+                        <!-- Badge -->
+                        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-gold-muted border border-brand-gold-border text-brand-gold text-xs font-semibold tracking-wider uppercase animate-pulse">
+                            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                            Next-Gen Estimation Suite v2.4
+                        </div>
+
+                        <!-- Headline -->
+                        <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white leading-tight">
+                            AI Construction <span class="bg-gradient-to-r from-brand-gold via-[#FFF1C5] to-brand-gold bg-clip-text text-transparent drop-shadow-sm">Estimating</span> for Modern Builders
+                        </h1>
+
+                        <!-- Subtitle -->
+                        <p class="text-lg md:text-xl text-gray-400 font-light max-w-2xl mx-auto lg:mx-0">
+                            Generate professional construction quotations in minutes using intelligent document analysis. Say goodbye to tedious manual surveys.
+                        </p>
+
+                        <!-- Actions -->
+                        <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                            <button onclick="toggleView(true)" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-brand-gold text-brand-matte hover:bg-brand-gold-hover font-bold text-center hover:shadow-gold-glow transition-all duration-300 flex items-center justify-center gap-2.5">
+                                Get Started Free
+                                <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                            </button>
+                            <button onclick="triggerWorkflowDemoAnimation()" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-brand-graphite/40 border border-brand-glass-border text-gray-300 hover:text-white hover:bg-brand-glass-hover font-bold text-center transition-all duration-300 flex items-center justify-center gap-2.5">
+                                <i data-lucide="play" class="w-5 h-5 text-brand-gold"></i>
+                                View Demo
+                            </button>
+                        </div>
+
+                        <!-- Stats -->
+                        <div class="pt-8 grid grid-cols-3 gap-4 sm:gap-8 border-t border-brand-glass-border max-w-lg mx-auto lg:mx-0">
+                            <div>
+                                <p class="text-2xl sm:text-3xl font-extrabold text-brand-gold">10x</p>
+                                <p class="text-xs text-gray-400 uppercase tracking-wider mt-1">Faster Estimations</p>
+                            </div>
+                            <div>
+                                <p class="text-2xl sm:text-3xl font-extrabold text-white">99.8%</p>
+                                <p class="text-xs text-gray-400 uppercase tracking-wider mt-1">AI Survey Accuracy</p>
+                            </div>
+                            <div>
+                                <p class="text-2xl sm:text-3xl font-extrabold text-white">£4.2B+</p>
+                                <p class="text-xs text-gray-400 uppercase tracking-wider mt-1">Estimates Generated</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Hero Content - Interactive Dashboard Sandbox Mock -->
+                    <div class="lg:col-span-5" id="hero-workflow-container">
+                        <div class="relative mx-auto max-w-md lg:max-w-none">
+                            <!-- Background glow for dashboard -->
+                            <div class="absolute -inset-1.5 bg-gradient-to-r from-brand-gold to-[#A28321] rounded-2xl blur opacity-20 group-hover:opacity-30 transition duration-1000"></div>
+
+                            <!-- Dashboard Card Frame -->
+                            <div class="relative bg-brand-graphite border border-brand-glass-border shadow-glass-shadow rounded-2xl overflow-hidden">
+                                <!-- Top Bar -->
+                                <div class="bg-[#1e1e24] px-4 py-3 border-b border-brand-glass-border flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+                                        <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                                        <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+                                        <span class="text-xs text-gray-400 font-mono ml-2">builderquote-ai-pipeline</span>
+                                    </div>
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                                        <span class="text-[10px] text-green-400 uppercase tracking-wider font-mono">Live Engine</span>
+                                    </div>
+                                </div>
+
+                                <!-- Main Panel -->
+                                <div class="p-6 space-y-4">
+                                    <div class="flex items-center justify-between">
+                                        <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest">AI Quantity Surveying Pipeline</h3>
+                                        <span class="text-[11px] text-brand-gold font-semibold flex items-center gap-1" id="pipeline-status">
+                                            <span class="w-1.5 h-1.5 bg-brand-gold rounded-full animate-ping"></span>
+                                            Active Takeoff
+                                        </span>
+                                    </div>
+
+                                    <!-- Vertical Workflow Animation -->
+                                    <div class="space-y-2.5 relative before:absolute before:left-[17px] before:top-2 before:bottom-2 before:w-[1px] before:bg-brand-glass-border">
+                                        <div class="pipeline-step flex items-center gap-3.5 p-2 bg-brand-matte/40 rounded-xl border border-brand-glass-border transition-all duration-300" id="flow-step-0">
+                                            <div class="step-num w-6 h-6 rounded-full bg-brand-gold-muted border border-brand-gold-border/40 flex items-center justify-center text-brand-gold text-[10px] font-extrabold shrink-0">1</div>
+                                            <div>
+                                                <p class="text-xs font-bold text-white">Architectural Drawings</p>
+                                                <p class="text-[10px] text-gray-400">PDF, CAD/DWG layouts and site blueprints</p>
+                                            </div>
+                                        </div>
+                                        <div class="pipeline-step flex items-center gap-3.5 p-2 bg-brand-matte/40 rounded-xl border border-brand-glass-border transition-all duration-300" id="flow-step-1">
+                                            <div class="step-num w-6 h-6 rounded-full bg-brand-gold-muted border border-brand-gold-border/40 flex items-center justify-center text-brand-gold text-[10px] font-extrabold shrink-0">2</div>
+                                            <div>
+                                                <p class="text-xs font-bold text-white">AI Document Intelligence</p>
+                                                <p class="text-[10px] text-gray-400">Advanced OCR & system prompt specs analysis</p>
+                                            </div>
+                                        </div>
+                                        <div class="pipeline-step flex items-center gap-3.5 p-2 bg-brand-matte/40 rounded-xl border border-brand-glass-border transition-all duration-300" id="flow-step-2">
+                                            <div class="step-num w-6 h-6 rounded-full bg-brand-gold-muted border border-brand-gold-border/40 flex items-center justify-center text-brand-gold text-[10px] font-extrabold shrink-0">3</div>
+                                            <div>
+                                                <p class="text-xs font-bold text-white">Automatic Quantity Takeoff</p>
+                                                <p class="text-[10px] text-gray-400">Deep measurement & physical unit takeoff scanning</p>
+                                            </div>
+                                        </div>
+                                        <div class="pipeline-step flex items-center gap-3.5 p-2 bg-brand-matte/40 rounded-xl border border-brand-glass-border transition-all duration-300" id="flow-step-3">
+                                            <div class="step-num w-6 h-6 rounded-full bg-brand-gold-muted border border-brand-gold-border/40 flex items-center justify-center text-brand-gold text-[10px] font-extrabold shrink-0">4</div>
+                                            <div>
+                                                <p class="text-xs font-bold text-white">Professional Bill of Quantities</p>
+                                                <p class="text-[10px] text-gray-400">Detailed line itemization according to NRM2 standards</p>
+                                            </div>
+                                        </div>
+                                        <div class="pipeline-step flex items-center gap-3.5 p-2 bg-brand-matte/40 rounded-xl border border-brand-glass-border transition-all duration-300" id="flow-step-4">
+                                            <div class="step-num w-6 h-6 rounded-full bg-brand-gold-muted border border-brand-gold-border/40 flex items-center justify-center text-brand-gold text-[10px] font-extrabold shrink-0">5</div>
+                                            <div>
+                                                <p class="text-xs font-bold text-white">Cost Analysis</p>
+                                                <p class="text-[10px] text-gray-400">Localized material, labour, and plant regional rates applied</p>
+                                            </div>
+                                        </div>
+                                        <div class="pipeline-step flex items-center gap-3.5 p-2 bg-brand-matte/40 rounded-xl border border-brand-glass-border transition-all duration-300" id="flow-step-5">
+                                            <div class="step-num w-6 h-6 rounded-full bg-brand-gold-muted border border-brand-gold-border/40 flex items-center justify-center text-brand-gold text-[10px] font-extrabold shrink-0">6</div>
+                                            <div>
+                                                <p class="text-xs font-bold text-white">Client Quotation</p>
+                                                <p class="text-[10px] text-gray-400">Enterprise 14-section Chartered Quantity Surveyor report</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Specification Level Selector inside Hero Content -->
+                                    <div class="bg-brand-matte/60 border border-brand-glass-border rounded-xl p-4 space-y-3">
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">Project Specification Level</span>
+                                            <span id="active-spec-badge" class="text-[10px] bg-brand-gold-muted border border-brand-gold-border text-brand-gold px-2 py-0.5 rounded font-bold uppercase">Premium</span>
+                                        </div>
+                                        <div class="grid grid-cols-3 gap-2">
+                                            <button onclick="setHomepageSpec('Standard')" class="home-spec-btn border border-brand-glass-border bg-brand-matte py-1.5 text-[10px] font-semibold rounded text-gray-400 hover:text-white hover:border-gray-500 transition-all flex flex-col items-center">
+                                                <span class="font-bold text-white">Standard</span>
+                                                <span class="text-[8px] text-gray-500 mt-0.5 text-center">Developer spec</span>
+                                            </button>
+                                            <button onclick="setHomepageSpec('Premium')" class="home-spec-btn border border-brand-gold/60 bg-brand-gold-muted py-1.5 text-[10px] font-bold rounded text-brand-gold transition-all flex flex-col items-center">
+                                                <span class="font-bold text-brand-gold">Premium</span>
+                                                <span class="text-[8px] text-brand-gold/60 mt-0.5 text-center">High-quality resi</span>
+                                            </button>
+                                            <button onclick="setHomepageSpec('Luxury')" class="home-spec-btn border border-brand-glass-border bg-brand-matte py-1.5 text-[10px] font-semibold rounded text-gray-400 hover:text-white hover:border-gray-500 transition-all flex flex-col items-center">
+                                                <span class="font-bold text-white">Luxury</span>
+                                                <span class="text-[8px] text-gray-500 mt-0.5 text-center">Bespoke luxury</span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Strong CTA Directing Users into Workspace -->
+                                    <button onclick="toggleView(true)" class="w-full py-3 rounded-xl bg-brand-gold text-brand-matte hover:bg-brand-gold-hover hover:shadow-gold-glow font-bold text-sm transition-all duration-300 flex items-center justify-center gap-2">
+                                        Get Started in AI Workspace
+                                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section id="testimonials" class="py-20 border-t border-brand-glass-border relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="text-center max-w-3xl mx-auto mb-12 space-y-4">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-gold-muted border border-brand-gold-border text-brand-gold text-xs font-semibold tracking-wider uppercase">
+                        What Contractors Say
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Trusted by Industry Professionals</h2>
+                    <p class="text-base text-gray-400 font-light">See how enterprise contractors and Quantity Surveyors leverage our AI takeoff engine.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-brand-graphite border border-brand-glass-border p-6 rounded-2xl relative">
+                        <div class="flex items-center gap-1.5 mb-3 text-brand-gold">
+                            <i data-lucide="star" class="w-4 h-4 fill-brand-gold"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-brand-gold"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-brand-gold"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-brand-gold"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-brand-gold"></i>
+                        </div>
+                        <p class="text-xs text-gray-300 italic mb-4">"QuantisAI has completely transformed our bidding volume. What used to take two weeks of manual scaling is now produced in minutes. The 14-section QS report is incredibly detailed and client-ready."</p>
+                        <div>
+                            <p class="text-xs font-bold text-white">David Fletcher, MRICS</p>
+                            <p class="text-[10px] text-gray-500">Lead Surveyor, Apex Commercial Tenders</p>
+                        </div>
+                    </div>
+                    <div class="bg-brand-graphite border border-brand-glass-border p-6 rounded-2xl relative">
+                        <div class="flex items-center gap-1.5 mb-3 text-brand-gold">
+                            <i data-lucide="star" class="w-4 h-4 fill-brand-gold"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-brand-gold"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-brand-gold"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-brand-gold"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-brand-gold"></i>
+                        </div>
+                        <p class="text-xs text-gray-300 italic mb-4">"The regional pricing multipliers are spot on. We bid across 4 different UK regions, and having the labor/material indexes adjusted automatically has saved us from several costly bidding mistakes."</p>
+                        <div>
+                            <p class="text-xs font-bold text-white">Sarah Jenkins</p>
+                            <p class="text-[10px] text-gray-500">Director, Jenkins & Partners Ltd</p>
+                        </div>
+                    </div>
+                    <div class="bg-brand-graphite border border-brand-glass-border p-6 rounded-2xl relative md:col-span-2 lg:col-span-1">
+                        <div class="flex items-center gap-1.5 mb-3 text-brand-gold">
+                            <i data-lucide="star" class="w-4 h-4 fill-brand-gold"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-brand-gold"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-brand-gold"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-brand-gold"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-brand-gold"></i>
+                        </div>
+                        <p class="text-xs text-gray-300 italic mb-4">"Absolutely phenomenal. Being able to secure multiple AI provider integrations like Claude 3.5 Sonnet and OpenAI is incredible. We get highly unique, highly precise estimations every time."</p>
+                        <div>
+                            <p class="text-xs font-bold text-white">Marcus Vance</p>
+                            <p class="text-[10px] text-gray-500">VP of Preconstruction, Alliance Infrastructure</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="py-24 border-t border-brand-glass-border relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+
+                <!-- Section Header -->
+                <div class="text-center max-w-3xl mx-auto mb-20 space-y-4">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-gold-muted border border-brand-gold-border text-brand-gold text-xs font-semibold tracking-wider uppercase">
+                        Enterprise Capabilities
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight">
+                        Engineered for High-Precision Estimating
+                    </h2>
+                    <p class="text-lg text-gray-400 font-light">
+                        Discover 10 revolutionary, AI-powered modules designed specifically for builders, quantity surveyors, and project managers.
+                    </p>
+                </div>
+
+                <!-- Features Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                    <!-- Card 1: AI Quantity Surveyor -->
+                    <div class="group relative bg-brand-graphite border border-brand-glass-border rounded-2xl p-8 hover:border-brand-gold-border hover:shadow-glass-shadow transition-all duration-300 hover:-translate-y-1.5 overflow-hidden">
+                        <div class="absolute -right-8 -bottom-8 w-24 h-24 bg-brand-gold-muted rounded-full blur-2xl group-hover:bg-brand-gold/10 transition-all duration-300"></div>
+                        <div class="w-12 h-12 rounded-xl bg-brand-gold-muted border border-brand-gold-border text-brand-gold flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-brand-gold group-hover:text-brand-matte transition-all duration-300">
+                            <i data-lucide="calculator" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3 group-hover:text-brand-gold transition-colors">AI Quantity Surveyor</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            Simulate physical quantity takeoffs from structural blueprints instantly, reducing weeks of tedious measurements to mere seconds.
+                        </p>
+                    </div>
+
+                    <!-- Card 2: BOQ Generator -->
+                    <div class="group relative bg-brand-graphite border border-brand-glass-border rounded-2xl p-8 hover:border-brand-gold-border hover:shadow-glass-shadow transition-all duration-300 hover:-translate-y-1.5 overflow-hidden">
+                        <div class="absolute -right-8 -bottom-8 w-24 h-24 bg-brand-gold-muted rounded-full blur-2xl group-hover:bg-brand-gold/10 transition-all duration-300"></div>
+                        <div class="w-12 h-12 rounded-xl bg-brand-gold-muted border border-brand-gold-border text-brand-gold flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-brand-gold group-hover:text-brand-matte transition-all duration-300">
+                            <i data-lucide="file-text" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3 group-hover:text-brand-gold transition-colors">BOQ Generator</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            Export highly detailed and fully customized Bills of Quantities compliant with modern industrial standards (NRM2 & SMM7).
+                        </p>
+                    </div>
+
+                    <!-- Card 3: Material Estimator -->
+                    <div class="group relative bg-brand-graphite border border-brand-glass-border rounded-2xl p-8 hover:border-brand-gold-border hover:shadow-glass-shadow transition-all duration-300 hover:-translate-y-1.5 overflow-hidden">
+                        <div class="absolute -right-8 -bottom-8 w-24 h-24 bg-brand-gold-muted rounded-full blur-2xl group-hover:bg-brand-gold/10 transition-all duration-300"></div>
+                        <div class="w-12 h-12 rounded-xl bg-brand-gold-muted border border-brand-gold-border text-brand-gold flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-brand-gold group-hover:text-brand-matte transition-all duration-300">
+                            <i data-lucide="package" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3 group-hover:text-brand-gold transition-colors">Material Estimator</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            Automatically calculate raw concrete, steel weight, bricks, wiring, and timber loads with real-time dynamic market pricing.
+                        </p>
+                    </div>
+
+                    <!-- Card 4: Labour Calculator -->
+                    <div class="group relative bg-brand-graphite border border-brand-glass-border rounded-2xl p-8 hover:border-brand-gold-border hover:shadow-glass-shadow transition-all duration-300 hover:-translate-y-1.5 overflow-hidden">
+                        <div class="absolute -right-8 -bottom-8 w-24 h-24 bg-brand-gold-muted rounded-full blur-2xl group-hover:bg-brand-gold/10 transition-all duration-300"></div>
+                        <div class="w-12 h-12 rounded-xl bg-brand-gold-muted border border-brand-gold-border text-brand-gold flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-brand-gold group-hover:text-brand-matte transition-all duration-300">
+                            <i data-lucide="users" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3 group-hover:text-brand-gold transition-colors">Labour Calculator</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            Estimate craft hour rates and total labour costs across various trades, including electricians, bricklayers, plumbers and joiners.
+                        </p>
+                    </div>
+
+                    <!-- Card 5: Cost Database -->
+                    <div class="group relative bg-brand-graphite border border-brand-glass-border rounded-2xl p-8 hover:border-brand-gold-border hover:shadow-glass-shadow transition-all duration-300 hover:-translate-y-1.5 overflow-hidden">
+                        <div class="absolute -right-8 -bottom-8 w-24 h-24 bg-brand-gold-muted rounded-full blur-2xl group-hover:bg-brand-gold/10 transition-all duration-300"></div>
+                        <div class="w-12 h-12 rounded-xl bg-brand-gold-muted border border-brand-gold-border text-brand-gold flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-brand-gold group-hover:text-brand-matte transition-all duration-300">
+                            <i data-lucide="database" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3 group-hover:text-brand-gold transition-colors">Cost Database</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            Gain access to our premium, regionally-indexed cost master database containing over 50,000 active trade items.
+                        </p>
+                    </div>
+
+                    <!-- Card 6: Tender Assistant -->
+                    <div class="group relative bg-brand-graphite border border-brand-glass-border rounded-2xl p-8 hover:border-brand-gold-border hover:shadow-glass-shadow transition-all duration-300 hover:-translate-y-1.5 overflow-hidden">
+                        <div class="absolute -right-8 -bottom-8 w-24 h-24 bg-brand-gold-muted rounded-full blur-2xl group-hover:bg-brand-gold/10 transition-all duration-300"></div>
+                        <div class="w-12 h-12 rounded-xl bg-brand-gold-muted border border-brand-gold-border text-brand-gold flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-brand-gold group-hover:text-brand-matte transition-all duration-300">
+                            <i data-lucide="award" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3 group-hover:text-brand-gold transition-colors">Tender Assistant</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            Analyze tender conditions and specifications automatically. Build competitive, error-free margins to win lucrative commercial bids.
+                        </p>
+                    </div>
+
+                    <!-- Card 7: Project Timeline -->
+                    <div class="group relative bg-brand-graphite border border-brand-glass-border rounded-2xl p-8 hover:border-brand-gold-border hover:shadow-glass-shadow transition-all duration-300 hover:-translate-y-1.5 overflow-hidden">
+                        <div class="absolute -right-8 -bottom-8 w-24 h-24 bg-brand-gold-muted rounded-full blur-2xl group-hover:bg-brand-gold/10 transition-all duration-300"></div>
+                        <div class="w-12 h-12 rounded-xl bg-brand-gold-muted border border-brand-gold-border text-brand-gold flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-brand-gold group-hover:text-brand-matte transition-all duration-300">
+                            <i data-lucide="calendar-days" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3 group-hover:text-brand-gold transition-colors">Project Timeline</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            Generate automated project critical paths and realistic Gantt chart milestones based on real material procurement and labor.
+                        </p>
+                    </div>
+
+                    <!-- Card 8: Risk Analysis -->
+                    <div class="group relative bg-brand-graphite border border-brand-glass-border rounded-2xl p-8 hover:border-brand-gold-border hover:shadow-glass-shadow transition-all duration-300 hover:-translate-y-1.5 overflow-hidden">
+                        <div class="absolute -right-8 -bottom-8 w-24 h-24 bg-brand-gold-muted rounded-full blur-2xl group-hover:bg-brand-gold/10 transition-all duration-300"></div>
+                        <div class="w-12 h-12 rounded-xl bg-brand-gold-muted border border-brand-gold-border text-brand-gold flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-brand-gold group-hover:text-brand-matte transition-all duration-300">
+                            <i data-lucide="shield-alert" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3 group-hover:text-brand-gold transition-colors">Risk Analysis</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            Identify pricing anomalies, missing material constraints, and potential supply-chain delays with smart statistical predictions.
+                        </p>
+                    </div>
+
+                    <!-- Card 9: Document Intelligence -->
+                    <div class="group relative bg-brand-graphite border border-brand-glass-border rounded-2xl p-8 hover:border-brand-gold-border hover:shadow-glass-shadow transition-all duration-300 hover:-translate-y-1.5 overflow-hidden">
+                        <div class="absolute -right-8 -bottom-8 w-24 h-24 bg-brand-gold-muted rounded-full blur-2xl group-hover:bg-brand-gold/10 transition-all duration-300"></div>
+                        <div class="w-12 h-12 rounded-xl bg-brand-gold-muted border border-brand-gold-border text-brand-gold flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-brand-gold group-hover:text-brand-matte transition-all duration-300">
+                            <i data-lucide="brain-circuit" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3 group-hover:text-brand-gold transition-colors">Document Intelligence</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            Analyze architectural drawings, specifications, and layout blueprints instantly with advanced visual-linguistic AI algorithms.
+                        </p>
+                    </div>
+
+                    <!-- Card 10: Client Reports -->
+                    <div class="group relative bg-brand-graphite border border-brand-glass-border rounded-2xl p-8 hover:border-brand-gold-border hover:shadow-glass-shadow transition-all duration-300 hover:-translate-y-1.5 overflow-hidden md:col-span-2 lg:col-span-3">
+                        <div class="absolute -right-8 -bottom-8 w-24 h-24 bg-brand-gold-muted rounded-full blur-2xl group-hover:bg-brand-gold/10 transition-all duration-300"></div>
+                        <div class="w-12 h-12 rounded-xl bg-brand-gold-muted border border-brand-gold-border text-brand-gold flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-brand-gold group-hover:text-brand-matte transition-all duration-300">
+                            <i data-lucide="file-check" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3 group-hover:text-brand-gold transition-colors">Client Reports</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed max-w-2xl">
+                            Export ultra-premium, white-labeled PDF quotes complete with your organization's custom branding, clear material visual breakdown, terms and conditions, and digital signatures.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section id="pricing" class="py-24 border-t border-brand-glass-border relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+
+                <!-- Section Header -->
+                <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-gold-muted border border-brand-gold-border text-brand-gold text-xs font-semibold tracking-wider uppercase">
+                        Transparent Pricing
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight">
+                        Tailored for Every Scale of Construction
+                    </h2>
+                    <p class="text-lg text-gray-400 font-light">
+                        Select a premium plan that fits your estimation volume. Save over 30% with an annual billing cycle.
+                    </p>
+
+                    <!-- Toggle Button Container -->
+                    <div class="pt-6 flex justify-center items-center gap-4">
+                        <span id="label-monthly" class="text-sm font-semibold text-white transition-colors">Monthly</span>
+                        <button id="billing-toggle" type="button" class="relative inline-flex h-7 w-14 shrink-0 cursor-pointer rounded-full border-2 border-brand-gold/30 bg-brand-graphite transition-colors duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-brand-gold focus:ring-offset-2 focus:ring-offset-brand-matte" role="switch" aria-checked="false">
+                            <span id="toggle-knob" aria-hidden="true" class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-brand-gold shadow ring-0 transition duration-300 ease-in-out translate-x-0"></span>
+                        </button>
+                        <span id="label-annual" class="text-sm font-semibold text-gray-400 transition-colors flex items-center gap-1.5">
+                            Annual
+                            <span class="text-[10px] bg-brand-gold-muted border border-brand-gold-border text-brand-gold px-1.5 py-0.5 rounded font-bold">Save 30%</span>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Pricing Plan Cards Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch max-w-6xl mx-auto">
+
+                    <!-- Starter Plan -->
+                    <div class="bg-brand-graphite border border-brand-glass-border rounded-2xl p-8 flex flex-col justify-between hover:border-gray-700 transition-all duration-300">
+                        <div>
+                            <div class="mb-6">
+                                <h3 class="text-lg font-bold text-gray-400 tracking-wider uppercase">Starter</h3>
+                                <p class="text-sm text-gray-400 mt-1">Ideal for small builders and specialist trades.</p>
+                            </div>
+                            <div class="mb-8 flex items-baseline">
+                                <span class="text-sm font-bold text-brand-gold">£</span>
+                                <span id="price-starter" class="text-5xl font-extrabold text-white tracking-tight transition-all duration-300">79</span>
+                                <span class="text-sm text-gray-400 ml-1">/ mo</span>
+                            </div>
+                            <ul class="space-y-4 mb-8">
+                                <li class="flex items-start gap-3 text-sm text-gray-300">
+                                    <i data-lucide="check" class="w-5 h-5 text-brand-gold shrink-0"></i>
+                                    <span>Up to 5 Estimations / Month</span>
+                                </li>
+                                <li class="flex items-start gap-3 text-sm text-gray-300">
+                                    <i data-lucide="check" class="w-5 h-5 text-brand-gold shrink-0"></i>
+                                    <span>Material Takeoffs & BOQs</span>
+                                </li>
+                                <li class="flex items-start gap-3 text-sm text-gray-300">
+                                    <i data-lucide="check" class="w-5 h-5 text-brand-gold shrink-0"></i>
+                                    <span>Regional Cost Database access</span>
+                                </li>
+                                <li class="flex items-start gap-3 text-sm text-gray-300/40">
+                                    <i data-lucide="x" class="w-5 h-5 text-gray-600 shrink-0"></i>
+                                    <span>Full AI Document Analysis (PDF/CAD)</span>
+                                </li>
+                                <li class="flex items-start gap-3 text-sm text-gray-300/40">
+                                    <i data-lucide="x" class="w-5 h-5 text-gray-600 shrink-0"></i>
+                                    <span>White-labeled reports</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <button onclick="subscribePlan('Starter')" class="w-full py-3.5 px-4 rounded-xl border border-brand-gold/50 text-brand-gold bg-brand-gold-muted hover:bg-brand-gold hover:text-brand-matte font-bold transition-all duration-300">
+                            Choose Starter
+                        </button>
+                    </div>
+
+                    <!-- Professional Plan (Popular / Gold Highlight) -->
+                    <div class="relative bg-brand-graphite border-2 border-brand-gold shadow-gold-glow rounded-2xl p-8 flex flex-col justify-between hover:scale-[1.02] transition-all duration-300">
+                        <div class="absolute top-0 right-8 -translate-y-1/2 bg-brand-gold text-brand-matte text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                            Most Popular
+                        </div>
+                        <div>
+                            <div class="mb-6">
+                                <h3 class="text-lg font-extrabold text-brand-gold tracking-wider uppercase">Professional</h3>
+                                <p class="text-sm text-gray-400 mt-1">Perfect for fast-growing residential and commercial contractors.</p>
+                            </div>
+                            <div class="mb-8 flex items-baseline">
+                                <span class="text-sm font-bold text-brand-gold">£</span>
+                                <span id="price-professional" class="text-5xl font-extrabold text-white tracking-tight transition-all duration-300">199</span>
+                                <span class="text-sm text-gray-400 ml-1">/ mo</span>
+                            </div>
+                            <ul class="space-y-4 mb-8">
+                                <li class="flex items-start gap-3 text-sm text-gray-300">
+                                    <i data-lucide="check" class="w-5 h-5 text-brand-gold shrink-0"></i>
+                                    <span class="font-semibold text-white">Unlimited Estimations</span>
+                                </li>
+                                <li class="flex items-start gap-3 text-sm text-gray-300">
+                                    <i data-lucide="check" class="w-5 h-5 text-brand-gold shrink-0"></i>
+                                    <span>AI Blueprint Analysis & Document Takeoff</span>
+                                </li>
+                                <li class="flex items-start gap-3 text-sm text-gray-300">
+                                    <i data-lucide="check" class="w-5 h-5 text-brand-gold shrink-0"></i>
+                                    <span>Premium BOQ Generator with Custom Rates</span>
+                                </li>
+                                <li class="flex items-start gap-3 text-sm text-gray-300">
+                                    <i data-lucide="check" class="w-5 h-5 text-brand-gold shrink-0"></i>
+                                    <span>White-labeled Premium Reports</span>
+                                </li>
+                                <li class="flex items-start gap-3 text-sm text-gray-300">
+                                    <i data-lucide="check" class="w-5 h-5 text-brand-gold shrink-0"></i>
+                                    <span>Integrations (Excel, Bluebeam, Procore)</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <button onclick="subscribePlan('Professional')" class="w-full py-3.5 px-4 rounded-xl bg-brand-gold text-brand-matte hover:bg-brand-gold-hover hover:shadow-gold-glow-sm font-bold transition-all duration-300">
+                            Choose Professional
+                        </button>
+                    </div>
+
+                    <!-- Enterprise Plan -->
+                    <div class="bg-brand-graphite border border-brand-glass-border rounded-2xl p-8 flex flex-col justify-between hover:border-gray-700 transition-all duration-300">
+                        <div>
+                            <div class="mb-6">
+                                <h3 class="text-lg font-bold text-gray-400 tracking-wider uppercase">Enterprise</h3>
+                                <p class="text-sm text-gray-400 mt-1">For regional builders, large consultants, and developers.</p>
+                            </div>
+                            <div class="mb-8 flex items-baseline">
+                                <span class="text-5xl font-extrabold text-white tracking-tight">Custom</span>
+                            </div>
+                            <ul class="space-y-4 mb-8">
+                                <li class="flex items-start gap-3 text-sm text-gray-300">
+                                    <i data-lucide="check" class="w-5 h-5 text-brand-gold shrink-0"></i>
+                                    <span>Multi-User License & Shared Workspaces</span>
+                                </li>
+                                <li class="flex items-start gap-3 text-sm text-gray-300">
+                                    <i data-lucide="check" class="w-5 h-5 text-brand-gold shrink-0"></i>
+                                    <span>Custom Cost Database Integrations</span>
+                                </li>
+                                <li class="flex items-start gap-3 text-sm text-gray-300">
+                                    <i data-lucide="check" class="w-5 h-5 text-brand-gold shrink-0"></i>
+                                    <span>Dedicated AI model training & custom rules</span>
+                                </li>
+                                <li class="flex items-start gap-3 text-sm text-gray-300">
+                                    <i data-lucide="check" class="w-5 h-5 text-brand-gold shrink-0"></i>
+                                    <span>Dedicated Account Manager & SLA support</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <a href="#contact" class="w-full text-center py-3.5 px-4 rounded-xl border border-brand-glass-border hover:bg-brand-glass-hover text-white font-bold transition-all duration-300">
+                            Contact Sales
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-24 border-t border-brand-glass-border relative overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+
+                    <!-- Left Side - Content -->
+                    <div class="lg:col-span-7 space-y-6">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-gold-muted border border-brand-gold-border text-brand-gold text-xs font-semibold tracking-wider uppercase">
+                            Who We Are
+                        </div>
+                        <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight">
+                            The Pinnacle of AI Construction Estimating
+                        </h2>
+                        <p class="text-lg text-gray-300 font-light leading-relaxed">
+                            <strong class="text-brand-gold font-semibold">QuantisAI</strong> was forged to bridge the gap between traditional engineering accuracy and state-of-the-art AI. We utilize visual-linguistic AI to interpret architectural drawings, generate complete Bills of Quantities, and automate estimates with unprecedented speed.
+                        </p>
+
+                        <!-- Highlights list -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
+                            <div class="flex gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-brand-gold-muted border border-brand-gold-border flex items-center justify-center text-brand-gold shrink-0">
+                                    <i data-lucide="award" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-white">Quantity Surveying</h4>
+                                    <p class="text-xs text-gray-400 mt-1">Conforming to professional standard auditing rules.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-brand-gold-muted border border-brand-gold-border flex items-center justify-center text-brand-gold shrink-0">
+                                    <i data-lucide="wrench" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-white">Contractors & Builders</h4>
+                                    <p class="text-xs text-gray-400 mt-1">Tailor estimates to your specific site wages & waste factors.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-brand-gold-muted border border-brand-gold-border flex items-center justify-center text-brand-gold shrink-0">
+                                    <i data-lucide="file-spreadsheet" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-white">Tender Consultants</h4>
+                                    <p class="text-xs text-gray-400 mt-1">Scale bid volumes and capture errors before submission.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-brand-gold-muted border border-brand-gold-border flex items-center justify-center text-brand-gold shrink-0">
+                                    <i data-lucide="trending-up" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-white">Architects & Developers</h4>
+                                    <p class="text-xs text-gray-400 mt-1">Track budgetary targets at schematic design phases.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Side - Interactive Mission & Architecture Mockup -->
+                    <div class="lg:col-span-5 bg-brand-graphite border border-brand-glass-border shadow-glass-shadow rounded-2xl p-8 space-y-6 relative">
+                        <div class="absolute -right-12 -top-12 w-32 h-32 bg-brand-gold-muted/40 rounded-full blur-3xl"></div>
+                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                            <i data-lucide="workflow" class="w-5 h-5 text-brand-gold"></i>
+                            Algorithmic Blueprint Breakdown
+                        </h3>
+
+                        <!-- Mini step guide -->
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-4 p-3 bg-brand-matte/50 rounded-xl border border-brand-glass-border">
+                                <span class="bg-brand-gold text-brand-matte text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shrink-0">1</span>
+                                <div>
+                                    <p class="text-sm font-bold text-white">Visual Scanning</p>
+                                    <p class="text-xs text-gray-400">Our deep vision neural network isolates walls, partitions, and doors.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-4 p-3 bg-brand-matte/50 rounded-xl border border-brand-glass-border">
+                                <span class="bg-brand-gold text-brand-matte text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shrink-0">2</span>
+                                <div>
+                                    <p class="text-sm font-bold text-white">Itemization & Standards Mapping</p>
+                                    <p class="text-xs text-gray-400">Elements mapped according to standard rules of measurement.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-4 p-3 bg-brand-matte/50 rounded-xl border border-brand-glass-border">
+                                <span class="bg-brand-gold text-brand-matte text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shrink-0">3</span>
+                                <div>
+                                    <p class="text-sm font-bold text-white">Dynamic Pricing Engine</p>
+                                    <p class="text-xs text-gray-400">Localized trade labor and raw material indices are applied.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-2">
+                            <div class="flex justify-between items-center text-xs text-gray-400">
+                                <span>Engine status:</span>
+                                <span class="text-green-400 font-semibold flex items-center gap-1.5">
+                                    <span class="w-1.5 h-1.5 bg-green-400 rounded-full animate-ping"></span>
+                                    Operational
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-24 border-t border-brand-glass-border relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start max-w-6xl mx-auto">
+
+                    <!-- Left Side Details -->
+                    <div class="lg:col-span-5 space-y-6">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-gold-muted border border-brand-gold-border text-brand-gold text-xs font-semibold tracking-wider uppercase">
+                            Connect with us
+                        </div>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight">
+                            Accelerate Your Estimations Today
+                        </h2>
+                        <p class="text-gray-400 font-light leading-relaxed">
+                            Have questions about our AI algorithm, enterprise custom database integrations, or license plans? Reach out to our specialist Quantity Surveying support team.
+                        </p>
+
+                        <div class="space-y-4 pt-4">
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="mail" class="w-5 h-5 text-brand-gold"></i>
+                                <span class="text-gray-300 text-sm">support@quantisai.com</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="map-pin" class="w-5 h-5 text-brand-gold"></i>
+                                <span class="text-gray-300 text-sm">Altrincham, Greater Manchester, WA14 2SZ</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="clock" class="w-5 h-5 text-brand-gold"></i>
+                                <span class="text-gray-300 text-sm">Response Time: &lt; 15 mins</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Form Card -->
+                    <div class="lg:col-span-7 bg-brand-graphite border border-brand-glass-border shadow-glass-shadow rounded-2xl p-8 relative">
+                        <form id="contact-form" class="space-y-6" onsubmit="handleFormSubmit(event)">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                <div class="space-y-2">
+                                    <label for="form-name" class="block text-xs font-bold text-gray-400 uppercase tracking-wider">Your Name</label>
+                                    <input type="text" id="form-name" name="name" required class="w-full bg-brand-matte border border-brand-glass-border focus:border-brand-gold text-white rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors" placeholder="e.g. John Doe">
+                                </div>
+                                <div class="space-y-2">
+                                    <label for="form-company" class="block text-xs font-bold text-gray-400 uppercase tracking-wider">Company Name</label>
+                                    <input type="text" id="form-company" name="company" required class="w-full bg-brand-matte border border-brand-glass-border focus:border-brand-gold text-white rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors" placeholder="e.g. Acme Construction">
+                                </div>
+                            </div>
+
+                            <div class="space-y-2">
+                                <label for="form-email" class="block text-xs font-bold text-gray-400 uppercase tracking-wider">Email Address</label>
+                                <input type="email" id="form-email" name="email" required class="w-full bg-brand-matte border border-brand-glass-border focus:border-brand-gold text-white rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors" placeholder="john@acme.com">
+                            </div>
+
+                            <div class="space-y-2">
+                                <label for="form-message" class="block text-xs font-bold text-gray-400 uppercase tracking-wider">Project Estimating Requirements</label>
+                                <textarea id="form-message" name="message" rows="4" required class="w-full bg-brand-matte border border-brand-glass-border focus:border-brand-gold text-white rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors resize-none" placeholder="Tell us about the project types you tender or manage..."></textarea>
+                            </div>
+
+                            <button type="submit" class="w-full py-4 px-6 rounded-xl bg-brand-gold text-brand-matte hover:bg-brand-gold-hover hover:shadow-gold-glow font-bold transition-all duration-300 flex items-center justify-center gap-2">
+                                <i data-lucide="send" class="w-4 h-4"></i>
+                                Send Message
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Dedicated Construction Law Detail Modal -->
+    <div id="law-detail-modal" class="fixed inset-0 z-50 hidden bg-brand-matte/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-brand-graphite border border-brand-glass-border rounded-2xl w-full max-w-3xl shadow-glass-shadow overflow-hidden flex flex-col max-h-[85vh]">
+            <!-- Modal Header -->
+            <div class="px-6 py-4 border-b border-brand-glass-border flex items-center justify-between bg-[#1e1e24]">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-brand-gold-muted border border-brand-gold-border flex items-center justify-center text-brand-gold" id="modal-law-icon-container">
+                        <i data-lucide="scale" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-white" id="modal-law-title">Construction Law Overview</h3>
+                        <p class="text-[11px] text-gray-400" id="modal-law-subtitle">Legal guidelines & reference instructions.</p>
+                    </div>
+                </div>
+                <button onclick="closeLawDetailModal()" class="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-brand-glass-hover transition-all">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-6 overflow-y-auto space-y-4 text-sm text-gray-300 leading-relaxed" id="modal-law-body">
+                <!-- Content will be injected dynamically -->
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="px-6 py-4 border-t border-brand-glass-border bg-[#18181c] flex items-center justify-between text-xs">
+                <span class="text-gray-400 font-mono">QuantAI Legal Hub Integration</span>
+                <button onclick="closeLawDetailModal()" class="px-4 py-2 bg-brand-gold text-brand-matte hover:bg-brand-gold-hover font-bold rounded-lg transition-all">
+                    Close Details
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dedicated Read-Only BOQ Viewer Modal -->
+    <div id="boq-viewer-modal" class="fixed inset-0 z-50 hidden bg-brand-matte/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-brand-graphite border border-brand-glass-border rounded-2xl w-full max-w-5xl shadow-glass-shadow overflow-hidden flex flex-col max-h-[85vh]">
+            <!-- Modal Header -->
+            <div class="px-6 py-4 border-b border-brand-glass-border flex items-center justify-between bg-[#1e1e24]">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-brand-gold-muted border border-brand-gold-border flex items-center justify-center text-brand-gold">
+                        <i data-lucide="file-spreadsheet" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-white">AI-Generated Bill of Quantities (BOQ)</h3>
+                        <p class="text-[11px] text-gray-400">Strictly read-only taking-off measurements and regional pricing rates.</p>
+                    </div>
+                </div>
+                <button onclick="closeBOQViewerModal()" class="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-brand-glass-hover transition-all">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body (Read-only Table) -->
+            <div class="p-6 overflow-y-auto space-y-4">
+                <div class="overflow-x-auto border border-brand-glass-border rounded-xl">
+                    <table class="w-full text-left border-collapse" id="modal-boq-table">
+                        <thead>
+                            <tr class="bg-brand-matte/60 border-b border-brand-glass-border text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+                                <th class="px-4 py-3 w-[80px]">Item No.</th>
+                                <th class="px-4 py-3 min-w-[280px]">Description</th>
+                                <th class="px-4 py-3 w-[90px] text-center">Unit</th>
+                                <th class="px-4 py-3 w-[100px] text-right">Qty</th>
+                                <th class="px-4 py-3 w-[110px] text-right">Material (<span class="currency-symbol">£</span>)</th>
+                                <th class="px-4 py-3 w-[110px] text-right">Labour (<span class="currency-symbol">£</span>)</th>
+                                <th class="px-4 py-3 w-[110px] text-right">Plant (<span class="currency-symbol">£</span>)</th>
+                                <th class="px-4 py-3 w-[110px] text-right">Total (<span class="currency-symbol">£</span>)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modal-boq-tbody" class="divide-y divide-brand-glass-border/40 text-xs">
+                            <tr>
+                                <td colspan="8" class="px-4 py-8 text-center text-gray-500 font-medium">
+                                    No BOQ items currently generated. Upload project documents and trigger AI takeoff above.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="px-6 py-4 border-t border-brand-glass-border bg-[#18181c] flex items-center justify-between text-xs">
+                <span class="text-gray-400 font-mono">Generated uniquely from architectural specifications.</span>
+                <button onclick="closeBOQViewerModal()" class="px-4 py-2 bg-brand-gold text-brand-matte hover:bg-brand-gold-hover font-bold rounded-lg transition-all">
+                    Close Viewer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Toast (Hidden by default, triggered on actions) -->
+    <div id="toast" class="fixed bottom-8 right-8 z-50 transform translate-y-20 opacity-0 pointer-events-none transition-all duration-500 ease-out bg-brand-graphite border border-brand-gold shadow-gold-glow rounded-xl px-5 py-4 max-w-sm flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-brand-gold-muted border border-brand-gold-border text-brand-gold flex items-center justify-center shrink-0">
+            <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+        </div>
+        <div>
+            <h4 class="font-bold text-white text-sm" id="toast-title">Notification</h4>
+            <p class="text-xs text-gray-400 mt-0.5" id="toast-message">Action completed successfully.</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-brand-matte border-t border-brand-glass-border py-12 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                <!-- Branding -->
+                <div class="text-center md:text-left space-y-2">
+                    <div id="footer-logo-container" class="h-8 flex items-center justify-center md:justify-start">
+                        <!-- Logo with fallback logic -->
+                        <img id="brand-footer-logo" src="images/QuantisAI.png" alt="QuantisAI" class="h-7 w-auto object-contain" onerror="handleFooterLogoError()">
+                    </div>
+                    <p class="text-xs text-gray-500 font-light">Next-Generation AI Estimating & Bill of Quantities Platform</p>
+                </div>
+
+                <!-- Footer Nav Links -->
+                <div class="flex flex-wrap justify-center gap-6 md:gap-8 text-xs font-semibold text-gray-400">
+                    <a href="#" class="hover:text-brand-gold transition-colors">Home</a>
+                    <a href="#features" class="hover:text-brand-gold transition-colors">Features</a>
+                    <a href="#pricing" class="hover:text-brand-gold transition-colors">Pricing</a>
+                    <a href="#" class="hover:text-brand-gold transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-brand-gold transition-colors">Terms of Service</a>
+                    <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="hover:text-brand-gold transition-colors flex items-center gap-1">
+                        <i data-lucide="github" class="w-3.5 h-3.5"></i>
+                        GitHub
+                    </a>
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <div class="border-t border-brand-glass-border/40 my-8"></div>
+
+            <!-- Copyright info -->
+            <div class="flex flex-col sm:flex-row items-center justify-between text-[11px] text-gray-500 gap-4">
+                <p>&copy; <span id="current-year"></span> QuantisAI. All rights reserved.</p>
+                <p class="flex items-center gap-1.5 font-mono">
+                    <span class="w-1.5 h-1.5 rounded-full bg-brand-gold animate-pulse"></span>
+                    Sovereign Estimate Engine v2.4
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Custom App JavaScript -->
+    <script src="js/pipeline.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
