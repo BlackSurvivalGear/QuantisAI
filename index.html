@@ -901,286 +901,665 @@
 
             <!-- TAB 4: CONSTRUCTION LAW PAGE -->
             <div id="workspace-tab-construction-law" class="hidden space-y-8">
-                <!-- Header -->
-                <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-6">
+                <!-- REDESIGNED TOP HEADER -->
+                <div class="space-y-4">
                     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-lg bg-brand-gold-muted border border-brand-gold-border flex items-center justify-center text-brand-gold">
+                            <div class="w-10 h-10 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-500">
                                 <i data-lucide="scale" class="w-5 h-5"></i>
                             </div>
                             <div>
-                                <h2 class="text-xl font-bold text-white">Construction Law</h2>
-                                <p class="text-xs text-gray-400">AI-powered legal guidance for quantity surveyors, contractors, project managers, developers, and construction professionals.</p>
+                                <h2 class="text-xl font-bold text-white">Construction Law AI Assistant</h2>
+                                <p class="text-xs text-gray-400">Upload construction contracts for AI-powered legal guidance, analysis, risk assessment, compliance checks, and clause review.</p>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Search Bar -->
-                        <div class="relative w-full md:w-96">
-                            <i data-lucide="search" class="absolute left-3 top-2.5 h-4 w-4 text-gray-400"></i>
-                            <input type="text" oninput="filterLawCards(this.value)" class="w-full bg-brand-matte border border-brand-glass-border focus:border-brand-gold text-white rounded-lg pl-9 pr-4 py-2 text-sm focus:outline-none transition-colors" placeholder="Search construction law, contracts, disputes, or regulations...">
+                    <!-- Four Summary Cards -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <!-- Card 1: Supported Contracts -->
+                        <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-4 shadow-sm flex flex-col justify-between">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Supported Contracts</span>
+                                <div class="w-6 h-6 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500">
+                                    <i data-lucide="file-check" class="w-3.5 h-3.5"></i>
+                                </div>
+                            </div>
+                            <p class="text-xs font-bold text-white leading-tight">JCT • NEC • FIDIC • Subcontracts • Purchase Orders</p>
+                        </div>
+                        <!-- Card 2: AI Analysis -->
+                        <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-4 shadow-sm flex flex-col justify-between">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">AI Analysis</span>
+                                <div class="w-6 h-6 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500">
+                                    <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                                </div>
+                            </div>
+                            <p class="text-xs font-bold text-white leading-tight">Clause-by-Clause Review</p>
+                        </div>
+                        <!-- Card 3: Risk Assessment -->
+                        <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-4 shadow-sm flex flex-col justify-between">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Risk Assessment</span>
+                                <div class="w-6 h-6 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500">
+                                    <i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i>
+                                </div>
+                            </div>
+                            <p class="text-xs font-bold text-white leading-tight">Commercial & Legal</p>
+                        </div>
+                        <!-- Card 4: Export -->
+                        <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-4 shadow-sm flex flex-col justify-between">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Export</span>
+                                <div class="w-6 h-6 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500">
+                                    <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                                </div>
+                            </div>
+                            <p class="text-xs font-bold text-white leading-tight">PDF • Word • JSON</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Cards Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="law-cards-grid">
-                    <!-- Construction Contracts -->
-                    <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-gold-glow-sm transition-all duration-300 flex flex-col justify-between h-full law-card" data-title="construction contracts jct nec fidic ice design build traditional procurement management contracting epc">
-                        <div class="space-y-4">
-                            <div class="w-10 h-10 rounded-lg bg-brand-gold-muted/30 border border-brand-gold-border/30 flex items-center justify-center text-brand-gold">
-                                <i data-lucide="file-text" class="w-5 h-5"></i>
-                            </div>
-                            <h3 class="text-base font-bold text-white">Construction Contracts</h3>
-                            <p class="text-xs text-gray-400 leading-relaxed">Learn about JCT, NEC, FIDIC, ICE, Design & Build, Traditional Procurement, Management Contracting, and EPC contracts.</p>
-                        </div>
-                        <div class="pt-5">
-                            <button onclick="openLawDetail('contracts')" class="w-full px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-brand-gold text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
-                                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-                                Open
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Payment & Valuations -->
-                    <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-gold-glow-sm transition-all duration-300 flex flex-col justify-between h-full law-card" data-title="payment valuations interim pay notices less retention final accounts valuation procedures">
-                        <div class="space-y-4">
-                            <div class="w-10 h-10 rounded-lg bg-brand-gold-muted/30 border border-brand-gold-border/30 flex items-center justify-center text-brand-gold">
-                                <i data-lucide="coins" class="w-5 h-5"></i>
-                            </div>
-                            <h3 class="text-base font-bold text-white">Payment & Valuations</h3>
-                            <p class="text-xs text-gray-400 leading-relaxed">Guidance on interim payments, payment notices, pay less notices, retention, final accounts, and valuation procedures.</p>
-                        </div>
-                        <div class="pt-5">
-                            <button onclick="openLawDetail('payment')" class="w-full px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-brand-gold text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
-                                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-                                Open
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Claims & Disputes -->
-                    <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-gold-glow-sm transition-all duration-300 flex flex-col justify-between h-full law-card" data-title="claims disputes extension of time loss expense variations delay liquidated damages adjudication arbitration mediation litigation">
-                        <div class="space-y-4">
-                            <div class="w-10 h-10 rounded-lg bg-brand-gold-muted/30 border border-brand-gold-border/30 flex items-center justify-center text-brand-gold">
-                                <i data-lucide="scale" class="w-5 h-5"></i>
-                            </div>
-                            <h3 class="text-base font-bold text-white">Claims & Disputes</h3>
-                            <p class="text-xs text-gray-400 leading-relaxed">Extension of Time, Loss & Expense, Variations, Delay Claims, Liquidated Damages, Adjudication, Arbitration, Mediation, and Litigation.</p>
-                        </div>
-                        <div class="pt-5">
-                            <button onclick="openLawDetail('claims')" class="w-full px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-brand-gold text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
-                                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-                                Open
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Contract Administration -->
-                    <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-gold-glow-sm transition-all duration-300 flex flex-col justify-between h-full law-card" data-title="contract administration architect instructions compensation events early warning notices site practical completion defects certificates final accounts">
-                        <div class="space-y-4">
-                            <div class="w-10 h-10 rounded-lg bg-brand-gold-muted/30 border border-brand-gold-border/30 flex items-center justify-center text-brand-gold">
-                                <i data-lucide="clipboard-list" class="w-5 h-5"></i>
-                            </div>
-                            <h3 class="text-base font-bold text-white">Contract Administration</h3>
-                            <p class="text-xs text-gray-400 leading-relaxed">Architect's Instructions, Compensation Events, Early Warning Notices, Site Instructions, Practical Completion, Defects, Certificates, and Final Accounts.</p>
-                        </div>
-                        <div class="pt-5">
-                            <button onclick="openLawDetail('administration')" class="w-full px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-brand-gold text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
-                                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-                                Open
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Procurement -->
-                    <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-gold-glow-sm transition-all duration-300 flex flex-col justify-between h-full law-card" data-title="procurement tendering procedures framework agreements contractor selection public bid evaluation">
-                        <div class="space-y-4">
-                            <div class="w-10 h-10 rounded-lg bg-brand-gold-muted/30 border border-brand-gold-border/30 flex items-center justify-center text-brand-gold">
-                                <i data-lucide="briefcase" class="w-5 h-5"></i>
-                            </div>
-                            <h3 class="text-base font-bold text-white">Procurement</h3>
-                            <p class="text-xs text-gray-400 leading-relaxed">Tendering procedures, framework agreements, contractor selection, public procurement, and bid evaluation.</p>
-                        </div>
-                        <div class="pt-5">
-                            <button onclick="openLawDetail('procurement')" class="w-full px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-brand-gold text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
-                                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-                                Open
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Health & Safety -->
-                    <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-gold-glow-sm transition-all duration-300 flex flex-col justify-between h-full law-card" data-title="health safety cdm regulations principal designer duties contractor responsibilities rams ppe site requirements">
-                        <div class="space-y-4">
-                            <div class="w-10 h-10 rounded-lg bg-brand-gold-muted/30 border border-brand-gold-border/30 flex items-center justify-center text-brand-gold">
-                                <i data-lucide="shield-alert" class="w-5 h-5"></i>
-                            </div>
-                            <h3 class="text-base font-bold text-white">Health & Safety</h3>
-                            <p class="text-xs text-gray-400 leading-relaxed">CDM Regulations, Principal Designer duties, Principal Contractor responsibilities, RAMS, PPE, and site safety requirements.</p>
-                        </div>
-                        <div class="pt-5">
-                            <button onclick="openLawDetail('safety')" class="w-full px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-brand-gold text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
-                                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-                                Open
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Planning & Building Regulations -->
-                    <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-gold-glow-sm transition-all duration-300 flex flex-col justify-between h-full law-card" data-title="planning building regulations permission listed buildings conservation areas control compliance">
-                        <div class="space-y-4">
-                            <div class="w-10 h-10 rounded-lg bg-brand-gold-muted/30 border border-brand-gold-border/30 flex items-center justify-center text-brand-gold">
-                                <i data-lucide="milestone" class="w-5 h-5"></i>
-                            </div>
-                            <h3 class="text-base font-bold text-white">Planning & Building Regulations</h3>
-                            <p class="text-xs text-gray-400 leading-relaxed">Planning Permission, Building Regulations, Listed Buildings, Conservation Areas, Building Control, and Compliance.</p>
-                        </div>
-                        <div class="pt-5">
-                            <button onclick="openLawDetail('planning')" class="w-full px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-brand-gold text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
-                                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-                                Open
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Insurance & Bonds -->
-                    <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-gold-glow-sm transition-all duration-300 flex flex-col justify-between h-full law-card" data-title="insurance bonds professional indemnity public liability car performance parent company guarantees warranties">
-                        <div class="space-y-4">
-                            <div class="w-10 h-10 rounded-lg bg-brand-gold-muted/30 border border-brand-gold-border/30 flex items-center justify-center text-brand-gold">
-                                <i data-lucide="shield-check" class="w-5 h-5"></i>
-                            </div>
-                            <h3 class="text-base font-bold text-white">Insurance & Bonds</h3>
-                            <p class="text-xs text-gray-400 leading-relaxed">Professional Indemnity, Public Liability, CAR Insurance, Performance Bonds, Parent Company Guarantees, and Warranties.</p>
-                        </div>
-                        <div class="pt-5">
-                            <button onclick="openLawDetail('insurance')" class="w-full px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-brand-gold text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
-                                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-                                Open
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Construction Legislation -->
-                    <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-gold-glow-sm transition-all duration-300 flex flex-col justify-between h-full law-card" data-title="construction legislation housing grants regeneration act building safety cdm health regulations uk laws">
-                        <div class="space-y-4">
-                            <div class="w-10 h-10 rounded-lg bg-brand-gold-muted/30 border border-brand-gold-border/30 flex items-center justify-center text-brand-gold">
-                                <i data-lucide="book-open" class="w-5 h-5"></i>
-                            </div>
-                            <h3 class="text-base font-bold text-white">Construction Legislation</h3>
-                            <p class="text-xs text-gray-400 leading-relaxed">Reference the Housing Grants, Construction and Regeneration Act, Building Safety Act, CDM Regulations, Health & Safety legislation, and other key UK construction laws.</p>
-                        </div>
-                        <div class="pt-5">
-                            <button onclick="openLawDetail('legislation')" class="w-full px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-brand-gold text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
-                                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-                                Open
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- AI Contract Review -->
-                    <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-gold-glow-sm transition-all duration-300 flex flex-col justify-between h-full law-card" data-title="ai contract review upload contracts analysis clause explanations risk identification missing provisions summaries recommendations">
-                        <div class="space-y-4">
-                            <div class="w-10 h-10 rounded-lg bg-brand-gold-muted/30 border border-brand-gold-border/30 flex items-center justify-center text-brand-gold">
-                                <i data-lucide="brain" class="w-5 h-5"></i>
-                            </div>
-                            <h3 class="text-base font-bold text-white">AI Contract Review</h3>
-                            <p class="text-xs text-gray-400 leading-relaxed">Upload contracts for AI analysis. Receive clause explanations, risk identification, missing provisions, plain-English summaries, and recommendations.</p>
-                        </div>
-                        <div class="pt-5">
-                            <button onclick="openLawDetail('review')" class="w-full px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-brand-gold text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
-                                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-                                Open
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Legal Templates -->
-                    <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-gold-glow-sm transition-all duration-300 flex flex-col justify-between h-full law-card" data-title="legal templates downloadable payment notices pay less extension of time requests variation orders delay letters before action practical completion certificates final account">
-                        <div class="space-y-4">
-                            <div class="w-10 h-10 rounded-lg bg-brand-gold-muted/30 border border-brand-gold-border/30 flex items-center justify-center text-brand-gold">
-                                <i data-lucide="folder-open" class="w-5 h-5"></i>
-                            </div>
-                            <h3 class="text-base font-bold text-white">Legal Templates</h3>
-                            <p class="text-xs text-gray-400 leading-relaxed">Access downloadable templates including Payment Notices, Pay Less Notices, Extension of Time Requests, Variation Orders, Delay Notices, Letters Before Action, Practical Completion Certificates, and Final Account documents.</p>
-                        </div>
-                        <div class="pt-5">
-                            <button onclick="openLawDetail('templates')" class="w-full px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-brand-gold text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
-                                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-                                Open
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Featured AI Assistant Section -->
-                <div class="bg-gradient-to-r from-brand-graphite to-[#18181C] border border-brand-gold/30 rounded-2xl p-6 md:p-8 space-y-6 relative overflow-hidden">
-                    <!-- Background Glow Accent -->
-                    <div class="absolute -right-16 -top-16 w-48 h-48 rounded-full bg-brand-gold/5 blur-3xl pointer-events-none"></div>
-                    <div class="absolute -left-16 -bottom-16 w-48 h-48 rounded-full bg-brand-gold/5 blur-3xl pointer-events-none"></div>
-
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-brand-glass-border pb-6">
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-brand-gold-muted border border-brand-gold-border flex items-center justify-center text-brand-gold shrink-0">
-                                <i data-lucide="bot" class="w-6 h-6"></i>
-                            </div>
-                            <div>
-                                <h2 class="text-xl font-bold text-white flex items-center gap-2">
-                                    🤖 Construction Law AI Assistant
-                                    <span class="text-[10px] bg-brand-gold/10 text-brand-gold border border-brand-gold/20 px-2 py-0.5 rounded-full font-mono font-normal">Active Premium</span>
-                                </h2>
-                                <p class="text-xs text-gray-400 mt-1">Sovereign Artificial Intelligence trained on UK JCT/NEC contracts, Housing Grants Act, and commercial dispute precedents.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- AI Input Workspace -->
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                        <!-- Left Side: Prompt Input and Example Tags (7 cols) -->
-                        <div class="lg:col-span-7 space-y-4">
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Legal AI Prompt Inquiry</label>
-                                <textarea id="law-ai-prompt" rows="3" class="w-full bg-brand-matte border border-brand-glass-border focus:border-brand-gold text-white rounded-xl p-4 text-sm focus:outline-none transition-all placeholder:text-gray-500" placeholder="Describe your legal issue, ask about a contract clause, or request advice on payment terms..."></textarea>
+                <!-- MAIN TWO-COLUMN CONTENT -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <!-- LEFT COLUMN (35%) -->
+                    <div class="lg:col-span-4 space-y-6">
+                        <!-- Upload Contract Panel -->
+                        <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 shadow-sm space-y-4">
+                            <!-- Drag & Drop Area -->
+                            <div id="contract-drop-zone" class="border-2 border-dashed border-brand-glass-border hover:border-blue-500/50 rounded-xl p-6 text-center transition-all cursor-pointer flex flex-col items-center justify-center space-y-3 bg-brand-matte/20">
+                                <i data-lucide="cloud-upload" class="w-10 h-10 text-blue-500"></i>
+                                <h3 class="text-sm font-bold text-white">Upload Contract</h3>
+                                <p class="text-xs text-gray-400">Drag & Drop your contract here<br>or click to browse</p>
+                                <span class="text-[10px] text-gray-500 uppercase">Supported formats: PDF, DOCX, DOC, TXT</span>
+                                <span class="text-[10px] text-gray-500">Maximum file size: 50 MB</span>
+                                <input type="file" id="contract-file-input" class="hidden" accept=".pdf,.docx,.doc,.txt">
+                                <button type="button" onclick="document.getElementById('contract-file-input').click()" class="mt-2 w-full px-4 py-2.5 text-xs font-bold rounded-lg bg-blue-600 hover:bg-blue-700 text-white shadow transition-all flex items-center justify-center gap-2">
+                                    <i data-lucide="file-plus" class="w-3.5 h-3.5"></i>
+                                    Choose Contract
+                                </button>
                             </div>
 
-                            <!-- Clickable Prompt Questions -->
-                            <div class="space-y-2">
-                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider">Suggested Queries</label>
-                                <div class="flex flex-wrap gap-2">
-                                    <button onclick="setLawPrompt('Explain this NEC clause.')" class="px-2.5 py-1 text-[11px] rounded-lg border border-brand-glass-border hover:border-brand-gold text-gray-400 hover:text-white bg-brand-matte/50 transition-all">Explain this NEC clause.</button>
-                                    <button onclick="setLawPrompt('What is a Pay Less Notice?')" class="px-2.5 py-1 text-[11px] rounded-lg border border-brand-glass-border hover:border-brand-gold text-gray-400 hover:text-white bg-brand-matte/50 transition-all">What is a Pay Less Notice?</button>
-                                    <button onclick="setLawPrompt('Can I claim an Extension of Time?')" class="px-2.5 py-1 text-[11px] rounded-lg border border-brand-glass-border hover:border-brand-gold text-gray-400 hover:text-white bg-brand-matte/50 transition-all">Can I claim an Extension of Time?</button>
-                                    <button onclick="setLawPrompt('Summarize this contract.')" class="px-2.5 py-1 text-[11px] rounded-lg border border-brand-glass-border hover:border-brand-gold text-gray-400 hover:text-white bg-brand-matte/50 transition-all">Summarize this contract.</button>
-                                    <button onclick="setLawPrompt('Review this JCT contract.')" class="px-2.5 py-1 text-[11px] rounded-lg border border-brand-glass-border hover:border-brand-gold text-gray-400 hover:text-white bg-brand-matte/50 transition-all">Review this JCT contract.</button>
-                                    <button onclick="setLawPrompt('Explain Liquidated Damages.')" class="px-2.5 py-1 text-[11px] rounded-lg border border-brand-glass-border hover:border-brand-gold text-gray-400 hover:text-white bg-brand-matte/50 transition-all">Explain Liquidated Damages.</button>
-                                    <button onclick="setLawPrompt('Draft a Variation Order.')" class="px-2.5 py-1 text-[11px] rounded-lg border border-brand-glass-border hover:border-brand-gold text-gray-400 hover:text-white bg-brand-matte/50 transition-all">Draft a Variation Order.</button>
-                                    <button onclick="setLawPrompt('Generate a Payment Notice.')" class="px-2.5 py-1 text-[11px] rounded-lg border border-brand-glass-border hover:border-brand-gold text-gray-400 hover:text-white bg-brand-matte/50 transition-all">Generate a Payment Notice.</button>
-                                </div>
-                            </div>
-
-                            <button onclick="askLawAI()" class="px-5 py-3 text-xs font-bold rounded-lg bg-brand-gold text-brand-matte hover:bg-brand-gold-hover hover:shadow-gold-glow-sm transition-all flex items-center gap-2">
-                                <i data-lucide="scale" class="w-4 h-4"></i>
-                                Ask Construction Law AI
-                            </button>
-                        </div>
-
-                        <!-- Right Side: AI Output Box (5 cols) -->
-                        <div class="lg:col-span-5 flex flex-col justify-between border border-brand-glass-border bg-brand-matte rounded-xl p-5 min-h-[250px] relative">
-                            <div class="space-y-4 flex-1">
-                                <div class="flex items-center justify-between border-b border-brand-glass-border/30 pb-2">
-                                    <span class="text-[10px] font-bold text-brand-gold uppercase tracking-wider flex items-center gap-1.5">
-                                        <span class="w-1.5 h-1.5 bg-brand-gold rounded-full animate-pulse"></span>
-                                        AI Response Engine
-                                    </span>
-                                    <span class="text-[10px] text-gray-500 font-mono">Output Status: Ready</span>
-                                </div>
-
-                                <!-- Live Interactive Legal Content Output -->
-                                <div id="law-ai-response" class="text-xs text-gray-300 leading-relaxed max-h-[300px] overflow-y-auto space-y-3">
-                                    <div class="flex flex-col items-center justify-center py-12 text-center text-gray-500 space-y-2">
-                                        <i data-lucide="gavel" class="w-8 h-8 text-gray-600"></i>
-                                        <p class="font-medium text-gray-400">No Query Submitted Yet</p>
-                                        <p class="max-w-xs text-[11px]">Select a suggested query or type a prompt above to receive structured legal analysis and advice.</p>
+                            <!-- Document Meta-Information (Hidden Initially) -->
+                            <div id="contract-meta-panel" class="hidden border border-blue-500/20 bg-blue-500/5 rounded-xl p-4 space-y-3">
+                                <div class="flex items-start justify-between gap-2">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="check-circle" class="w-4 h-4 text-emerald-500 shrink-0"></i>
+                                        <p class="text-xs font-bold text-white truncate max-w-[180px]" id="contract-filename">contract_draft.pdf</p>
                                     </div>
+                                    <button type="button" onclick="removeUploadedContract()" class="text-xs text-gray-400 hover:text-rose-500 font-medium flex items-center gap-1 transition-all">
+                                        <i data-lucide="trash-2" class="w-3 h-3"></i> Remove
+                                    </button>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2 text-[11px] text-gray-400 border-t border-brand-glass-border/30 pt-3">
+                                    <div>
+                                        <span class="block text-[9px] uppercase text-gray-500">File Size</span>
+                                        <span id="contract-size">14.2 MB</span>
+                                    </div>
+                                    <div>
+                                        <span class="block text-[9px] uppercase text-gray-500">Page Count</span>
+                                        <span id="contract-pages">24 pages</span>
+                                    </div>
+                                    <div class="col-span-2">
+                                        <span class="block text-[9px] uppercase text-gray-500">Detected Contract Type</span>
+                                        <span id="contract-detected-type" class="text-blue-400 font-bold">JCT Standard Building Contract</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between border-t border-brand-glass-border/30 pt-3 text-[11px]">
+                                    <span class="text-gray-500">Status:</span>
+                                    <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold">Ready for Analysis</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Analysis Type Panel -->
+                        <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 shadow-sm space-y-4">
+                            <h3 class="text-xs font-bold text-white uppercase tracking-wider border-b border-brand-glass-border/30 pb-2">Analysis Type</h3>
+                            <div class="space-y-2.5">
+                                <label class="flex items-start gap-2.5 cursor-pointer p-2 rounded-lg hover:bg-brand-matte/40 transition-all">
+                                    <input type="radio" name="analysis-type" value="Full Contract Review" checked class="mt-1 accent-blue-500">
+                                    <div>
+                                        <span class="block text-xs font-bold text-white">Full Contract Review</span>
+                                        <span class="block text-[10px] text-gray-400">Comprehensive audit of all core legal & commercial aspects.</span>
+                                    </div>
+                                </label>
+                                <label class="flex items-start gap-2.5 cursor-pointer p-2 rounded-lg hover:bg-brand-matte/40 transition-all">
+                                    <input type="radio" name="analysis-type" value="Risk Assessment" class="mt-1 accent-blue-500">
+                                    <div>
+                                        <span class="block text-xs font-bold text-white">Risk Assessment</span>
+                                        <span class="block text-[10px] text-gray-400">Identify high-exposure liabilities, uncapped risks, and indemnity issues.</span>
+                                    </div>
+                                </label>
+                                <label class="flex items-start gap-2.5 cursor-pointer p-2 rounded-lg hover:bg-brand-matte/40 transition-all">
+                                    <input type="radio" name="analysis-type" value="Clause Analysis" class="mt-1 accent-blue-500">
+                                    <div>
+                                        <span class="block text-xs font-bold text-white">Clause Analysis</span>
+                                        <span class="block text-[10px] text-gray-400">Deep-dive check of specific clause phrasing against market standards.</span>
+                                    </div>
+                                </label>
+                                <label class="flex items-start gap-2.5 cursor-pointer p-2 rounded-lg hover:bg-brand-matte/40 transition-all">
+                                    <input type="radio" name="analysis-type" value="Compliance Check" class="mt-1 accent-blue-500">
+                                    <div>
+                                        <span class="block text-xs font-bold text-white">Compliance Check</span>
+                                        <span class="block text-[10px] text-gray-400">Validate adherence to Housing Grants Act, CDM 2015, and building laws.</span>
+                                    </div>
+                                </label>
+                                <label class="flex items-start gap-2.5 cursor-pointer p-2 rounded-lg hover:bg-brand-matte/40 transition-all">
+                                    <input type="radio" name="analysis-type" value="Payment Clause Review" class="mt-1 accent-blue-500">
+                                    <div>
+                                        <span class="block text-xs font-bold text-white">Payment Clause Review</span>
+                                        <span class="block text-[10px] text-gray-400">Evaluate payless notice timelines, payment periods, and retention terms.</span>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <button type="button" id="analyse-contract-btn" disabled onclick="triggerContractAnalysis()" class="w-full mt-2 py-3 text-xs font-bold rounded-lg bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 shadow shadow-blue-500/20">
+                                <i data-lucide="scale" class="w-4 h-4"></i>
+                                Analyse Contract
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT COLUMN (65%) -->
+                    <div class="lg:col-span-8 flex flex-col min-h-[500px]">
+                        <!-- PLACEHOLDER STATE -->
+                        <div id="analysis-placeholder-state" class="bg-brand-graphite border border-brand-glass-border rounded-xl p-8 shadow-sm flex flex-col items-center justify-center text-center space-y-6 flex-grow">
+                            <div class="w-16 h-16 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500 border border-blue-500/20">
+                                <i data-lucide="bot" class="w-8 h-8"></i>
+                            </div>
+                            <div class="space-y-2">
+                                <h3 class="text-lg font-bold text-white">Ready to Analyse</h3>
+                                <p class="text-xs text-gray-400 max-w-sm mx-auto">Upload a construction contract to begin AI analysis.</p>
+                            </div>
+                            <div class="max-w-md w-full border-t border-brand-glass-border/30 pt-6">
+                                <p class="text-[11px] font-bold text-left uppercase tracking-wider text-gray-400 mb-3">The report will include:</p>
+                                <div class="grid grid-cols-2 gap-x-4 gap-y-2 text-left">
+                                    <div class="flex items-center gap-2 text-xs text-gray-300">
+                                        <i data-lucide="check" class="w-3.5 h-3.5 text-blue-500"></i> Executive Summary
+                                    </div>
+                                    <div class="flex items-center gap-2 text-xs text-gray-300">
+                                        <i data-lucide="check" class="w-3.5 h-3.5 text-blue-500"></i> Risk Score
+                                    </div>
+                                    <div class="flex items-center gap-2 text-xs text-gray-300">
+                                        <i data-lucide="check" class="w-3.5 h-3.5 text-blue-500"></i> Clause Review
+                                    </div>
+                                    <div class="flex items-center gap-2 text-xs text-gray-300">
+                                        <i data-lucide="check" class="w-3.5 h-3.5 text-blue-500"></i> Missing Clauses
+                                    </div>
+                                    <div class="flex items-center gap-2 text-xs text-gray-300">
+                                        <i data-lucide="check" class="w-3.5 h-3.5 text-blue-500"></i> Compliance Issues
+                                    </div>
+                                    <div class="flex items-center gap-2 text-xs text-gray-300">
+                                        <i data-lucide="check" class="w-3.5 h-3.5 text-blue-500"></i> Suggested Amendments
+                                    </div>
+                                    <div class="flex items-center gap-2 text-xs text-gray-300">
+                                        <i data-lucide="check" class="w-3.5 h-3.5 text-blue-500"></i> Negotiation Advice
+                                    </div>
+                                    <div class="flex items-center gap-2 text-xs text-gray-300">
+                                        <i data-lucide="check" class="w-3.5 h-3.5 text-blue-500"></i> Commercial Risks
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- LOADING STATE -->
+                        <div id="analysis-loading-state" class="hidden bg-brand-graphite border border-brand-glass-border rounded-xl p-8 shadow-sm flex flex-col items-center justify-center text-center space-y-6 flex-grow">
+                            <div class="w-16 h-16 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500 border border-blue-500/20">
+                                <i data-lucide="scale" class="w-8 h-8 animate-spin"></i>
+                            </div>
+                            <div class="space-y-1">
+                                <h3 class="text-base font-bold text-white">Analysing Contract Documents</h3>
+                                <p class="text-xs text-gray-400">Sovereign Law AI Counsel is auditing contractual provisions...</p>
+                            </div>
+                            <!-- Sequential progress steps -->
+                            <div class="w-full max-w-sm space-y-3.5 text-left bg-brand-matte/40 border border-brand-glass-border/40 p-5 rounded-xl">
+                                <div id="analysis-step-1" class="flex items-center justify-between text-xs text-gray-500">
+                                    <span class="flex items-center gap-2"><i data-lucide="loader" class="w-3.5 h-3.5 animate-spin"></i> Reading document...</span>
+                                    <span class="text-[10px] font-mono text-gray-500" id="analysis-step-status-1">Waiting</span>
+                                </div>
+                                <div id="analysis-step-2" class="flex items-center justify-between text-xs text-gray-500">
+                                    <span class="flex items-center gap-2"><i data-lucide="circle" class="w-3.5 h-3.5 text-gray-600"></i> Extracting clauses...</span>
+                                    <span class="text-[10px] font-mono text-gray-500" id="analysis-step-status-2">Waiting</span>
+                                </div>
+                                <div id="analysis-step-3" class="flex items-center justify-between text-xs text-gray-500">
+                                    <span class="flex items-center gap-2"><i data-lucide="circle" class="w-3.5 h-3.5 text-gray-600"></i> Analysing legal terms...</span>
+                                    <span class="text-[10px] font-mono text-gray-500" id="analysis-step-status-3">Waiting</span>
+                                </div>
+                                <div id="analysis-step-4" class="flex items-center justify-between text-xs text-gray-500">
+                                    <span class="flex items-center gap-2"><i data-lucide="circle" class="w-3.5 h-3.5 text-gray-600"></i> Assessing commercial risks...</span>
+                                    <span class="text-[10px] font-mono text-gray-500" id="analysis-step-status-4">Waiting</span>
+                                </div>
+                                <div id="analysis-step-5" class="flex items-center justify-between text-xs text-gray-500">
+                                    <span class="flex items-center gap-2"><i data-lucide="circle" class="w-3.5 h-3.5 text-gray-600"></i> Generating recommendations...</span>
+                                    <span class="text-[10px] font-mono text-gray-500" id="analysis-step-status-5">Waiting</span>
+                                </div>
+                                <div id="analysis-step-6" class="flex items-center justify-between text-xs text-gray-500">
+                                    <span class="flex items-center gap-2"><i data-lucide="circle" class="w-3.5 h-3.5 text-gray-600"></i> Preparing report...</span>
+                                    <span class="text-[10px] font-mono text-gray-500" id="analysis-step-status-6">Waiting</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- COMPLETED REPORT VIEWER STATE -->
+                        <div id="analysis-report-state" class="hidden bg-brand-graphite border border-brand-glass-border rounded-xl p-6 shadow-sm space-y-6 flex-grow">
+                            <!-- Report Title and Export Header -->
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-brand-glass-border/30 pb-4">
+                                <div>
+                                    <h3 class="text-base font-bold text-white flex items-center gap-2">
+                                        <i data-lucide="file-text" class="w-5 h-5 text-blue-500"></i>
+                                        <span id="report-title-label">AI Contract Analysis Report</span>
+                                    </h3>
+                                    <p class="text-xs text-gray-400 animate-pulse" id="report-meta-subtitle">Generated on 28 Jul 2026 for JCT Contract</p>
+                                </div>
+                                <div class="flex items-center gap-2 shrink-0">
+                                    <button type="button" onclick="exportLawReport('pdf')" class="px-2.5 py-1.5 text-xs font-bold rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/20 transition-all flex items-center gap-1">
+                                        <i data-lucide="file-text" class="w-3.5 h-3.5"></i> PDF
+                                    </button>
+                                    <button type="button" onclick="exportLawReport('word')" class="px-2.5 py-1.5 text-xs font-bold rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/20 transition-all flex items-center gap-1">
+                                        <i data-lucide="file-text" class="w-3.5 h-3.5"></i> Word
+                                    </button>
+                                    <button type="button" onclick="exportLawReport('json')" class="px-2.5 py-1.5 text-xs font-bold rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/20 transition-all flex items-center gap-1">
+                                        <i data-lucide="code" class="w-3.5 h-3.5"></i> JSON
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Scrollable Report Content -->
+                            <div class="space-y-6 max-h-[500px] overflow-y-auto pr-2">
+                                <!-- Executive Summary & Risk Score -->
+                                <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                                    <!-- Executive Summary Content (8 cols) -->
+                                    <div class="md:col-span-8 space-y-2">
+                                        <h4 class="text-xs font-bold text-white uppercase tracking-wider">Executive Summary</h4>
+                                        <p class="text-xs text-gray-300 leading-relaxed" id="report-executive-summary">
+                                            The contract uploaded presents typical standard clauses with several critical deviations that represent high commercial exposure. Overall risk rating indicates standard terms with moderate liabilities, but specific payment notification periods require adjustment.
+                                        </p>
+                                    </div>
+                                    <!-- Risk Score Circular Gauge (4 cols) -->
+                                    <div class="md:col-span-4 bg-brand-matte/40 border border-brand-glass-border/40 rounded-xl p-4 flex flex-col items-center justify-center text-center space-y-2">
+                                        <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Risk Score</span>
+                                        <div class="relative flex items-center justify-center">
+                                            <!-- Simple visual layout for risk score representation -->
+                                            <div class="w-16 h-16 rounded-full border-4 border-rose-500/30 flex items-center justify-center">
+                                                <span class="text-lg font-black text-rose-400" id="report-risk-score">65%</span>
+                                            </div>
+                                        </div>
+                                        <span class="text-[10px] font-bold px-2 py-0.5 rounded text-rose-400 bg-rose-500/10 border border-rose-500/20" id="report-risk-badge">Medium-High Risk</span>
+                                    </div>
+                                </div>
+
+                                <!-- Clause Review Table -->
+                                <div class="space-y-2">
+                                    <h4 class="text-xs font-bold text-white uppercase tracking-wider">Clause Review</h4>
+                                    <div class="overflow-x-auto border border-brand-glass-border/30 rounded-lg">
+                                        <table class="w-full text-left border-collapse text-xs">
+                                            <thead>
+                                                <tr class="bg-brand-matte/60 border-b border-brand-glass-border/30 text-gray-400 uppercase tracking-wider text-[9px] font-bold">
+                                                    <th class="p-3">Clause Reference</th>
+                                                    <th class="p-3">Title / Provision</th>
+                                                    <th class="p-3">Status</th>
+                                                    <th class="p-3">Analysis & Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="report-clause-tbody" class="divide-y divide-brand-glass-border/20 text-gray-300">
+                                                <!-- Dynamic content -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Missing Clauses & Compliance Issues -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="bg-brand-matte/20 border border-brand-glass-border/30 rounded-xl p-4 space-y-2">
+                                        <h4 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5 text-amber-400">
+                                            <i data-lucide="alert-circle" class="w-4 h-4 shrink-0"></i> Missing Clauses
+                                        </h4>
+                                        <ul id="report-missing-clauses" class="space-y-1.5 text-xs text-gray-400 pl-4 list-disc">
+                                            <!-- Dynamic content -->
+                                        </ul>
+                                    </div>
+                                    <div class="bg-brand-matte/20 border border-brand-glass-border/30 rounded-xl p-4 space-y-2">
+                                        <h4 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5 text-blue-400">
+                                            <i data-lucide="shield-check" class="w-4 h-4 shrink-0"></i> Compliance Issues
+                                        </h4>
+                                        <ul id="report-compliance-issues" class="space-y-1.5 text-xs text-gray-400 pl-4 list-disc">
+                                            <!-- Dynamic content -->
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!-- Suggested Amendments & Negotiation Advice -->
+                                <div class="space-y-4">
+                                    <div class="space-y-2">
+                                        <h4 class="text-xs font-bold text-white uppercase tracking-wider text-emerald-400">Suggested Amendments</h4>
+                                        <div class="bg-brand-matte/20 border border-brand-glass-border/30 rounded-xl p-4 space-y-3 text-xs text-gray-300" id="report-suggested-amendments">
+                                            <!-- Dynamic content -->
+                                        </div>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <h4 class="text-xs font-bold text-white uppercase tracking-wider text-blue-400">Negotiation Advice</h4>
+                                        <div class="bg-brand-matte/20 border border-brand-glass-border/30 rounded-xl p-4 space-y-3 text-xs text-gray-300" id="report-negotiation-advice">
+                                            <!-- Dynamic content -->
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Commercial Risks -->
+                                <div class="space-y-2">
+                                    <h4 class="text-xs font-bold text-white uppercase tracking-wider text-rose-400">Commercial Risks</h4>
+                                    <div class="bg-brand-matte/20 border border-brand-glass-border/30 rounded-xl p-4 space-y-2 text-xs text-gray-300" id="report-commercial-risks">
+                                        <!-- Dynamic content -->
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- ALWAYS VISIBLE INTERACTIVE CONTRACT QA (FUTURE INTEGRATION / COPILOT BACKWARD COMPATIBILITY) -->
+                        <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 shadow-sm space-y-4">
+                            <div class="flex items-center gap-2">
+                                <div class="w-7 h-7 rounded bg-blue-500/10 flex items-center justify-center text-blue-500 animate-pulse">
+                                    <i data-lucide="bot" class="w-4 h-4"></i>
+                                </div>
+                                <h4 class="text-xs font-bold text-white uppercase tracking-wider">Interactive Assistant: Query this Contract</h4>
+                            </div>
+                            <div class="space-y-3">
+                                <textarea id="law-ai-prompt" rows="2" class="w-full bg-brand-matte border border-brand-glass-border focus:border-blue-500 text-white rounded-xl p-3 text-xs focus:outline-none transition-all placeholder:text-gray-500" placeholder="Ask specific questions about this contract (e.g. 'What is the payment period?', 'Is there a delay damages cap?')..."></textarea>
+
+                                <!-- Suggested Queries -->
+                                <div class="flex flex-wrap gap-1.5">
+                                    <button type="button" onclick="setLawPrompt('Explain this NEC clause.')" class="px-2 py-0.5 text-[10px] rounded-md border border-brand-glass-border hover:border-blue-500 text-gray-400 hover:text-white bg-brand-matte/50 transition-all">Explain this NEC clause.</button>
+                                    <button type="button" onclick="setLawPrompt('What is a Pay Less Notice?')" class="px-2 py-0.5 text-[10px] rounded-md border border-brand-glass-border hover:border-blue-500 text-gray-400 hover:text-white bg-brand-matte/50 transition-all">What is a Pay Less Notice?</button>
+                                    <button type="button" onclick="setLawPrompt('Can I claim an Extension of Time?')" class="px-2 py-0.5 text-[10px] rounded-md border border-brand-glass-border hover:border-blue-500 text-gray-400 hover:text-white bg-brand-matte/50 transition-all">Can I claim an Extension of Time?</button>
+                                    <button type="button" onclick="setLawPrompt('Summarize this contract.')" class="px-2 py-0.5 text-[10px] rounded-md border border-brand-glass-border hover:border-blue-500 text-gray-400 hover:text-white bg-brand-matte/50 transition-all">Summarize this contract.</button>
+                                </div>
+
+                                <div class="flex items-center justify-between gap-4 pt-1">
+                                    <button type="button" onclick="askLawAI()" class="px-4 py-2 text-xs font-bold rounded-lg bg-blue-600 hover:bg-blue-700 hover:shadow shadow-blue-500/20 text-white transition-all flex items-center gap-1.5">
+                                        <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                                        Ask Construction Law AI
+                                    </button>
+                                    <span class="text-[10px] text-gray-500 font-mono">Connected to Sovereign Counsel Engine</span>
+                                </div>
+
+                                <!-- Response Area -->
+                                <div id="law-ai-response" class="border border-brand-glass-border/30 bg-brand-matte/40 rounded-xl p-4 text-xs text-gray-300 leading-relaxed max-h-[250px] overflow-y-auto space-y-3">
+                                    <div class="flex flex-col items-center justify-center py-6 text-center text-gray-500 space-y-1.5">
+                                        <i data-lucide="gavel" class="w-6 h-6 text-gray-600"></i>
+                                        <p class="font-medium text-gray-400">No Query Submitted Yet</p>
+                                        <p class="max-w-xs text-[10px]">Select a suggested query or type a prompt above to receive structured legal analysis and advice.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BOTTOM ROW OF FEATURE CARDS -->
+                <div class="space-y-4">
+                    <h3 class="text-xs font-bold text-white uppercase tracking-wider text-gray-400 border-b border-brand-glass-border/30 pb-2">Workspace Capabilities</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
+                        <!-- Feature 1 -->
+                        <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-4 flex flex-col space-y-2">
+                            <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500">
+                                <i data-lucide="file-text" class="w-4 h-4"></i>
+                            </div>
+                            <h4 class="text-xs font-bold text-white">Executive Summary</h4>
+                            <p class="text-[10px] text-gray-400 leading-normal">High-level insights, metadata detection, and critical legal findings compiled at a glance.</p>
+                        </div>
+                        <!-- Feature 2 -->
+                        <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-4 flex flex-col space-y-2">
+                            <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500">
+                                <i data-lucide="scale" class="w-4 h-4"></i>
+                            </div>
+                            <h4 class="text-xs font-bold text-white">Clause Analysis</h4>
+                            <p class="text-[10px] text-gray-400 leading-normal">In-depth evaluations of liabilities, warranties, and indemnities against market baselines.</p>
+                        </div>
+                        <!-- Feature 3 -->
+                        <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-4 flex flex-col space-y-2">
+                            <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500">
+                                <i data-lucide="grid" class="w-4 h-4"></i>
+                            </div>
+                            <h4 class="text-xs font-bold text-white">Risk Matrix</h4>
+                            <p class="text-[10px] text-gray-400 leading-normal">A structured grading system mapping exposure levels, severity, and mitigation suggestions.</p>
+                        </div>
+                        <!-- Feature 4 -->
+                        <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-4 flex flex-col space-y-2">
+                            <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500">
+                                <i data-lucide="shield-alert" class="w-4 h-4"></i>
+                            </div>
+                            <h4 class="text-xs font-bold text-white">Compliance</h4>
+                            <p class="text-[10px] text-gray-400 leading-normal">Automated validation of JCT statutory timelines, CDM 2015 obligations, and UK legislation.</p>
+                        </div>
+                        <!-- Feature 5 -->
+                        <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-4 flex flex-col space-y-2">
+                            <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500">
+                                <i data-lucide="message-square" class="w-4 h-4"></i>
+                            </div>
+                            <h4 class="text-xs font-bold text-white">Negotiation</h4>
+                            <p class="text-[10px] text-gray-400 leading-normal">Actionable advice, bargaining levers, and industry-standard alternative clause redlines.</p>
+                        </div>
+                        <!-- Feature 6 -->
+                        <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-4 flex flex-col space-y-2">
+                            <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500">
+                                <i data-lucide="download" class="w-4 h-4"></i>
+                            </div>
+                            <h4 class="text-xs font-bold text-white">Export Report</h4>
+                            <p class="text-[10px] text-gray-400 leading-normal">Instantly save the complete AI-generated report as a structured PDF, Word document, or raw JSON.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COLLAPSIBLE REFERENCE LIBRARY SECTION FOR BACKWARDS COMPATIBILITY -->
+                <div class="border border-brand-glass-border bg-brand-graphite rounded-xl overflow-hidden shadow">
+                    <!-- Toggle Button -->
+                    <button type="button" onclick="toggleReferenceLibrary()" class="w-full px-5 py-4 flex items-center justify-between text-left hover:bg-brand-glass-hover transition-all">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500">
+                                <i data-lucide="search" class="w-4 h-4"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-white uppercase tracking-wider">UK Construction Law Reference Library</h4>
+                                <p class="text-[10px] text-gray-400">Search statutory references, JCT/NEC guidelines, and legal templates.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <!-- Search Bar (Accessible for search tests) -->
+                            <div class="relative w-48 sm:w-64" onclick="event.stopPropagation()">
+                                <i data-lucide="search" class="absolute left-2.5 top-2 h-3 w-3 text-gray-500"></i>
+                                <input type="text" oninput="filterLawCards(this.value)" class="w-full bg-brand-matte border border-brand-glass-border focus:border-blue-500 text-white rounded-md pl-7 pr-3 py-1 text-[11px] focus:outline-none transition-colors placeholder:text-gray-500" placeholder="Search construction law, contracts, disputes, or regulations...">
+                            </div>
+                            <i data-lucide="chevron-down" id="library-toggle-icon" class="w-4 h-4 text-gray-400 transition-all"></i>
+                        </div>
+                    </button>
+
+                    <!-- Library Content (Open by default so that elements are visible to Playwright search tests) -->
+                    <div id="reference-library-content" class="p-5 border-t border-brand-glass-border/30 bg-brand-matte/10 space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="law-cards-grid">
+                            <!-- Construction Contracts -->
+                            <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-gold-glow-sm transition-all duration-300 flex flex-col justify-between h-full law-card" data-title="construction contracts jct nec fidic ice design build traditional procurement management contracting epc">
+                                <div class="space-y-4">
+                                    <div class="w-10 h-10 rounded-lg bg-brand-gold-muted/30 border border-brand-gold-border/30 flex items-center justify-center text-brand-gold">
+                                        <i data-lucide="file-text" class="w-5 h-5"></i>
+                                    </div>
+                                    <h3 class="text-base font-bold text-white">Construction Contracts</h3>
+                                    <p class="text-xs text-gray-400 leading-relaxed">Learn about JCT, NEC, FIDIC, ICE, Design & Build, Traditional Procurement, Management Contracting, and EPC contracts.</p>
+                                </div>
+                                <div class="pt-5">
+                                    <button onclick="openLawDetail('contracts')" class="w-full px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-brand-gold text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
+                                        <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                        Open
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Payment & Valuations -->
+                            <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-gold-glow-sm transition-all duration-300 flex flex-col justify-between h-full law-card" data-title="payment valuations interim pay notices less retention final accounts valuation procedures">
+                                <div class="space-y-4">
+                                    <div class="w-10 h-10 rounded-lg bg-brand-gold-muted/30 border border-brand-gold-border/30 flex items-center justify-center text-brand-gold">
+                                        <i data-lucide="coins" class="w-5 h-5"></i>
+                                    </div>
+                                    <h3 class="text-base font-bold text-white">Payment & Valuations</h3>
+                                    <p class="text-xs text-gray-400 leading-relaxed">Guidance on interim payments, payment notices, pay less notices, retention, final accounts, and valuation procedures.</p>
+                                </div>
+                                <div class="pt-5">
+                                    <button onclick="openLawDetail('payment')" class="w-full px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-brand-gold text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
+                                        <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                        Open
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Claims & Disputes -->
+                            <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-gold-glow-sm transition-all duration-300 flex flex-col justify-between h-full law-card" data-title="claims disputes extension of time loss expense variations delay liquidated damages adjudication arbitration mediation litigation">
+                                <div class="space-y-4">
+                                    <div class="w-10 h-10 rounded-lg bg-brand-gold-muted/30 border border-brand-gold-border/30 flex items-center justify-center text-brand-gold">
+                                        <i data-lucide="scale" class="w-5 h-5"></i>
+                                    </div>
+                                    <h3 class="text-base font-bold text-white">Claims & Disputes</h3>
+                                    <p class="text-xs text-gray-400 leading-relaxed">Extension of Time, Loss & Expense, Variations, Delay Claims, Liquidated Damages, Adjudication, Arbitration, Mediation, and Litigation.</p>
+                                </div>
+                                <div class="pt-5">
+                                    <button onclick="openLawDetail('claims')" class="w-full px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-brand-gold text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
+                                        <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                        Open
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Contract Administration -->
+                            <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-gold-glow-sm transition-all duration-300 flex flex-col justify-between h-full law-card" data-title="contract administration architect instructions compensation events early warning notices site practical completion defects certificates final accounts">
+                                <div class="space-y-4">
+                                    <div class="w-10 h-10 rounded-lg bg-brand-gold-muted/30 border border-brand-gold-border/30 flex items-center justify-center text-brand-gold">
+                                        <i data-lucide="clipboard-list" class="w-5 h-5"></i>
+                                    </div>
+                                    <h3 class="text-base font-bold text-white">Contract Administration</h3>
+                                    <p class="text-xs text-gray-400 leading-relaxed">Architect's Instructions, Compensation Events, Early Warning Notices, Site Instructions, Practical Completion, Defects, Certificates, and Final Accounts.</p>
+                                </div>
+                                <div class="pt-5">
+                                    <button onclick="openLawDetail('administration')" class="w-full px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-brand-gold text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
+                                        <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                        Open
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Procurement -->
+                            <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-gold-glow-sm transition-all duration-300 flex flex-col justify-between h-full law-card" data-title="procurement tendering procedures framework agreements contractor selection public bid evaluation">
+                                <div class="space-y-4">
+                                    <div class="w-10 h-10 rounded-lg bg-brand-gold-muted/30 border border-brand-gold-border/30 flex items-center justify-center text-brand-gold">
+                                        <i data-lucide="briefcase" class="w-5 h-5"></i>
+                                    </div>
+                                    <h3 class="text-base font-bold text-white">Procurement</h3>
+                                    <p class="text-xs text-gray-400 leading-relaxed">Tendering procedures, framework agreements, contractor selection, public procurement, and bid evaluation.</p>
+                                </div>
+                                <div class="pt-5">
+                                    <button onclick="openLawDetail('procurement')" class="w-full px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-brand-gold text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
+                                        <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                        Open
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Health & Safety -->
+                            <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-gold-glow-sm transition-all duration-300 flex flex-col justify-between h-full law-card" data-title="health safety cdm regulations principal designer duties contractor responsibilities rams ppe site requirements">
+                                <div class="space-y-4">
+                                    <div class="w-10 h-10 rounded-lg bg-brand-gold-muted/30 border border-brand-gold-border/30 flex items-center justify-center text-brand-gold">
+                                        <i data-lucide="shield-alert" class="w-5 h-5"></i>
+                                    </div>
+                                    <h3 class="text-base font-bold text-white">Health & Safety</h3>
+                                    <p class="text-xs text-gray-400 leading-relaxed">CDM Regulations, Principal Designer duties, Principal Contractor responsibilities, RAMS, PPE, and site safety requirements.</p>
+                                </div>
+                                <div class="pt-5">
+                                    <button onclick="openLawDetail('safety')" class="w-full px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-brand-gold text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
+                                        <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                        Open
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Planning & Building Regulations -->
+                            <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-gold-glow-sm transition-all duration-300 flex flex-col justify-between h-full law-card" data-title="planning building regulations permission listed buildings conservation areas control compliance">
+                                <div class="space-y-4">
+                                    <div class="w-10 h-10 rounded-lg bg-brand-gold-muted/30 border border-brand-gold-border/30 flex items-center justify-center text-brand-gold">
+                                        <i data-lucide="milestone" class="w-5 h-5"></i>
+                                    </div>
+                                    <h3 class="text-base font-bold text-white">Planning & Building Regulations</h3>
+                                    <p class="text-xs text-gray-400 leading-relaxed">Planning Permission, Building Regulations, Listed Buildings, Conservation Areas, Building Control, and Compliance.</p>
+                                </div>
+                                <div class="pt-5">
+                                    <button onclick="openLawDetail('planning')" class="w-full px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-brand-gold text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
+                                        <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                        Open
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Insurance & Bonds -->
+                            <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-gold-glow-sm transition-all duration-300 flex flex-col justify-between h-full law-card" data-title="insurance bonds professional indemnity public liability car performance parent company guarantees warranties">
+                                <div class="space-y-4">
+                                    <div class="w-10 h-10 rounded-lg bg-brand-gold-muted/30 border border-brand-gold-border/30 flex items-center justify-center text-brand-gold">
+                                        <i data-lucide="shield-check" class="w-5 h-5"></i>
+                                    </div>
+                                    <h3 class="text-base font-bold text-white">Insurance & Bonds</h3>
+                                    <p class="text-xs text-gray-400 leading-relaxed">Professional Indemnity, Public Liability, CAR Insurance, Performance Bonds, Parent Company Guarantees, and Warranties.</p>
+                                </div>
+                                <div class="pt-5">
+                                    <button onclick="openLawDetail('insurance')" class="w-full px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-brand-gold text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
+                                        <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                        Open
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Construction Legislation -->
+                            <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-gold-glow-sm transition-all duration-300 flex flex-col justify-between h-full law-card" data-title="construction legislation housing grants regeneration act building safety cdm health regulations uk laws">
+                                <div class="space-y-4">
+                                    <div class="w-10 h-10 rounded-lg bg-brand-gold-muted/30 border border-brand-gold-border/30 flex items-center justify-center text-brand-gold">
+                                        <i data-lucide="book-open" class="w-5 h-5"></i>
+                                    </div>
+                                    <h3 class="text-base font-bold text-white">Construction Legislation</h3>
+                                    <p class="text-xs text-gray-400 leading-relaxed">Reference the Housing Grants, Construction and Regeneration Act, Building Safety Act, CDM Regulations, Health & Safety legislation, and other key UK construction laws.</p>
+                                </div>
+                                <div class="pt-5">
+                                    <button onclick="openLawDetail('legislation')" class="w-full px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-brand-gold text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
+                                        <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                        Open
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- AI Contract Review -->
+                            <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-gold-glow-sm transition-all duration-300 flex flex-col justify-between h-full law-card" data-title="ai contract review upload contracts analysis clause explanations risk identification missing provisions summaries recommendations">
+                                <div class="space-y-4">
+                                    <div class="w-10 h-10 rounded-lg bg-brand-gold-muted/30 border border-brand-gold-border/30 flex items-center justify-center text-brand-gold">
+                                        <i data-lucide="brain" class="w-5 h-5"></i>
+                                    </div>
+                                    <h3 class="text-base font-bold text-white">AI Contract Review</h3>
+                                    <p class="text-xs text-gray-400 leading-relaxed">Upload contracts for AI analysis. Receive clause explanations, risk identification, missing provisions, plain-English summaries, and recommendations.</p>
+                                </div>
+                                <div class="pt-5">
+                                    <button onclick="openLawDetail('review')" class="w-full px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-brand-gold text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
+                                        <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                        Open
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Legal Templates -->
+                            <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-5 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-gold-glow-sm transition-all duration-300 flex flex-col justify-between h-full law-card" data-title="legal templates downloadable payment notices pay less extension of time requests variation orders delay letters before action practical completion certificates final account">
+                                <div class="space-y-4">
+                                    <div class="w-10 h-10 rounded-lg bg-brand-gold-muted/30 border border-brand-gold-border/30 flex items-center justify-center text-brand-gold">
+                                        <i data-lucide="folder-open" class="w-5 h-5"></i>
+                                    </div>
+                                    <h3 class="text-base font-bold text-white">Legal Templates</h3>
+                                    <p class="text-xs text-gray-400 leading-relaxed">Access downloadable templates including Payment Notices, Pay Less Notices, Extension of Time Requests, Variation Orders, Delay Notices, Letters Before Action, Practical Completion Certificates, and Final Account documents.</p>
+                                </div>
+                                <div class="pt-5">
+                                    <button onclick="openLawDetail('templates')" class="w-full px-3 py-2 text-xs font-bold rounded-lg border border-brand-glass-border hover:border-brand-gold text-white hover:bg-brand-glass-hover transition-all flex items-center justify-center gap-1.5">
+                                        <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                        Open
+                                    </button>
                                 </div>
                             </div>
                         </div>

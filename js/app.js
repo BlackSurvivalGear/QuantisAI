@@ -158,6 +158,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Bind partner triggers for Coming Soon Modal
     bindPartnerTriggers();
 
+    // Initialize the Premium Contract Review Workspace
+    initContractReviewWorkspace();
+
     // Client-side Routing Initial Trigger & Popstate registration
     handleRouting();
     window.addEventListener('popstate', handleRouting);
@@ -5077,4 +5080,469 @@ function copyToClipboard(text) {
     navigator.clipboard.writeText(text).then(() => {
         showToast("Copied to Clipboard", "AI Response has been successfully copied to your clipboard.");
     });
+}
+
+// Global State for uploaded contract in law workspace
+let uploadedContractFile = null;
+
+// Initialize the Premium Contract Review Workspace
+function initContractReviewWorkspace() {
+    const dropZone = document.getElementById('contract-drop-zone');
+    const fileInput = document.getElementById('contract-file-input');
+
+    if (!dropZone || !fileInput) return;
+
+    // Drag and Drop Events
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropZone.classList.add('border-blue-500', 'bg-blue-500/5');
+        }, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropZone.classList.remove('border-blue-500', 'bg-blue-500/5');
+        }, false);
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        if (files && files.length > 0) {
+            handleContractUpload(files[0]);
+        }
+    }, false);
+
+    // Click to upload via file input
+    fileInput.addEventListener('change', (e) => {
+        if (fileInput.files && fileInput.files.length > 0) {
+            handleContractUpload(fileInput.files[0]);
+        }
+    });
+}
+
+// Validate and process uploaded contract file
+function handleContractUpload(file) {
+    if (!file) return;
+
+    // Supported formats check: PDF, DOCX, DOC, TXT
+    const allowedExtensions = ['pdf', 'docx', 'doc', 'txt'];
+    const filename = file.name;
+    const extension = filename.split('.').pop().toLowerCase();
+
+    if (!allowedExtensions.includes(extension)) {
+        showToast("Unsupported Format", "Please upload a PDF, DOCX, DOC, or TXT file.");
+        return;
+    }
+
+    // Maximum file size check: 50 MB
+    const maxSizeInBytes = 50 * 1024 * 1024; // 50 MB
+    if (file.size > maxSizeInBytes) {
+        showToast("File Too Large", "The selected file exceeds the 50 MB maximum size limit.");
+        return;
+    }
+
+    // Save state
+    uploadedContractFile = file;
+
+    // Format file size
+    let formattedSize = "";
+    if (file.size < 1024 * 1024) {
+        formattedSize = (file.size / 1024).toFixed(1) + " KB";
+    } else {
+        formattedSize = (file.size / (1024 * 1024)).toFixed(1) + " MB";
+    }
+
+    // Detect contract type mock
+    let detectedType = "Commercial Subcontract Agreement";
+    const lowerName = filename.toLowerCase();
+    if (lowerName.includes("jct")) {
+        detectedType = "JCT Standard Building Contract 2016";
+    } else if (lowerName.includes("nec")) {
+        detectedType = "NEC4 Engineering and Construction Contract";
+    } else if (lowerName.includes("fidic")) {
+        detectedType = "FIDIC Red Book (Conditions of Contract for Construction)";
+    } else if (lowerName.includes("purchase") || lowerName.includes("po")) {
+        detectedType = "Standard Purchase Order Agreement";
+    }
+
+    // Random page count mock (5 to 50)
+    const randomPages = Math.floor(Math.random() * 46) + 5;
+
+    // Update UI elements
+    const filenameLabel = document.getElementById('contract-filename');
+    const sizeLabel = document.getElementById('contract-size');
+    const pagesLabel = document.getElementById('contract-pages');
+    const detectedTypeLabel = document.getElementById('contract-detected-type');
+    const metaPanel = document.getElementById('contract-meta-panel');
+    const dropZone = document.getElementById('contract-drop-zone');
+    const analyseBtn = document.getElementById('analyse-contract-btn');
+
+    if (filenameLabel) filenameLabel.innerText = filename;
+    if (sizeLabel) sizeLabel.innerText = formattedSize;
+    if (pagesLabel) pagesLabel.innerText = `${randomPages} pages`;
+    if (detectedTypeLabel) detectedTypeLabel.innerText = detectedType;
+
+    // Toggle panels
+    if (metaPanel) metaPanel.classList.remove('hidden');
+    if (dropZone) dropZone.classList.add('hidden');
+    if (analyseBtn) {
+        analyseBtn.removeAttribute('disabled');
+        analyseBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+    }
+
+    showToast("Contract Uploaded", `"${filename}" is ready for legal AI analysis.`);
+    initLucide();
+}
+
+// Remove or replace uploaded contract file
+function removeUploadedContract() {
+    uploadedContractFile = null;
+
+    // Clear input
+    const fileInput = document.getElementById('contract-file-input');
+    if (fileInput) fileInput.value = "";
+
+    // Toggle panels
+    const metaPanel = document.getElementById('contract-meta-panel');
+    const dropZone = document.getElementById('contract-drop-zone');
+    const analyseBtn = document.getElementById('analyse-contract-btn');
+
+    if (metaPanel) metaPanel.classList.add('hidden');
+    if (dropZone) dropZone.classList.remove('hidden');
+    if (analyseBtn) {
+        analyseBtn.setAttribute('disabled', 'true');
+        analyseBtn.classList.add('opacity-50', 'cursor-not-allowed');
+    }
+
+    // Hide report or loaders and go back to placeholder
+    const placeholderState = document.getElementById('analysis-placeholder-state');
+    const loadingState = document.getElementById('analysis-loading-state');
+    const reportState = document.getElementById('analysis-report-state');
+
+    if (placeholderState) placeholderState.classList.remove('hidden');
+    if (loadingState) loadingState.classList.add('hidden');
+    if (reportState) reportState.classList.add('hidden');
+
+    showToast("File Removed", "Contract file removed. Upload another file to begin.");
+    initLucide();
+}
+
+// Toggle reference library collapsible
+function toggleReferenceLibrary() {
+    const libraryContent = document.getElementById('reference-library-content');
+    const toggleIcon = document.getElementById('library-toggle-icon');
+
+    if (!libraryContent || !toggleIcon) return;
+
+    if (libraryContent.classList.contains('hidden')) {
+        libraryContent.classList.remove('hidden');
+        toggleIcon.style.transform = 'rotate(0deg)';
+    } else {
+        libraryContent.classList.add('hidden');
+        toggleIcon.style.transform = 'rotate(180deg)';
+    }
+}
+
+// Trigger the contract analysis loading sequence
+function triggerContractAnalysis() {
+    const placeholderState = document.getElementById('analysis-placeholder-state');
+    const loadingState = document.getElementById('analysis-loading-state');
+    const reportState = document.getElementById('analysis-report-state');
+
+    if (!loadingState) return;
+
+    // Show loading state, hide others
+    if (placeholderState) placeholderState.classList.add('hidden');
+    if (reportState) reportState.classList.add('hidden');
+    loadingState.classList.remove('hidden');
+
+    // Reset progress steps UI
+    const steps = [
+        { id: 1, text: "Reading document..." },
+        { id: 2, text: "Extracting clauses..." },
+        { id: 3, text: "Analysing legal terms..." },
+        { id: 4, text: "Assessing commercial risks..." },
+        { id: 5, text: "Generating recommendations..." },
+        { id: 6, text: "Preparing report..." }
+    ];
+
+    steps.forEach(step => {
+        const stepRow = document.getElementById(`analysis-step-${step.id}`);
+        const stepStatus = document.getElementById(`analysis-step-status-${step.id}`);
+        if (stepRow && stepStatus) {
+            stepRow.className = "flex items-center justify-between text-xs text-gray-500";
+            const icon = stepRow.querySelector('svg, i');
+            if (icon) icon.outerHTML = `<i data-lucide="circle" class="w-3.5 h-3.5 text-gray-600"></i>`;
+            stepStatus.innerText = "Waiting";
+            stepStatus.className = "text-[10px] font-mono text-gray-500";
+        }
+    });
+    initLucide();
+
+    // Run sequential step animation
+    let currentStep = 1;
+    function runNextStep() {
+        if (currentStep > 6) {
+            // Loading complete, generate report
+            generateMockContractReport();
+            return;
+        }
+
+        const stepRow = document.getElementById(`analysis-step-${currentStep}`);
+        const stepStatus = document.getElementById(`analysis-step-status-${currentStep}`);
+
+        if (stepRow && stepStatus) {
+            // Mark current as In Progress
+            stepRow.className = "flex items-center justify-between text-xs text-blue-400 font-semibold";
+            const icon = stepRow.querySelector('svg, i');
+            if (icon) icon.outerHTML = `<i data-lucide="loader" class="w-3.5 h-3.5 animate-spin text-blue-400"></i>`;
+            stepStatus.innerText = "In Progress";
+            stepStatus.className = "text-[10px] font-mono text-blue-400 animate-pulse";
+            initLucide();
+        }
+
+        setTimeout(() => {
+            // Mark previous as Complete
+            if (stepRow && stepStatus) {
+                stepRow.className = "flex items-center justify-between text-xs text-emerald-400";
+                const icon = stepRow.querySelector('svg, i');
+                if (icon) icon.outerHTML = `<i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-400"></i>`;
+                stepStatus.innerText = "Complete";
+                stepStatus.className = "text-[10px] font-mono text-emerald-400 font-bold";
+                initLucide();
+            }
+
+            currentStep++;
+            runNextStep();
+        }, 800);
+    }
+
+    runNextStep();
+}
+
+// Generate premium mock report data based on Analysis Type & Contract Type
+function generateMockContractReport() {
+    const loadingState = document.getElementById('analysis-loading-state');
+    const reportState = document.getElementById('analysis-report-state');
+
+    if (loadingState) loadingState.classList.add('hidden');
+    if (reportState) reportState.classList.remove('hidden');
+
+    // Get selected radio input
+    const selectedRadio = document.querySelector('input[name="analysis-type"]:checked');
+    const analysisType = selectedRadio ? selectedRadio.value : "Full Contract Review";
+
+    // Get contract metadata
+    const filename = uploadedContractFile ? uploadedContractFile.name : "contract_draft.pdf";
+    const detectedType = document.getElementById('contract-detected-type')?.innerText || "Commercial Subcontract Agreement";
+
+    // Update Header metadata
+    const reportTitle = document.getElementById('report-title-label');
+    const reportMeta = document.getElementById('report-meta-subtitle');
+
+    if (reportTitle) reportTitle.innerText = `${analysisType} - ${detectedType}`;
+    if (reportMeta) reportMeta.innerText = `AI Generated Report • ${filename} • 28 Jul 2026`;
+
+    // Dynamic Variables based on analysis type and contract type
+    let riskScoreVal = 65;
+    let riskLevel = "Medium Risk";
+    let riskBadgeClass = "text-yellow-400 bg-yellow-950/40 border-yellow-900";
+    let executiveSummaryText = "";
+    let clausesList = [];
+    let missingClauses = [];
+    let complianceIssues = [];
+    let suggestedAmendments = [];
+    let negotiationAdvice = [];
+    let commercialRisks = [];
+
+    // Set Risk Score and Summary based on Analysis Type
+    if (analysisType === "Full Contract Review") {
+        riskScoreVal = 58;
+        riskLevel = "Medium Risk";
+        riskBadgeClass = "text-yellow-400 bg-yellow-950/40 border-yellow-900";
+        executiveSummaryText = `This full contract review evaluated all core legal, commercial, and operational parameters of "${filename}". The analysis shows a standard risk profile typical for construction projects of this scale. While standard obligations match general industry baselines, several exposure points in indemnity caps and specific default notification periods present moderate exposure and require targeted amendment before execution.`;
+    } else if (analysisType === "Risk Assessment") {
+        riskScoreVal = 82;
+        riskLevel = "High Risk";
+        riskBadgeClass = "text-red-400 bg-red-950/40 border-red-900";
+        executiveSummaryText = `EXPOSURE WARN: This dedicated Risk Assessment identifies critical commercial and legal liabilities. Overall exposure is graded HIGH. Uncapped indemnities for third-party property damage and extremely short notification periods for extension of time claims represent substantial financial risks. Execution under the current drafting is highly discouraged without securing the recommended amendments.`;
+    } else if (analysisType === "Clause Analysis") {
+        riskScoreVal = 45;
+        riskLevel = "Low-Medium Risk";
+        riskBadgeClass = "text-blue-400 bg-blue-950/40 border-blue-900";
+        executiveSummaryText = `This Clause Analysis conducted a detailed sentence-level check of core contract provisions. Over 85% of standard clauses adhere strictly to market norms. However, slight variations in definition wording for "Force Majeure" and unilateral termination rights represent minor areas of commercial misalignment.`;
+    } else if (analysisType === "Compliance Check") {
+        riskScoreVal = 70;
+        riskLevel = "Medium-High Risk";
+        riskBadgeClass = "text-red-400 bg-red-950/40 border-red-900";
+        executiveSummaryText = `This Compliance Check audited the contract draft against modern UK Construction Legislation (including the Housing Grants Act 1996, CDM 2015, and the Building Safety Act 2022). Significant compliance misalignments were detected regarding statutory timelines for payment notices and pay less notices, creating a risk of default payment obligations.`;
+    } else if (analysisType === "Payment Clause Review") {
+        riskScoreVal = 75;
+        riskLevel = "High Risk";
+        riskBadgeClass = "text-red-400 bg-red-950/40 border-red-900";
+        executiveSummaryText = `This targeted Payment Clause Review focused on cashflow security, timelines, and retention terms. The contract outlines a 60-day final payment period from the due date, which exceeds standard UK Construction norms (usually 30 days) and poses severe cashflow constraints on subcontractors. Retentional release is also conditional, creating high recovery risks.`;
+    }
+
+    // Set Clause Review rows based on Contract Type
+    if (detectedType.includes("JCT")) {
+        clausesList = [
+            { ref: "Clause 2.27", title: "Extension of Time (Relevant Events)", status: "Medium Risk", statusClass: "text-yellow-400 bg-yellow-950/40 border-yellow-900", analysis: "Notice must be given as soon as delay is 'reasonably apparent'. Highly subjective; we recommend replacing with a clear 'within 14 days' deadline to prevent dispute." },
+            { ref: "Clause 4.10", title: "Interim Valuation Dates", status: "Low Risk", statusClass: "text-emerald-400 bg-emerald-950/40 border-emerald-900", analysis: "Dates align perfectly with standard JCT payment cycles. Payment notices are due within 5 days of the due date." },
+            { ref: "Clause 8.4", title: "Termination by Employer (Default)", status: "High Risk", statusClass: "text-red-400 bg-red-950/40 border-red-900", analysis: "Unilateral termination permitted after only a 7-day warning for minor defaults. This is highly aggressive; recommend amending to a 14-day cure period." }
+        ];
+        missingClauses = [
+            "<strong>Third Party Rights:</strong> No provision for JCT Third Party Rights or Collateral Warranties for purchasers, creating potential financing friction.",
+            "<strong>BIM Protocol Addition:</strong> Missing modern digital modeling compliance protocols, creating delivery standard ambiguity."
+        ];
+        complianceIssues = [
+            "<strong>Payment Timeline:</strong> Clause 4.12 specifies a Pay Less notice deadline of 3 days prior to the final payment date, which is legally compliant but represents tight administration constraints.",
+            "<strong>H&S Regulations:</strong> Incomplete reference to CDM 2015 Principal Designer obligations under safety protocols."
+        ];
+        suggestedAmendments = [
+            "<strong>Amendment 1 (Clause 8.4):</strong> Replace '7 days notice of default termination' with '14 days written rectification notice to cure the specified default before termination can occur.'",
+            "<strong>Amendment 2 (Clause 2.27):</strong> Clarify that exceptionally adverse weather is to be measured against a 1-in-10-year statistical average baseline."
+        ];
+        negotiationAdvice = [
+            "Negotiate the retention rate from 5% to 3%, with 50% released immediately upon Practical Completion.",
+            "Insert a mutual liability cap restricted to 100% of the total Subcontract Sum, excluding death or personal injury."
+        ];
+        commercialRisks = [
+            "Uncapped liquidated damages (LADs) under Clause 2.29 can lead to catastrophic financial exposure if delays arise.",
+            "Retention recovery is tied to overall project completion, meaning a minor defects list could lock up final cashflow for up to 12 months."
+        ];
+    } else if (detectedType.includes("NEC")) {
+        clausesList = [
+            { ref: "Clause 16.1", title: "Early Warning Notices (EWN)", status: "Medium Risk", statusClass: "text-yellow-400 bg-yellow-950/40 border-yellow-900", analysis: "Compulsory early warnings must be given for any matter affecting cost, delay or quality. Highly collaborative but carries severe risk if missed." },
+            { ref: "Clause 61.3", title: "Compensation Event Time-Bar", status: "High Risk", statusClass: "text-red-400 bg-red-950/40 border-red-900", analysis: "Strict 8-week time-bar to notify any Compensation Event. Failing to notify within this period absolutely bars all time and cost recovery. Extremely high operational risk." },
+            { ref: "Clause 50.2", title: "Assessments of Payment", status: "Low Risk", statusClass: "text-emerald-400 bg-emerald-950/40 border-emerald-900", analysis: "Standard monthly valuation cycle in place. Conforms to NEC4 Project Manager assessment rules." }
+        ];
+        missingClauses = [
+            "<strong>Clause 29 (Limitation of Liability):</strong> Missing standard Option X18 liability limitation caps, meaning the contractor carries full uncapped commercial liability.",
+            "<strong>Option Y(UK)2 Addition:</strong> Explicit reference to Housing Grants Act compliance is poorly formatted; needs revision to prevent statutory payment overrides."
+        ];
+        complianceIssues = [
+            "<strong>Compensation Event Timelines:</strong> PM response periods in Option W2 (Dispute Resolution) do not match fast-track statutory adjudication timelines.",
+            "<strong>CDM 2015 Roles:</strong> The role of CDM Principal Designer must be explicitly allocated to the Contractor in Section 4 of the Contract Data."
+        ];
+        suggestedAmendments = [
+            "<strong>Amendment 1 (Clause 61.3):</strong> Negotiate the Compensation Event notification time-bar from 8 weeks to 12 weeks to provide operational safety.",
+            "<strong>Amendment 2 (Option X18):</strong> Ensure Option X18 is selected and completed with 'Total liability capped at 100% of the Contract Price'."
+        ];
+        negotiationAdvice = [
+            "Insist on the selection of Option X7 (Delay Damages) with a clear daily rate and a cap of 10% of the total price.",
+            "Reject any PM attempt to unilaterally change the working areas without formal compensation event assessments."
+        ];
+        commercialRisks = [
+            "The 8-week time-bar represents a massive administrative burden on the commercial team. A single missed notice could result in massive unpaid variation costs.",
+            "Price fluctuation risk is completely borne by the Contractor under Option A. Recommend negotiating Option X1 (Price Adjustment for Inflation)."
+        ];
+    } else {
+        // General or Subcontracts / Purchase Orders
+        clausesList = [
+            { ref: "Section 4.1", title: "Limitation of Liability", status: "High Risk", statusClass: "text-red-400 bg-red-950/40 border-red-900", analysis: "No general limitation of liability cap is provided. The contractor is fully exposed to unlimited consequential losses and damages." },
+            { ref: "Section 5.3", title: "Payment Terms", status: "Medium Risk", statusClass: "text-yellow-400 bg-yellow-950/40 border-yellow-900", analysis: "Payment is set to 60 days following invoice receipt. This is unfavorable and exceeds construction industry standards." },
+            { ref: "Section 9.2", title: "Intellectual Property Rights", status: "Low Risk", statusClass: "text-emerald-400 bg-emerald-950/40 border-emerald-900", analysis: "Standard mutual license structure in place. Reassures IP safety for standard design drawings." }
+        ];
+        missingClauses = [
+            "<strong>Dispute Resolution (Adjudication):</strong> Missing standard fast-track statutory adjudication provisions as required under the Housing Grants Act.",
+            "<strong>Force Majeure Definition:</strong> The contract lacks any definition of Force Majeure, exposing the contractor to breach of contract claims during major national crises."
+        ];
+        complianceIssues = [
+            "<strong>Statutory Interest:</strong> The interest rate on late payments is set to 1% above base rate, which violates the Late Payment of Commercial Debts Act (statutory rate is 8% above base)."
+        ];
+        suggestedAmendments = [
+            "<strong>Amendment 1 (Section 4.1):</strong> 'The Contractor's total liability under or in connection with this Agreement shall be limited to 100% of the Price.'",
+            "<strong>Amendment 2 (Section 5.3):</strong> Amend the payment period from '60 days' to '30 days' from the date of interim valuation."
+        ];
+        negotiationAdvice = [
+            "State that standard payment terms in the UK construction market are 30 days and insist on statutory alignment.",
+            "Do not begin physical works on site until a signed Purchase Order has been officially received."
+        ];
+        commercialRisks = [
+            "A 60-day payment timeline can severely lock up commercial cashflow, impacting payment to sub-tier suppliers and workers.",
+            "Unlimited liability exposure poses an existential risk to the contractor's business structure."
+        ];
+    }
+
+    // Populate risk values in UI
+    const riskScoreLabel = document.getElementById('report-risk-score');
+    const riskBadgeLabel = document.getElementById('report-risk-badge');
+    const execSummaryLabel = document.getElementById('report-executive-summary');
+
+    if (riskScoreLabel) riskScoreLabel.innerText = `${riskScoreVal}%`;
+    if (riskBadgeLabel) {
+        riskBadgeLabel.innerText = riskLevel;
+        riskBadgeLabel.className = `text-[10px] font-bold px-2 py-0.5 rounded ${riskBadgeClass}`;
+    }
+    if (execSummaryLabel) execSummaryLabel.innerText = executiveSummaryText;
+
+    // Populate Clause Review Table
+    const tbody = document.getElementById('report-clause-tbody');
+    if (tbody) {
+        tbody.innerHTML = clausesList.map(item => `
+            <tr class="hover:bg-brand-matte/20 transition-all border-b border-brand-glass-border/20">
+                <td class="p-3 font-mono font-bold text-white">${item.ref}</td>
+                <td class="p-3 font-semibold text-white">${item.title}</td>
+                <td class="p-3">
+                    <span class="px-2 py-0.5 rounded text-[9px] font-bold ${item.statusClass}">${item.status}</span>
+                </td>
+                <td class="p-3 text-xs text-gray-400 leading-normal">${item.analysis}</td>
+            </tr>
+        `).join('');
+    }
+
+    // Populate Lists
+    const missingUl = document.getElementById('report-missing-clauses');
+    if (missingUl) {
+        missingUl.innerHTML = missingClauses.map(pt => `<li>${pt}</li>`).join('');
+    }
+
+    const complianceUl = document.getElementById('report-compliance-issues');
+    if (complianceUl) {
+        complianceUl.innerHTML = complianceIssues.map(pt => `<li>${pt}</li>`).join('');
+    }
+
+    const amendmentsDiv = document.getElementById('report-suggested-amendments');
+    if (amendmentsDiv) {
+        amendmentsDiv.innerHTML = suggestedAmendments.map(pt => `
+            <div class="p-2 border-l-2 border-emerald-500 bg-emerald-500/5 rounded-r">
+                ${pt}
+            </div>
+        `).join('<div class="h-2"></div>');
+    }
+
+    const adviceDiv = document.getElementById('report-negotiation-advice');
+    if (adviceDiv) {
+        adviceDiv.innerHTML = negotiationAdvice.map(pt => `
+            <div class="p-2 border-l-2 border-blue-500 bg-blue-500/5 rounded-r">
+                ${pt}
+            </div>
+        `).join('<div class="h-2"></div>');
+    }
+
+    const risksDiv = document.getElementById('report-commercial-risks');
+    if (risksDiv) {
+        risksDiv.innerHTML = commercialRisks.map(pt => `
+            <div class="p-2 border-l-2 border-rose-500 bg-rose-500/5 rounded-r">
+                ${pt}
+            </div>
+        `).join('<div class="h-2"></div>');
+    }
+
+    showToast("Analysis Complete", "The comprehensive AI Contract Analysis Report is now ready for review.");
+    initLucide();
+}
+
+// Simulated Export Law Report
+function exportLawReport(format) {
+    const detectedType = document.getElementById('contract-detected-type')?.innerText || "Contract";
+    showToast("Exporting Report", `Preparing and structural formatting of your AI Report for ${detectedType} as ${format.toUpperCase()}...`);
+    setTimeout(() => {
+        showToast("Export Successful", `The complete AI Legal report has been successfully compiled and downloaded as a .${format === 'word' ? 'docx' : format} file.`);
+    }, 1500);
 }
