@@ -1,0 +1,566 @@
+PAGE LOG: cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: === STAGE COMPLETED: Upload Documents ===
+PAGE LOG: Incoming Project ID: project-sample-1785192149068
+PAGE LOG: Outgoing Project ID: project-sample-1785192149068
+PAGE LOG: Project Name: Mayfair Duplex Refurbishment
+PAGE LOG: Client Name: Arthur Henderson
+PAGE LOG: Quote Number: BQ-2024-216
+PAGE LOG: Metadata Source: Sample
+PAGE LOG: ==========================================
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+Waiting for pipeline to run...
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: === STAGE COMPLETED: OCR ===
+PAGE LOG: Incoming Project ID: project-sample-1785192149068
+PAGE LOG: Outgoing Project ID: project-sample-1785192149068
+PAGE LOG: Project Name: Mayfair Duplex Refurbishment
+PAGE LOG: Client Name: Arthur Henderson
+PAGE LOG: Quote Number: BQ-2024-216
+PAGE LOG: Metadata Source: Sample
+PAGE LOG: ==========================================
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: === METADATA EXTRACTION START ===
+PAGE LOG: Previous Project State: {
+  "id": "project-sample-1785192149068",
+  "projectName": "Mayfair Duplex Refurbishment",
+  "clientName": "Arthur Henderson",
+  "siteAddress": "12 Mayfair Gardens, London",
+  "quoteNumber": "BQ-2024-216",
+  "region": "London",
+  "currency": "GBP",
+  "projectDescription": "Tender specifications for Mayfair duplex residential refurb:\n- Ground Floor: Demolition of internal structural masonry partitions, supply and installation of steel universal columns (203x203x46 UC).\n- First Floor: Install structural stud partition walls, skim coat plaster, double insulated plasterboards.\n- Electrical sub-circuits: 12 LED downlights, 6 double sockets, regional utility certificate audit.\n- Flooring: Underfloor insulation, dry screed flooring base, engineered premium Oak timber floorboards throughout.",
+  "specificationLevel": "Premium",
+  "metadataSource": "Sample",
+  "drawingReference": "Not Extracted",
+  "revision": "Not Extracted",
+  "drawingDate": "Not Extracted"
+}
+PAGE LOG: OCR Extracted Metadata: {
+  "projectName": "Mayfair Duplex Refurbishment",
+  "clientName": "Arthur Henderson",
+  "siteAddress": "12 Mayfair Gardens, London",
+  "quoteNumber": "BQ-2024-216",
+  "projectDescription": "",
+  "region": "London",
+  "currency": "GBP",
+  "specificationLevel": "Premium",
+  "drawingReference": "Not Extracted",
+  "revision": "Not Extracted",
+  "drawingDate": "Not Extracted"
+}
+PAGE LOG: === STAGE COMPLETED: Metadata Extraction ===
+PAGE LOG: Incoming Project ID: project-sample-1785192149068
+PAGE LOG: Outgoing Project ID: project-sample-1785192149068
+PAGE LOG: Project Name: Mayfair Duplex Refurbishment
+PAGE LOG: Client Name: Arthur Henderson
+PAGE LOG: Quote Number: BQ-2024-216
+PAGE LOG: Metadata Source: Sample
+PAGE LOG: ==========================================
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: === STAGE COMPLETED: Replace Active Project State ===
+PAGE LOG: Incoming Project ID: project-sample-1785192149068
+PAGE LOG: Outgoing Project ID: project-1785192150661-di54xv7
+PAGE LOG: Project Name: Mayfair Duplex Refurbishment
+PAGE LOG: Client Name: Arthur Henderson
+PAGE LOG: Quote Number: BQ-2024-216
+PAGE LOG: Metadata Source: Uploaded Document
+PAGE LOG: ==========================================
+PAGE LOG: === UPDATE PROJECT STATE COMPLETED ===
+PAGE LOG: Metadata Extraction Output: {
+  "stage": "metadata-extraction",
+  "status": "success",
+  "metadata": {
+    "projectName": "Mayfair Duplex Refurbishment",
+    "clientName": "Arthur Henderson",
+    "siteAddress": "12 Mayfair Gardens, London",
+    "quoteNumber": "BQ-2024-216",
+    "region": "London",
+    "currency": "GBP",
+    "projectDescription": "",
+    "specificationLevel": "Premium",
+    "drawingReference": "Not Extracted",
+    "revision": "Not Extracted",
+    "drawingDate": "Not Extracted"
+  }
+}
+PAGE LOG: Updated Project State: {
+  "id": "project-1785192150661-di54xv7",
+  "projectName": "Mayfair Duplex Refurbishment",
+  "clientName": "Arthur Henderson",
+  "siteAddress": "12 Mayfair Gardens, London",
+  "quoteNumber": "BQ-2024-216",
+  "region": "London",
+  "currency": "GBP",
+  "projectDescription": "",
+  "specificationLevel": "Premium",
+  "drawingReference": "Not Extracted",
+  "revision": "Not Extracted",
+  "drawingDate": "Not Extracted",
+  "metadataSource": "Uploaded Document"
+}
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: === VALIDATION START ===
+PAGE LOG: Validation Input Project State: {
+  "id": "project-1785192150661-di54xv7",
+  "projectName": "Mayfair Duplex Refurbishment",
+  "clientName": "Arthur Henderson",
+  "siteAddress": "12 Mayfair Gardens, London",
+  "quoteNumber": "BQ-2024-216",
+  "region": "London",
+  "currency": "GBP",
+  "projectDescription": "",
+  "specificationLevel": "Premium",
+  "drawingReference": "Not Extracted",
+  "revision": "Not Extracted",
+  "drawingDate": "Not Extracted",
+  "metadataSource": "Uploaded Document"
+}
+PAGE LOG: === STAGE COMPLETED: Validation ===
+PAGE LOG: Incoming Project ID: project-1785192150661-di54xv7
+PAGE LOG: Outgoing Project ID: project-1785192150661-di54xv7
+PAGE LOG: Project Name: Mayfair Duplex Refurbishment
+PAGE LOG: Client Name: Arthur Henderson
+PAGE LOG: Quote Number: BQ-2024-216
+PAGE LOG: Metadata Source: Uploaded Document
+PAGE LOG: ==========================================
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: === STAGE COMPLETED: Document Classification ===
+PAGE LOG: Incoming Project ID: project-1785192150661-di54xv7
+PAGE LOG: Outgoing Project ID: project-1785192150661-di54xv7
+PAGE LOG: Project Name: Mayfair Duplex Refurbishment
+PAGE LOG: Client Name: Arthur Henderson
+PAGE LOG: Quote Number: BQ-2024-216
+PAGE LOG: Metadata Source: Uploaded Document
+PAGE LOG: ==========================================
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: === STAGE COMPLETED: Document Intelligence ===
+PAGE LOG: Incoming Project ID: project-1785192150661-di54xv7
+PAGE LOG: Outgoing Project ID: project-1785192151959-72ghyh7
+PAGE LOG: Project Name: Mayfair Duplex Refurbishment
+PAGE LOG: Client Name: Arthur Henderson
+PAGE LOG: Quote Number: BQ-2024-216
+PAGE LOG: Metadata Source: Document Intelligence
+PAGE LOG: ==========================================
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: === STAGE COMPLETED: Drawing Detection ===
+PAGE LOG: Incoming Project ID: project-1785192151959-72ghyh7
+PAGE LOG: Outgoing Project ID: project-1785192151959-72ghyh7
+PAGE LOG: Project Name: Mayfair Duplex Refurbishment
+PAGE LOG: Client Name: Arthur Henderson
+PAGE LOG: Quote Number: BQ-2024-216
+PAGE LOG: Metadata Source: Document Intelligence
+PAGE LOG: ==========================================
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: === STAGE COMPLETED: Quantity Survey ===
+PAGE LOG: Incoming Project ID: project-1785192151959-72ghyh7
+PAGE LOG: Outgoing Project ID: project-1785192151959-72ghyh7
+PAGE LOG: Project Name: Mayfair Duplex Refurbishment
+PAGE LOG: Client Name: Arthur Henderson
+PAGE LOG: Quote Number: BQ-2024-216
+PAGE LOG: Metadata Source: Document Intelligence
+PAGE LOG: ==========================================
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: === STAGE COMPLETED: BOQ Generation ===
+PAGE LOG: Incoming Project ID: project-1785192151959-72ghyh7
+PAGE LOG: Outgoing Project ID: project-1785192151959-72ghyh7
+PAGE LOG: Project Name: Mayfair Duplex Refurbishment
+PAGE LOG: Client Name: Arthur Henderson
+PAGE LOG: Quote Number: BQ-2024-216
+PAGE LOG: Metadata Source: Document Intelligence
+PAGE LOG: ==========================================
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: === STAGE COMPLETED: Cost Estimation ===
+PAGE LOG: Incoming Project ID: project-1785192151959-72ghyh7
+PAGE LOG: Outgoing Project ID: project-1785192151959-72ghyh7
+PAGE LOG: Project Name: Mayfair Duplex Refurbishment
+PAGE LOG: Client Name: Arthur Henderson
+PAGE LOG: Quote Number: BQ-2024-216
+PAGE LOG: Metadata Source: Document Intelligence
+PAGE LOG: ==========================================
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: === STAGE COMPLETED: Material Analysis ===
+PAGE LOG: Incoming Project ID: project-1785192151959-72ghyh7
+PAGE LOG: Outgoing Project ID: project-1785192151959-72ghyh7
+PAGE LOG: Project Name: Mayfair Duplex Refurbishment
+PAGE LOG: Client Name: Arthur Henderson
+PAGE LOG: Quote Number: BQ-2024-216
+PAGE LOG: Metadata Source: Document Intelligence
+PAGE LOG: ==========================================
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: === STAGE COMPLETED: Labour Analysis ===
+PAGE LOG: Incoming Project ID: project-1785192151959-72ghyh7
+PAGE LOG: Outgoing Project ID: project-1785192151959-72ghyh7
+PAGE LOG: Project Name: Mayfair Duplex Refurbishment
+PAGE LOG: Client Name: Arthur Henderson
+PAGE LOG: Quote Number: BQ-2024-216
+PAGE LOG: Metadata Source: Document Intelligence
+PAGE LOG: ==========================================
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: === STAGE COMPLETED: Final Report ===
+PAGE LOG: Incoming Project ID: project-1785192151959-72ghyh7
+PAGE LOG: Outgoing Project ID: project-1785192151959-72ghyh7
+PAGE LOG: Project Name: Mayfair Duplex Refurbishment
+PAGE LOG: Client Name: Arthur Henderson
+PAGE LOG: Quote Number: BQ-2024-216
+PAGE LOG: Metadata Source: Document Intelligence
+PAGE LOG: ==========================================
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+PAGE LOG: <i data-lucide="github" class="w-3.5 h-3.5"></i> icon name was not found in the provided icons object.
+DEVELOPER LOGS: [
+  {
+    "stageId": "quotation-generator",
+    "stageName": "Final Report",
+    "startTime": "10:42:34 PM",
+    "finishTime": "10:42:34 PM",
+    "duration": "23ms",
+    "provider": "Simulated Local Core",
+    "model": "Sovereign-Llama3-8B",
+    "success": true,
+    "validationResult": "✓ Schema Valid",
+    "retryCount": 0,
+    "tokensUsed": 221,
+    "tokensSent": 88,
+    "tokensReceived": 132,
+    "pagesProcessed": 13,
+    "charactersExtracted": 338,
+    "confidenceScore": "94%",
+    "warnings": "None",
+    "errors": "None",
+    "stackTrace": "",
+    "payloadSize": 1200,
+    "exceptionMessage": ""
+  },
+  {
+    "stageId": "labour-analysis",
+    "stageName": "Labour Analysis",
+    "startTime": "10:42:34 PM",
+    "finishTime": "10:42:34 PM",
+    "duration": "4ms",
+    "provider": "Simulated Local Core",
+    "model": "Sovereign-Llama3-8B",
+    "success": true,
+    "validationResult": "✓ Schema Valid",
+    "retryCount": 0,
+    "tokensUsed": 219,
+    "tokensSent": 87,
+    "tokensReceived": 131,
+    "pagesProcessed": 13,
+    "charactersExtracted": 338,
+    "confidenceScore": "94%",
+    "warnings": "None",
+    "errors": "None",
+    "stackTrace": "",
+    "payloadSize": 1200,
+    "exceptionMessage": ""
+  },
+  {
+    "stageId": "material-analysis",
+    "stageName": "Material Analysis",
+    "startTime": "10:42:34 PM",
+    "finishTime": "10:42:34 PM",
+    "duration": "5ms",
+    "provider": "Simulated Local Core",
+    "model": "Sovereign-Llama3-8B",
+    "success": true,
+    "validationResult": "✓ Schema Valid",
+    "retryCount": 0,
+    "tokensUsed": 261,
+    "tokensSent": 104,
+    "tokensReceived": 156,
+    "pagesProcessed": 13,
+    "charactersExtracted": 338,
+    "confidenceScore": "94%",
+    "warnings": "None",
+    "errors": "None",
+    "stackTrace": "",
+    "payloadSize": 1200,
+    "exceptionMessage": ""
+  },
+  {
+    "stageId": "cost-estimator",
+    "stageName": "Cost Estimation",
+    "startTime": "10:42:33 PM",
+    "finishTime": "10:42:33 PM",
+    "duration": "22ms",
+    "provider": "Simulated Local Core",
+    "model": "Sovereign-Llama3-8B",
+    "success": true,
+    "validationResult": "✓ Schema Valid",
+    "retryCount": 0,
+    "tokensUsed": 252,
+    "tokensSent": 100,
+    "tokensReceived": 151,
+    "pagesProcessed": 13,
+    "charactersExtracted": 338,
+    "confidenceScore": "91%",
+    "warnings": "None",
+    "errors": "None",
+    "stackTrace": "",
+    "payloadSize": 1200,
+    "exceptionMessage": ""
+  },
+  {
+    "stageId": "boq-generator",
+    "stageName": "BOQ Generation",
+    "startTime": "10:42:33 PM",
+    "finishTime": "10:42:33 PM",
+    "duration": "24ms",
+    "provider": "Simulated Local Core",
+    "model": "Sovereign-Llama3-8B",
+    "success": true,
+    "validationResult": "✓ Schema Valid",
+    "retryCount": 0,
+    "tokensUsed": 259,
+    "tokensSent": 103,
+    "tokensReceived": 155,
+    "pagesProcessed": 13,
+    "charactersExtracted": 338,
+    "confidenceScore": "94%",
+    "warnings": "None",
+    "errors": "None",
+    "stackTrace": "",
+    "payloadSize": 1200,
+    "exceptionMessage": ""
+  },
+  {
+    "stageId": "quantity-surveyor",
+    "stageName": "Quantity Survey",
+    "startTime": "10:42:32 PM",
+    "finishTime": "10:42:32 PM",
+    "duration": "22ms",
+    "provider": "Simulated Local Core",
+    "model": "Sovereign-Llama3-8B",
+    "success": true,
+    "validationResult": "✓ Schema Valid",
+    "retryCount": 0,
+    "tokensUsed": 334,
+    "tokensSent": 133,
+    "tokensReceived": 200,
+    "pagesProcessed": 13,
+    "charactersExtracted": 338,
+    "confidenceScore": "94%",
+    "warnings": "None",
+    "errors": "None",
+    "stackTrace": "",
+    "payloadSize": 1200,
+    "exceptionMessage": ""
+  },
+  {
+    "stageId": "drawing-interpreter",
+    "stageName": "Drawing Detection",
+    "startTime": "10:42:32 PM",
+    "finishTime": "10:42:32 PM",
+    "duration": "8ms",
+    "provider": "Simulated Local Core",
+    "model": "Sovereign-Llama3-8B",
+    "success": true,
+    "validationResult": "✓ Schema Valid",
+    "retryCount": 0,
+    "tokensUsed": 328,
+    "tokensSent": 131,
+    "tokensReceived": 196,
+    "pagesProcessed": 13,
+    "charactersExtracted": 338,
+    "confidenceScore": "95%",
+    "warnings": "None",
+    "errors": "None",
+    "stackTrace": "",
+    "payloadSize": 1200,
+    "exceptionMessage": ""
+  },
+  {
+    "stageId": "document-intelligence",
+    "stageName": "Document Intelligence",
+    "startTime": "10:42:31 PM",
+    "finishTime": "10:42:31 PM",
+    "duration": "25ms",
+    "provider": "Simulated Local Core",
+    "model": "Sovereign-Llama3-8B",
+    "success": true,
+    "validationResult": "✓ Schema Valid",
+    "retryCount": 0,
+    "tokensUsed": 256,
+    "tokensSent": 102,
+    "tokensReceived": 153,
+    "pagesProcessed": 13,
+    "charactersExtracted": 338,
+    "confidenceScore": "98%",
+    "warnings": "None",
+    "errors": "None",
+    "stackTrace": "",
+    "payloadSize": 1200,
+    "exceptionMessage": ""
+  },
+  {
+    "stageId": "document-classification",
+    "stageName": "Document Classification",
+    "startTime": "10:42:31 PM",
+    "finishTime": "10:42:31 PM",
+    "duration": "21ms",
+    "provider": "Simulated Local Core",
+    "model": "Sovereign-Llama3-8B",
+    "success": true,
+    "validationResult": "✓ Schema Valid",
+    "retryCount": 0,
+    "tokensUsed": 205,
+    "tokensSent": 82,
+    "tokensReceived": 123,
+    "pagesProcessed": 13,
+    "charactersExtracted": 338,
+    "confidenceScore": "94%",
+    "warnings": "None",
+    "errors": "None",
+    "stackTrace": "",
+    "payloadSize": 1200,
+    "exceptionMessage": ""
+  },
+  {
+    "stageId": "validation",
+    "stageName": "Validation",
+    "startTime": "10:42:31 PM",
+    "finishTime": "10:42:31 PM",
+    "duration": "4ms",
+    "provider": "Simulated Local Core",
+    "model": "Sovereign-Llama3-8B",
+    "success": true,
+    "validationResult": "✓ Schema Valid",
+    "retryCount": 0,
+    "tokensUsed": 259,
+    "tokensSent": 103,
+    "tokensReceived": 155,
+    "pagesProcessed": 13,
+    "charactersExtracted": 338,
+    "confidenceScore": "94%",
+    "warnings": "None",
+    "errors": "None",
+    "stackTrace": "",
+    "payloadSize": 1200,
+    "exceptionMessage": ""
+  },
+  {
+    "stageId": "update-project-state",
+    "stageName": "Replace Active Project State",
+    "startTime": "10:42:30 PM",
+    "finishTime": "10:42:30 PM",
+    "duration": "4ms",
+    "provider": "Simulated Local Core",
+    "model": "Sovereign-Llama3-8B",
+    "success": true,
+    "validationResult": "✓ Schema Valid",
+    "retryCount": 0,
+    "tokensUsed": 291,
+    "tokensSent": 116,
+    "tokensReceived": 174,
+    "pagesProcessed": 13,
+    "charactersExtracted": 338,
+    "confidenceScore": "94%",
+    "warnings": "None",
+    "errors": "None",
+    "stackTrace": "",
+    "payloadSize": 1200,
+    "exceptionMessage": ""
+  },
+  {
+    "stageId": "metadata-extraction",
+    "stageName": "Metadata Extraction",
+    "startTime": "10:42:30 PM",
+    "finishTime": "10:42:30 PM",
+    "duration": "27ms",
+    "provider": "Simulated Local Core",
+    "model": "Sovereign-Llama3-8B",
+    "success": true,
+    "validationResult": "✓ Schema Valid",
+    "retryCount": 0,
+    "tokensUsed": 271,
+    "tokensSent": 108,
+    "tokensReceived": 162,
+    "pagesProcessed": 13,
+    "charactersExtracted": 338,
+    "confidenceScore": "94%",
+    "warnings": "None",
+    "errors": "None",
+    "stackTrace": "",
+    "payloadSize": 1200,
+    "exceptionMessage": ""
+  },
+  {
+    "stageId": "ocr",
+    "stageName": "OCR",
+    "startTime": "10:42:29 PM",
+    "finishTime": "10:42:29 PM",
+    "duration": "4ms",
+    "provider": "Simulated Local Core",
+    "model": "Sovereign-Llama3-8B",
+    "success": true,
+    "validationResult": "✓ Schema Valid",
+    "retryCount": 0,
+    "tokensUsed": 306,
+    "tokensSent": 122,
+    "tokensReceived": 183,
+    "pagesProcessed": 13,
+    "charactersExtracted": 338,
+    "confidenceScore": "94%",
+    "warnings": "None",
+    "errors": "None",
+    "stackTrace": "",
+    "payloadSize": 1200,
+    "exceptionMessage": ""
+  },
+  {
+    "stageId": "upload-documents",
+    "stageName": "Upload Documents",
+    "startTime": "10:42:29 PM",
+    "finishTime": "10:42:29 PM",
+    "duration": "10ms",
+    "provider": "Simulated Local Core",
+    "model": "Sovereign-Llama3-8B",
+    "success": true,
+    "validationResult": "✓ Schema Valid",
+    "retryCount": 0,
+    "tokensUsed": 283,
+    "tokensSent": 113,
+    "tokensReceived": 169,
+    "pagesProcessed": 13,
+    "charactersExtracted": 338,
+    "confidenceScore": "94%",
+    "warnings": "None",
+    "errors": "None",
+    "stackTrace": "",
+    "payloadSize": 1200,
+    "exceptionMessage": ""
+  }
+]

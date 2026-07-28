@@ -4,6 +4,19 @@
  * JSON validation layer, state persistence, step reruns, and developer logging.
  */
 
+function isValValid(val) {
+    if (typeof val !== 'string') return false;
+    const lower = val.trim().toLowerCase();
+    return val.trim() !== '' &&
+           lower !== 'not extracted' &&
+           lower !== 'not supplied' &&
+           lower !== 'awaiting information' &&
+           lower !== 'undefined' &&
+           lower !== 'null' &&
+           lower !== 'unspecified';
+}
+window.isValValid = isValValid;
+
 function updateAIDebugConsole(fields) {
     const elMap = {
         extractedText: 'debug-extracted-text',
@@ -318,22 +331,24 @@ window.BQAIPipeline = {
             if (!data.stage) data.stage = stageId;
             if (!data.status) data.status = "success";
 
+            const p = window.activeProject || {};
+
             if (stageId === "metadata-extraction") {
                 if (!data.metadata || typeof data.metadata !== "object") {
                     data.metadata = {};
                 }
                 const defaults = {
-                    projectName: "Not Extracted",
-                    clientName: "Not Extracted",
-                    siteAddress: "Not Extracted",
-                    quoteNumber: "Not Extracted",
-                    region: "London",
-                    currency: "GBP",
-                    projectDescription: "",
-                    specificationLevel: "Premium"
+                    projectName: isValValid(p.projectName) ? p.projectName : "Not Extracted",
+                    clientName: isValValid(p.clientName) ? p.clientName : "Not Extracted",
+                    siteAddress: isValValid(p.siteAddress) ? p.siteAddress : "Not Extracted",
+                    quoteNumber: isValValid(p.quoteNumber) ? p.quoteNumber : "Not Extracted",
+                    region: p.region || "London",
+                    currency: p.currency || "GBP",
+                    projectDescription: p.projectDescription || "",
+                    specificationLevel: p.specificationLevel || "Premium"
                 };
                 for (const [k, v] of Object.entries(defaults)) {
-                    if (!(k in data.metadata) || data.metadata[k] === undefined || data.metadata[k] === null) {
+                    if (!(k in data.metadata) || !isValValid(data.metadata[k])) {
                         data.metadata[k] = v;
                     }
                 }
@@ -345,13 +360,13 @@ window.BQAIPipeline = {
                     data.metadata = {};
                 }
                 const defaults = {
-                    projectName: "Not Extracted",
-                    clientName: "Not Extracted",
-                    siteAddress: "Not Extracted",
-                    quoteNumber: "Not Extracted"
+                    projectName: isValValid(p.projectName) ? p.projectName : "Not Extracted",
+                    clientName: isValValid(p.clientName) ? p.clientName : "Not Extracted",
+                    siteAddress: isValValid(p.siteAddress) ? p.siteAddress : "Not Extracted",
+                    quoteNumber: isValValid(p.quoteNumber) ? p.quoteNumber : "Not Extracted"
                 };
                 for (const [k, v] of Object.entries(defaults)) {
-                    if (!(k in data.metadata) || data.metadata[k] === undefined || data.metadata[k] === null) {
+                    if (!(k in data.metadata) || !isValValid(data.metadata[k])) {
                         data.metadata[k] = v;
                     }
                 }
@@ -365,15 +380,15 @@ window.BQAIPipeline = {
                     data.project = {};
                 }
                 const projDefaults = {
-                    projectName: "Not Extracted",
-                    clientName: "Not Extracted",
-                    siteAddress: "Not Extracted",
-                    quoteNumber: "Not Extracted",
-                    projectDescription: "",
-                    region: "London"
+                    projectName: isValValid(p.projectName) ? p.projectName : "Not Extracted",
+                    clientName: isValValid(p.clientName) ? p.clientName : "Not Extracted",
+                    siteAddress: isValValid(p.siteAddress) ? p.siteAddress : "Not Extracted",
+                    quoteNumber: isValValid(p.quoteNumber) ? p.quoteNumber : "Not Extracted",
+                    projectDescription: p.projectDescription || "",
+                    region: p.region || "London"
                 };
                 for (const [k, v] of Object.entries(projDefaults)) {
-                    if (!(k in data.project) || data.project[k] === undefined || data.project[k] === null) {
+                    if (!(k in data.project) || !isValValid(data.project[k])) {
                         data.project[k] = v;
                     }
                 }
@@ -802,18 +817,19 @@ window.BQAIPipeline = {
         },
 
         extractMetadataFromText(uploadedFiles, defaults) {
+            const p = window.activeProject || {};
             let metadata = {
-                projectName: "Not Extracted",
-                clientName: "Not Extracted",
-                siteAddress: "Not Extracted",
-                quoteNumber: "Not Extracted",
-                projectDescription: "",
-                region: "London",
-                currency: "GBP",
-                specificationLevel: "Premium",
-                drawingReference: "Not Extracted",
-                revision: "Not Extracted",
-                drawingDate: "Not Extracted"
+                projectName: isValValid(p.projectName) ? p.projectName : "Not Extracted",
+                clientName: isValValid(p.clientName) ? p.clientName : "Not Extracted",
+                siteAddress: isValValid(p.siteAddress) ? p.siteAddress : "Not Extracted",
+                quoteNumber: isValValid(p.quoteNumber) ? p.quoteNumber : "Not Extracted",
+                projectDescription: p.projectDescription || "",
+                region: p.region || "London",
+                currency: p.currency || "GBP",
+                specificationLevel: p.specificationLevel || "Premium",
+                drawingReference: isValValid(p.drawingReference) ? p.drawingReference : "Not Extracted",
+                revision: isValValid(p.revision) ? p.revision : "Not Extracted",
+                drawingDate: isValValid(p.drawingDate) ? p.drawingDate : "Not Extracted"
             };
 
             for (const file of uploadedFiles || []) {
@@ -915,21 +931,26 @@ window.BQAIPipeline = {
                         metaOut = this.extractMetadataFromText(inputData.uploadedFiles, {});
                     }
 
-                    // Create a completely new Project object using ONLY the extracted metadata.
-                    // This guarantees we completely throw away any previous/sample project data!
+                    const p = window.activeProject || {};
+                    const getVal = (extVal, existingVal) => {
+                        if (isValValid(extVal)) return extVal;
+                        if (isValValid(existingVal)) return existingVal;
+                        return "Not Extracted";
+                    };
+
                     window.activeProject = {
-                        id: "project-" + Date.now() + "-" + Math.random().toString(36).substring(2, 9),
-                        projectName: (metaOut && metaOut.projectName) ? metaOut.projectName : "Not Extracted",
-                        clientName: (metaOut && metaOut.clientName) ? metaOut.clientName : "Not Extracted",
-                        siteAddress: (metaOut && metaOut.siteAddress) ? metaOut.siteAddress : "Not Extracted",
-                        quoteNumber: (metaOut && metaOut.quoteNumber) ? metaOut.quoteNumber : "Not Extracted",
-                        region: (metaOut && metaOut.region) ? metaOut.region : "London",
-                        currency: (metaOut && metaOut.currency) ? metaOut.currency : "GBP",
-                        projectDescription: (metaOut && metaOut.projectDescription) ? metaOut.projectDescription : "",
-                        specificationLevel: (metaOut && metaOut.specificationLevel) ? metaOut.specificationLevel : "Premium",
-                        drawingReference: (metaOut && metaOut.drawingReference) ? metaOut.drawingReference : "Not Extracted",
-                        revision: (metaOut && metaOut.revision) ? metaOut.revision : "Not Extracted",
-                        drawingDate: (metaOut && metaOut.drawingDate) ? metaOut.drawingDate : "Not Extracted",
+                        id: p.id || ("project-" + Date.now() + "-" + Math.random().toString(36).substring(2, 9)),
+                        projectName: getVal(metaOut?.projectName, p.projectName),
+                        clientName: getVal(metaOut?.clientName, p.clientName),
+                        siteAddress: getVal(metaOut?.siteAddress, p.siteAddress),
+                        quoteNumber: getVal(metaOut?.quoteNumber, p.quoteNumber),
+                        region: metaOut?.region || p.region || "London",
+                        currency: metaOut?.currency || p.currency || "GBP",
+                        projectDescription: metaOut?.projectDescription || p.projectDescription || "",
+                        specificationLevel: metaOut?.specificationLevel || p.specificationLevel || "Premium",
+                        drawingReference: getVal(metaOut?.drawingReference, p.drawingReference),
+                        revision: getVal(metaOut?.revision, p.revision),
+                        drawingDate: getVal(metaOut?.drawingDate, p.drawingDate),
                         metadataSource: "Uploaded Document"
                     };
 
@@ -1149,7 +1170,9 @@ window.BQAIPipeline = {
 
                 case "quotation-generator": {
                     const quoteNo = inputData.quoteNumber || "BQ-2024-991";
-                    const grandTotal = inputData.grandTotal || 245000;
+                    const estOutput = inputData["cost-estimator"];
+                    const financials = window.activeProject?.financials || {};
+                    const grandTotal = financials.grandTotal || estOutput?.grandTotal || inputData.grandTotal || 245000;
                     return {
                         stage: "quotation-generator",
                         status: "success",
@@ -1511,27 +1534,53 @@ window.BQAIPipeline = {
                 // Run side-effects of replacing project state if document-intelligence is completed
                 if (stage.id === "document-intelligence" && result.data && result.data.project) {
                     const diProj = result.data.project;
-                    // Create a completely new, isolated Project object from Document Intelligence
-                    // completely replacing the active project object. Do not merge or preserve sample/old values.
-                    // Do not overwrite extracted values with defaults.
+                    const p = window.activeProject || {};
+                    const getVal = (extVal, existingVal) => {
+                        if (isValValid(extVal)) return extVal;
+                        if (isValValid(existingVal)) return existingVal;
+                        return "Not Extracted";
+                    };
+
                     window.activeProject = {
-                        id: "project-" + Date.now() + "-" + Math.random().toString(36).substring(2, 9),
-                        projectName: diProj.projectName || "Not Extracted",
-                        clientName: diProj.clientName || "Not Extracted",
-                        siteAddress: diProj.siteAddress || "Not Extracted",
-                        quoteNumber: diProj.quoteNumber || "Not Extracted",
-                        region: diProj.region || "London",
+                        id: p.id || ("project-" + Date.now() + "-" + Math.random().toString(36).substring(2, 9)),
+                        projectName: getVal(diProj.projectName, p.projectName),
+                        clientName: getVal(diProj.clientName, p.clientName),
+                        siteAddress: getVal(diProj.siteAddress, p.siteAddress),
+                        quoteNumber: getVal(diProj.quoteNumber, p.quoteNumber),
+                        region: diProj.region || p.region || "London",
                         currency: diProj.currency || "GBP",
-                        projectDescription: diProj.projectDescription || "",
-                        specificationLevel: diProj.specificationLevel || "Premium",
-                        drawingReference: diProj.drawingReference || "Not Extracted",
-                        revision: diProj.revision || "Not Extracted",
-                        drawingDate: diProj.drawingDate || "Not Extracted",
+                        projectDescription: diProj.projectDescription || p.projectDescription || "",
+                        specificationLevel: diProj.specificationLevel || p.specificationLevel || "Premium",
+                        drawingReference: getVal(diProj.drawingReference, p.drawingReference),
+                        revision: getVal(diProj.revision, p.revision),
+                        drawingDate: getVal(diProj.drawingDate, p.drawingDate),
                         metadataSource: "Document Intelligence"
                     };
                     if (typeof syncActiveProjectToUI === 'function') {
                         syncActiveProjectToUI();
                     }
+                    if (typeof saveWorkspaceToLocalStorage === 'function') {
+                        saveWorkspaceToLocalStorage();
+                    }
+                }
+
+                // Run side-effects of populating financials if cost-estimator is completed
+                if (stage.id === "cost-estimator" && result.data) {
+                    const est = result.data;
+                    if (!window.activeProject) {
+                        window.activeProject = {};
+                    }
+                    window.activeProject.financials = {
+                        rawSubtotal: est.subtotal || 0,
+                        wasteCost: est.wasteCost || 0,
+                        contingencyCost: est.overheads || 0,
+                        netSubtotal: (est.subtotal || 0) + (est.wasteCost || 0) + (est.overheads || 0),
+                        profitCost: 0,
+                        discountCost: 0,
+                        taxableNet: (est.subtotal || 0) + (est.wasteCost || 0) + (est.overheads || 0),
+                        vatCost: ((est.subtotal || 0) + (est.wasteCost || 0) + (est.overheads || 0)) * 0.20,
+                        grandTotal: est.grandTotal || ((est.subtotal || 0) + (est.wasteCost || 0) + (est.overheads || 0))
+                    };
                     if (typeof saveWorkspaceToLocalStorage === 'function') {
                         saveWorkspaceToLocalStorage();
                     }

@@ -852,6 +852,22 @@ function recalculateEstimates() {
     document.getElementById('calc-vat-cost').textContent = formatCurrency(vatCost);
     document.getElementById('calc-grand-total').textContent = formatCurrency(grandTotal);
 
+    // Populate financials to the activeProject canonical object!
+    if (!window.activeProject) {
+        window.activeProject = {};
+    }
+    window.activeProject.financials = {
+        rawSubtotal: rawCumulativeSubtotal,
+        wasteCost: materialWasteImpact,
+        contingencyCost: contingencyCost,
+        netSubtotal: factoredNetSubtotal,
+        profitCost: profitCost,
+        discountCost: discountCost,
+        taxableNet: taxableNetTotal,
+        vatCost: vatCost,
+        grandTotal: grandTotal
+    };
+
     // Save state back to local storage
     saveWorkspaceToLocalStorage();
 }
@@ -2233,24 +2249,35 @@ function renderCharteredQSReportFromJSON(data, type) {
     const conf = currencyConfigs[currency] || currencyConfigs.GBP;
     const s = conf.symbol;
 
+    const formatNum = (val) => new Intl.NumberFormat(conf.locale, { style: 'currency', currency: conf.code }).format(val);
+    const financials = window.activeProject?.financials || {};
+
+    // Get canonical values or read from DOM
+    const getCanonicalOrDOM = (key, domId, prefix = "") => {
+        if (financials[key] !== undefined) {
+            const formatted = formatNum(financials[key]);
+            return prefix && financials[key] > 0 ? prefix + formatted : formatted;
+        }
+        const el = document.getElementById(domId);
+        return el ? el.textContent : formatNum(0);
+    };
+
     // Read financial totals
-    const rawSubtotalText = document.getElementById('calc-raw-subtotal').textContent;
-    const wasteText = document.getElementById('calc-waste-cost').textContent;
-    const overheadText = document.getElementById('calc-contingency-cost').textContent;
-    const netSubtotalText = document.getElementById('calc-net-subtotal').textContent;
-    const profitText = document.getElementById('calc-profit-cost').textContent;
-    const discountText = document.getElementById('calc-discount-cost').textContent;
-    const taxableNetText = document.getElementById('calc-taxable-net').textContent;
-    const vatText = document.getElementById('calc-vat-cost').textContent;
-    const grandTotalText = document.getElementById('calc-grand-total').textContent;
+    const rawSubtotalText = getCanonicalOrDOM('rawSubtotal', 'calc-raw-subtotal');
+    const wasteText = getCanonicalOrDOM('wasteCost', 'calc-waste-cost');
+    const overheadText = getCanonicalOrDOM('contingencyCost', 'calc-contingency-cost');
+    const netSubtotalText = getCanonicalOrDOM('netSubtotal', 'calc-net-subtotal');
+    const profitText = getCanonicalOrDOM('profitCost', 'calc-profit-cost', "+");
+    const discountText = getCanonicalOrDOM('discountCost', 'calc-discount-cost', "-");
+    const taxableNetText = getCanonicalOrDOM('taxableNet', 'calc-taxable-net');
+    const vatText = getCanonicalOrDOM('vatCost', 'calc-vat-cost');
+    const grandTotalText = getCanonicalOrDOM('grandTotal', 'calc-grand-total');
 
     const projName = document.getElementById('project-name').value || 'Unspecified Project';
     const clientName = document.getElementById('project-client').value || 'Unspecified Client';
     const siteAddress = document.getElementById('project-site').value || 'Unspecified Site Address';
     const quoteNo = document.getElementById('project-quote-no').value || 'Unspecified Quote No.';
     const quoteDate = document.getElementById('project-date').value || 'Unspecified Date';
-
-    const formatNum = (val) => new Intl.NumberFormat(conf.locale, { style: 'currency', currency: conf.code }).format(val);
 
     const execSummary = data.ExecutiveSummary || "No Executive Summary provided by AI.";
     const scopeWorks = Array.isArray(data.ScopeOfWorks) ? data.ScopeOfWorks : [data.ScopeOfWorks || "No Scope of Works provided."];
@@ -4225,16 +4252,29 @@ function generateCharteredQSReport(type, template) {
     const conf = currencyConfigs[currency] || currencyConfigs.GBP;
     const s = conf.symbol;
 
+    const formatNum = (val) => new Intl.NumberFormat(conf.locale, { style: 'currency', currency: conf.code }).format(val);
+    const financials = window.activeProject?.financials || {};
+
+    // Get canonical values or read from DOM
+    const getCanonicalOrDOM = (key, domId, prefix = "") => {
+        if (financials[key] !== undefined) {
+            const formatted = formatNum(financials[key]);
+            return prefix && financials[key] > 0 ? prefix + formatted : formatted;
+        }
+        const el = document.getElementById(domId);
+        return el ? el.textContent : formatNum(0);
+    };
+
     // Read financial totals
-    const rawSubtotalText = document.getElementById('calc-raw-subtotal').textContent;
-    const wasteText = document.getElementById('calc-waste-cost').textContent;
-    const overheadText = document.getElementById('calc-contingency-cost').textContent;
-    const netSubtotalText = document.getElementById('calc-net-subtotal').textContent;
-    const profitText = document.getElementById('calc-profit-cost').textContent;
-    const discountText = document.getElementById('calc-discount-cost').textContent;
-    const taxableNetText = document.getElementById('calc-taxable-net').textContent;
-    const vatText = document.getElementById('calc-vat-cost').textContent;
-    const grandTotalText = document.getElementById('calc-grand-total').textContent;
+    const rawSubtotalText = getCanonicalOrDOM('rawSubtotal', 'calc-raw-subtotal');
+    const wasteText = getCanonicalOrDOM('wasteCost', 'calc-waste-cost');
+    const overheadText = getCanonicalOrDOM('contingencyCost', 'calc-contingency-cost');
+    const netSubtotalText = getCanonicalOrDOM('netSubtotal', 'calc-net-subtotal');
+    const profitText = getCanonicalOrDOM('profitCost', 'calc-profit-cost', "+");
+    const discountText = getCanonicalOrDOM('discountCost', 'calc-discount-cost', "-");
+    const taxableNetText = getCanonicalOrDOM('taxableNet', 'calc-taxable-net');
+    const vatText = getCanonicalOrDOM('vatCost', 'calc-vat-cost');
+    const grandTotalText = getCanonicalOrDOM('grandTotal', 'calc-grand-total');
 
     const projName = document.getElementById('project-name').value || 'Unspecified Project';
     const clientName = document.getElementById('project-client').value || 'Unspecified Client';
@@ -4250,8 +4290,6 @@ function generateCharteredQSReport(type, template) {
         labSub += qty * (parseFloat(item.labourRate) || 0);
         plaSub += qty * (parseFloat(item.plantRate) || 0);
     });
-
-    const formatNum = (val) => new Intl.NumberFormat(conf.locale, { style: 'currency', currency: conf.code }).format(val);
 
     return `
         <div class="space-y-8 p-1 sm:p-4 text-gray-300">
