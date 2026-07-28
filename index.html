@@ -85,6 +85,7 @@
                     <a href="#pricing" class="text-sm font-medium text-gray-300 hover:text-brand-gold transition-colors duration-200">Pricing</a>
                     <a href="#about" class="text-sm font-medium text-gray-300 hover:text-brand-gold transition-colors duration-200">About</a>
                     <a href="#contact" class="text-sm font-medium text-gray-300 hover:text-brand-gold transition-colors duration-200">Contact</a>
+                    <a href="/partner" id="nav-partner-btn" class="text-sm font-medium text-gray-300 hover:text-brand-gold transition-colors duration-200">Partner</a>
                     <button id="nav-workspace-btn" class="px-3.5 py-1.5 text-xs font-bold rounded-lg bg-brand-gold-muted border border-brand-gold-border text-brand-gold hover:bg-brand-gold hover:text-brand-matte hover:shadow-gold-glow-sm transition-all duration-300 flex items-center gap-1.5">
                         <i data-lucide="sparkles" class="w-3.5 h-3.5 text-brand-gold"></i>
                         AI Workspace
@@ -128,6 +129,7 @@
                 <a href="#pricing" class="mobile-nav-link block px-3 py-3 rounded-md text-base font-medium text-gray-300 hover:text-brand-gold hover:bg-brand-glass-hover transition-all">Pricing</a>
                 <a href="#about" class="mobile-nav-link block px-3 py-3 rounded-md text-base font-medium text-gray-300 hover:text-brand-gold hover:bg-brand-glass-hover transition-all">About</a>
                 <a href="#contact" class="mobile-nav-link block px-3 py-3 rounded-md text-base font-medium text-gray-300 hover:text-brand-gold hover:bg-brand-glass-hover transition-all">Contact</a>
+                <a href="/partner" id="mobile-nav-partner-btn" class="mobile-nav-link block px-3 py-3 rounded-md text-base font-medium text-gray-300 hover:text-brand-gold hover:bg-brand-glass-hover transition-all">Partner</a>
                 <button onclick="toggleView(true)" class="mobile-nav-link w-full text-left px-3 py-3 rounded-md text-base font-bold text-brand-gold hover:bg-brand-gold-muted/30 transition-all flex items-center gap-2">
                     <i data-lucide="sparkles" class="w-4 h-4 text-brand-gold animate-pulse"></i>
                     AI Workspace
@@ -1253,8 +1255,690 @@
             </div>
         </section>
 
-        <!-- Main Landing Content Wrapper -->
-        <main id="landing-page-wrapper" class="relative z-10">
+    <!-- Partner Page Section (Hidden by Default) -->
+    <section id="partner-section" class="hidden py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16 relative z-10">
+        <!-- Hero Section -->
+        <div class="text-center max-w-4xl mx-auto space-y-8">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-brand-gold-muted border border-brand-gold-border text-brand-gold text-xs font-bold tracking-wider uppercase">
+                <i data-lucide="award" class="w-3.5 h-3.5"></i>
+                QuantisAI Partner Programme
+            </span>
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white leading-tight">
+                Become a <span class="bg-gradient-to-r from-brand-gold via-[#FFF1C5] to-brand-gold bg-clip-text text-transparent drop-shadow-sm">QuantisAI Partner</span>
+            </h1>
+            <p class="text-lg md:text-xl text-gray-400 font-light max-w-3xl mx-auto leading-relaxed">
+                Earn recurring monthly commissions by introducing construction professionals and businesses to QuantisAI.
+                Start as a Bronze Partner and work your way up through our performance-based Partner Programme.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4 pt-4">
+                <button class="partner-trigger px-8 py-4 rounded-xl bg-brand-gold text-brand-matte hover:bg-brand-gold-hover hover:shadow-gold-glow font-extrabold text-sm tracking-wider uppercase transition-all duration-300 flex items-center justify-center gap-2">
+                    <i data-lucide="user-plus" class="w-5 h-5"></i>
+                    Become a Partner
+                </button>
+                <button class="partner-trigger px-8 py-4 rounded-xl bg-transparent border-2 border-brand-gold/40 text-brand-gold hover:bg-brand-gold/10 hover:border-brand-gold font-extrabold text-sm tracking-wider uppercase transition-all duration-300 flex items-center justify-center gap-2">
+                    <i data-lucide="log-in" class="w-5 h-5"></i>
+                    Partner Sign In
+                </button>
+            </div>
+        </div>
+
+        <!-- How the Programme Works -->
+        <div class="space-y-10">
+            <div class="text-center max-w-3xl mx-auto space-y-3">
+                <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">How the Programme Works</h2>
+                <p class="text-sm text-gray-400">Four simple steps to register, get approved, and unlock premium tiers.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 relative">
+                <!-- Apply Card -->
+                <div class="relative bg-brand-graphite border border-brand-glass-border rounded-2xl p-6 text-center space-y-4 hover:border-brand-gold/30 hover:scale-[1.02] transition-all duration-300 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="mx-auto w-12 h-12 rounded-xl bg-brand-gold-muted border border-brand-gold-border flex items-center justify-center text-brand-gold">
+                            <i data-lucide="file-check" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white">1. Apply</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed">Submit your application to become a QuantisAI Partner.</p>
+                    </div>
+                </div>
+                <!-- Approve Card -->
+                <div class="relative bg-brand-graphite border border-brand-glass-border rounded-2xl p-6 text-center space-y-4 hover:border-brand-gold/30 hover:scale-[1.02] transition-all duration-300 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="mx-auto w-12 h-12 rounded-xl bg-brand-gold-muted border border-brand-gold-border flex items-center justify-center text-brand-gold">
+                            <i data-lucide="shield-check" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white">2. Get Approved</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed">Our team reviews and approves your application.</p>
+                    </div>
+                </div>
+                <!-- Start Bronze Card -->
+                <div class="relative bg-brand-graphite border border-brand-glass-border rounded-2xl p-6 text-center space-y-4 hover:border-brand-gold/30 hover:scale-[1.02] transition-all duration-300 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="mx-auto w-12 h-12 rounded-xl bg-brand-gold-muted border border-brand-gold-border flex items-center justify-center text-brand-gold">
+                            <i data-lucide="medal" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white">3. Start as Bronze</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed">Every approved partner begins at the Bronze level.</p>
+                    </div>
+                </div>
+                <!-- Grow Business Card -->
+                <div class="relative bg-brand-graphite border border-brand-glass-border rounded-2xl p-6 text-center space-y-4 hover:border-brand-gold/30 hover:scale-[1.02] transition-all duration-300 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="mx-auto w-12 h-12 rounded-xl bg-brand-gold-muted border border-brand-gold-border flex items-center justify-center text-brand-gold">
+                            <i data-lucide="trending-up" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white">4. Grow Your Business</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed">Refer subscribers, earn recurring commissions and unlock promotions.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Important Business Rule -->
+        <div class="bg-gradient-to-r from-brand-graphite to-[#18181C] border border-brand-gold/30 rounded-2xl p-6 md:p-8 space-y-4 relative overflow-hidden">
+            <div class="absolute -right-16 -top-16 w-48 h-48 rounded-full bg-brand-gold/5 blur-3xl pointer-events-none"></div>
+            <div class="flex items-start gap-4">
+                <div class="w-12 h-12 rounded-xl bg-brand-gold-muted border border-brand-gold-border flex items-center justify-center text-brand-gold shrink-0">
+                    <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+                </div>
+                <div class="space-y-2">
+                    <h2 class="text-xl font-bold text-white">Performance-Based Promotion Rule</h2>
+                    <p class="text-sm text-gray-300 leading-relaxed">
+                        Every approved partner starts as a <strong class="text-brand-gold font-bold">Bronze Partner</strong>.
+                        Silver and Gold tiers cannot be selected during registration.
+                        Promotions are earned automatically by reaching active subscriber milestones. Premium Partner is strictly by invitation only.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Partner Levels -->
+        <div class="space-y-10">
+            <div class="text-center max-w-3xl mx-auto space-y-3">
+                <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Partner Levels</h2>
+                <p class="text-sm text-gray-400">Unlock greater commissions as you scale your active referrals.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-stretch">
+                <!-- Bronze -->
+                <div class="bg-brand-graphite border border-brand-glass-border rounded-2xl p-6 flex flex-col justify-between hover:border-brand-gold/30 hover:shadow-gold-glow-sm transition-all duration-300">
+                    <div class="space-y-6">
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl">🥉</span>
+                            <span class="px-2 py-0.5 text-[10px] font-bold bg-brand-gold-muted border border-brand-gold-border text-brand-gold rounded">Starting Tier</span>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-white">Bronze Partner</h3>
+                            <p class="text-[10px] text-gray-500 mt-0.5">Every new partner starts here.</p>
+                        </div>
+                        <div class="bg-brand-matte/50 p-4 rounded-xl text-center border border-brand-glass-border/30">
+                            <span class="text-[10px] text-gray-500 uppercase tracking-widest block font-bold">Commission</span>
+                            <span class="text-4xl font-extrabold text-brand-gold block mt-1 font-mono">10%</span>
+                        </div>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            Earn 10% of every monthly subscription payment for 12 months from each successful referral.
+                        </p>
+                    </div>
+                    <button class="partner-trigger w-full py-3 px-4 rounded-xl bg-brand-gold text-brand-matte hover:bg-brand-gold-hover hover:shadow-gold-glow-sm font-bold text-xs uppercase tracking-wider transition-all duration-300 mt-6">
+                        Join Programme
+                    </button>
+                </div>
+
+                <!-- Silver -->
+                <div class="bg-brand-graphite border border-brand-glass-border/50 rounded-2xl p-6 flex flex-col justify-between hover:border-gray-700 transition-all duration-300 relative group overflow-hidden">
+                    <div class="absolute inset-0 bg-brand-matte/10 backdrop-blur-[1px] pointer-events-none z-10"></div>
+                    <div class="space-y-6 z-20">
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl">🥈</span>
+                            <span class="px-2 py-0.5 text-[10px] font-bold bg-brand-matte border border-brand-glass-border text-gray-400 rounded flex items-center gap-1">
+                                <i data-lucide="lock" class="w-3 h-3"></i> Locked
+                            </span>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-300">Silver Partner</h3>
+                            <p class="text-[10px] text-gray-500 mt-0.5">Promotion Only</p>
+                        </div>
+                        <div class="bg-brand-matte/50 p-4 rounded-xl text-center border border-brand-glass-border/30">
+                            <span class="text-[10px] text-gray-500 uppercase tracking-widest block font-bold">Commission</span>
+                            <span class="text-4xl font-extrabold text-gray-400 block mt-1 font-mono">25%</span>
+                        </div>
+                        <p class="text-xs text-gray-500 leading-relaxed">
+                            Earn 25% recurring commission for 12 months. Unlock by reaching the required performance milestones.
+                        </p>
+                    </div>
+                    <button disabled class="w-full py-3 px-4 rounded-xl bg-brand-matte/80 border border-brand-glass-border text-gray-500 font-bold text-xs uppercase tracking-wider cursor-not-allowed mt-6 z-20 flex items-center justify-center gap-1.5">
+                        <i data-lucide="lock" class="w-3.5 h-3.5"></i> Locked
+                    </button>
+                </div>
+
+                <!-- Gold -->
+                <div class="bg-brand-graphite border border-brand-glass-border/50 rounded-2xl p-6 flex flex-col justify-between hover:border-gray-700 transition-all duration-300 relative group overflow-hidden">
+                    <div class="absolute inset-0 bg-brand-matte/10 backdrop-blur-[1px] pointer-events-none z-10"></div>
+                    <div class="space-y-6 z-20">
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl">🥇</span>
+                            <span class="px-2 py-0.5 text-[10px] font-bold bg-brand-matte border border-brand-glass-border text-gray-400 rounded flex items-center gap-1">
+                                <i data-lucide="lock" class="w-3 h-3"></i> Locked
+                            </span>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-300">Gold Partner</h3>
+                            <p class="text-[10px] text-gray-500 mt-0.5">Promotion Only</p>
+                        </div>
+                        <div class="bg-brand-matte/50 p-4 rounded-xl text-center border border-brand-glass-border/30">
+                            <span class="text-[10px] text-gray-500 uppercase tracking-widest block font-bold">Commission</span>
+                            <span class="text-4xl font-extrabold text-gray-400 block mt-1 font-mono">50%</span>
+                        </div>
+                        <p class="text-xs text-gray-500 leading-relaxed">
+                            Earn 50% recurring commission for 12 months. Unlock through exceptional referral performance.
+                        </p>
+                    </div>
+                    <button disabled class="w-full py-3 px-4 rounded-xl bg-brand-matte/80 border border-brand-glass-border text-gray-500 font-bold text-xs uppercase tracking-wider cursor-not-allowed mt-6 z-20 flex items-center justify-center gap-1.5">
+                        <i data-lucide="lock" class="w-3.5 h-3.5"></i> Locked
+                    </button>
+                </div>
+
+                <!-- Premium -->
+                <div class="relative bg-brand-graphite border-2 border-brand-gold shadow-gold-glow rounded-2xl p-6 flex flex-col justify-between hover:scale-[1.02] transition-all duration-300">
+                    <div class="absolute top-0 right-8 -translate-y-1/2 bg-brand-gold text-brand-matte text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                        Featured Card
+                    </div>
+                    <div class="space-y-6">
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl">💎</span>
+                            <span class="px-2 py-0.5 text-[10px] font-bold bg-brand-gold-muted border border-brand-gold-border text-brand-gold rounded">Invitation Only</span>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-extrabold text-white">Premium Partner</h3>
+                            <p class="text-[10px] text-gray-400 mt-0.5">Strategic & Enterprise Alliances</p>
+                        </div>
+                        <div class="bg-brand-matte/50 p-4 rounded-xl text-center border border-brand-glass-border/30">
+                            <span class="text-[10px] text-gray-500 uppercase tracking-widest block font-bold">Commission</span>
+                            <span class="text-4xl font-extrabold text-brand-gold block mt-1 font-mono">50%</span>
+                        </div>
+                        <p class="text-xs text-gray-300 leading-relaxed">
+                            Premium Partners receive 50% of every monthly subscription payment for as long as the referred customer remains subscribed. There is no one-year limit.
+                        </p>
+                        <div class="border-t border-brand-glass-border/30 pt-3 space-y-1.5 text-[10px] text-gray-400">
+                            <p class="font-bold text-white uppercase">Suitable for:</p>
+                            <ul class="grid grid-cols-2 gap-1 list-disc pl-4">
+                                <li>Universities</li>
+                                <li>Strategic Partners</li>
+                                <li>Enterprise Partners</li>
+                                <li>National Reps</li>
+                                <li>Industry Orgs</li>
+                                <li>Training Providers</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button class="partner-trigger w-full py-3 px-4 rounded-xl bg-brand-gold text-brand-matte hover:bg-brand-gold-hover hover:shadow-gold-glow-sm font-bold text-xs uppercase tracking-wider transition-all duration-300 mt-6">
+                        Request Information
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Timeline & Progress Widget Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <!-- Timeline (7 cols) -->
+            <div class="lg:col-span-7 bg-brand-graphite border border-brand-glass-border rounded-xl p-6 space-y-6">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2 border-b border-brand-glass-border pb-3">
+                    <i data-lucide="git-commit" class="w-5 h-5 text-brand-gold"></i>
+                    Promotion Journey
+                </h3>
+                <p class="text-xs text-gray-400">Track the milestones and transition path as a QuantisAI Partner.</p>
+
+                <div class="relative pl-6 border-l-2 border-brand-gold-border/40 space-y-8">
+                    <!-- Apply -->
+                    <div class="relative">
+                        <div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-brand-gold border-2 border-brand-graphite"></div>
+                        <h4 class="text-xs font-bold text-white uppercase">1. Apply</h4>
+                        <p class="text-[11px] text-gray-400 mt-0.5">Submit application with contact details & industry presence.</p>
+                    </div>
+                    <!-- Approved -->
+                    <div class="relative">
+                        <div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-brand-gold border-2 border-brand-graphite"></div>
+                        <h4 class="text-xs font-bold text-white uppercase">2. Approved</h4>
+                        <p class="text-[11px] text-gray-400 mt-0.5">Our operations desk authenticates credentials & sets up tracking.</p>
+                    </div>
+                    <!-- Bronze -->
+                    <div class="relative">
+                        <div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-brand-gold border-2 border-brand-graphite"></div>
+                        <h4 class="text-xs font-bold text-white uppercase">3. Bronze Partner</h4>
+                        <p class="text-[11px] text-gray-400 mt-0.5">Launch tracking link, standard 10% 1-year referral commission.</p>
+                    </div>
+                    <!-- Silver -->
+                    <div class="relative">
+                        <div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-brand-gold-border/60 border-2 border-brand-graphite"></div>
+                        <h4 class="text-xs font-bold text-white uppercase">4. Silver Partner</h4>
+                        <p class="text-[11px] text-gray-400 mt-0.5">Automatically unlock at 25 active subscribers, 25% recurring commission.</p>
+                    </div>
+                    <!-- Gold -->
+                    <div class="relative">
+                        <div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-brand-gold-border/60 border-2 border-brand-graphite"></div>
+                        <h4 class="text-xs font-bold text-white uppercase">5. Gold Partner</h4>
+                        <p class="text-[11px] text-gray-400 mt-0.5">Automatically unlock at 50 active subscribers, 50% recurring commission.</p>
+                    </div>
+                    <!-- Premium -->
+                    <div class="relative">
+                        <div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-brand-gold-border/60 border-2 border-brand-graphite"></div>
+                        <h4 class="text-xs font-bold text-white uppercase">6. Premium Partner (Invitation Only)</h4>
+                        <p class="text-[11px] text-gray-400 mt-0.5">Strategic board approval, lifetime 50% commission, un-timed payouts.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress & Comparison (5 cols) -->
+            <div class="lg:col-span-5 space-y-6">
+                <!-- Example Progress Card -->
+                <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-6 space-y-4">
+                    <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1.5">
+                        <i data-lucide="activity" class="w-4 h-4 text-brand-gold"></i>
+                        Example Progress Card
+                    </h3>
+                    <div class="bg-brand-matte/50 border border-brand-glass-border/30 rounded-xl p-4 space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs text-gray-400 font-bold uppercase">Current Tier</span>
+                            <span class="px-2 py-0.5 text-[10px] font-bold bg-brand-gold-muted border border-brand-gold-border text-brand-gold rounded">🥉 Bronze</span>
+                        </div>
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between text-xs text-gray-400 font-medium">
+                                <span>Progress to Silver</span>
+                                <span class="text-brand-gold font-bold font-mono">18 / 25 Active Subscribers</span>
+                            </div>
+                            <div class="w-full h-2 bg-brand-matte rounded-full overflow-hidden border border-brand-glass-border/40">
+                                <div class="h-full bg-brand-gold" style="width: 72%"></div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center text-[10px] text-gray-500 font-mono">
+                            <span>Next Promotion</span>
+                            <span class="text-white font-bold">Silver Partner</span>
+                        </div>
+                    </div>
+                    <p class="text-[10px] text-gray-500 font-mono text-center">Promotion thresholds shown are examples.</p>
+                </div>
+
+                <!-- Commission Comparison Table -->
+                <div class="bg-brand-graphite border border-brand-glass-border rounded-xl p-6 space-y-4">
+                    <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1.5">
+                        <i data-lucide="table" class="w-4 h-4 text-brand-gold"></i>
+                        Commission Comparison
+                    </h3>
+                    <div class="overflow-x-auto border border-brand-glass-border/30 rounded-xl bg-brand-matte/20">
+                        <table class="w-full text-left text-xs border-collapse font-mono">
+                            <thead>
+                                <tr class="bg-brand-matte/80 border-b border-brand-glass-border text-[9px] text-gray-400 font-bold uppercase">
+                                    <th class="p-2.5">Tier</th>
+                                    <th class="p-2.5 text-center">Commission</th>
+                                    <th class="p-2.5 text-right">Duration</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-brand-glass-border/20 text-gray-300">
+                                <tr>
+                                    <td class="p-2.5 font-bold text-white">Bronze</td>
+                                    <td class="p-2.5 text-center text-brand-gold font-bold">10%</td>
+                                    <td class="p-2.5 text-right">12 Months</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2.5 font-bold text-white">Silver</td>
+                                    <td class="p-2.5 text-center text-brand-gold font-bold">25%</td>
+                                    <td class="p-2.5 text-right">12 Months</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2.5 font-bold text-white">Gold</td>
+                                    <td class="p-2.5 text-center text-brand-gold font-bold">50%</td>
+                                    <td class="p-2.5 text-right">12 Months</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2.5 font-bold text-white">Premium</td>
+                                    <td class="p-2.5 text-center text-brand-gold font-bold">50%</td>
+                                    <td class="p-2.5 text-right font-sans text-[10px] leading-tight text-gray-400">As long as subscription is active</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Why Become a QuantisAI Partner? -->
+        <div class="space-y-10">
+            <div class="text-center max-w-3xl mx-auto space-y-3">
+                <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Why Become a QuantisAI Partner?</h2>
+                <p class="text-sm text-gray-400">Unlock outstanding rewards and industry-leading materials.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="bg-brand-graphite border border-brand-glass-border rounded-2xl p-6 space-y-3 hover:border-brand-gold/30 hover:-translate-y-1 transition-all duration-300">
+                    <div class="w-10 h-10 rounded-lg bg-brand-gold-muted border border-brand-gold-border text-brand-gold flex items-center justify-center">
+                        <i data-lucide="coins" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-white">Recurring Monthly Income</h3>
+                    <p class="text-xs text-gray-400 leading-relaxed">Get paid every month for referred builders and quantity surveyors who maintain active subscriptions.</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="bg-brand-graphite border border-brand-glass-border rounded-2xl p-6 space-y-3 hover:border-brand-gold/30 hover:-translate-y-1 transition-all duration-300">
+                    <div class="w-10 h-10 rounded-lg bg-brand-gold-muted border border-brand-gold-border text-brand-gold flex items-center justify-center">
+                        <i data-lucide="sparkles" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-white">Performance-Based Promotions</h3>
+                    <p class="text-xs text-gray-400 leading-relaxed">Advance automatically through our tiered partner structure to double or quintuple your baseline commissions.</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="bg-brand-graphite border border-brand-glass-border rounded-2xl p-6 space-y-3 hover:border-brand-gold/30 hover:-translate-y-1 transition-all duration-300">
+                    <div class="w-10 h-10 rounded-lg bg-brand-gold-muted border border-brand-gold-border text-brand-gold flex items-center justify-center">
+                        <i data-lucide="globe" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-white">Global Referral Opportunities</h3>
+                    <p class="text-xs text-gray-400 leading-relaxed">Refer builders, contractors, and engineering consultants worldwide—our system accommodates global currencies seamlessly.</p>
+                </div>
+                <!-- Card 4 -->
+                <div class="bg-brand-graphite border border-brand-glass-border rounded-2xl p-6 space-y-3 hover:border-brand-gold/30 hover:-translate-y-1 transition-all duration-300">
+                    <div class="w-10 h-10 rounded-lg bg-brand-gold-muted border border-brand-gold-border text-brand-gold flex items-center justify-center">
+                        <i data-lucide="megaphone" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-white">Marketing Resources</h3>
+                    <p class="text-xs text-gray-400 leading-relaxed">Gain access to pre-made display ads, professional copy templates, screenshots, and webinars to maximize conversion.</p>
+                </div>
+                <!-- Card 5 -->
+                <div class="bg-brand-graphite border border-brand-glass-border rounded-2xl p-6 space-y-3 hover:border-brand-gold/30 hover:-translate-y-1 transition-all duration-300">
+                    <div class="w-10 h-10 rounded-lg bg-brand-gold-muted border border-brand-gold-border text-brand-gold flex items-center justify-center">
+                        <i data-lucide="headset" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-white">Dedicated Partner Support</h3>
+                    <p class="text-xs text-gray-400 leading-relaxed">Receive personalized technical assistance from our Quantity Surveying desk to close high-volume enterprise deals.</p>
+                </div>
+                <!-- Card 6 -->
+                <div class="bg-brand-graphite border border-brand-glass-border rounded-2xl p-6 space-y-3 hover:border-brand-gold/30 hover:-translate-y-1 transition-all duration-300">
+                    <div class="w-10 h-10 rounded-lg bg-brand-gold-muted border border-brand-gold-border text-brand-gold flex items-center justify-center">
+                        <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-white">Future Analytics Dashboard</h3>
+                    <p class="text-xs text-gray-400 leading-relaxed">Track metrics, view active conversions, analyze click-through rates, and trigger payments inside our state-of-the-art portal.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Earnings Examples -->
+        <div class="space-y-10">
+            <div class="text-center max-w-3xl mx-auto space-y-3">
+                <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Earnings Examples</h2>
+                <p class="text-sm text-gray-400">See what is possible based on representative average subscriber levels.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <!-- Bronze -->
+                <div class="bg-brand-graphite border border-brand-glass-border rounded-2xl p-6 text-center space-y-3 hover:border-brand-gold/30 transition-all duration-300 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-lg">🥉 Bronze</span>
+                            <span class="text-brand-gold font-bold">10%</span>
+                        </div>
+                        <div class="py-4">
+                            <span class="text-gray-500 text-[10px] uppercase font-bold tracking-wider block">20 Subscribers</span>
+                            <span class="text-3xl font-black text-white block mt-1 font-mono">£398</span>
+                            <span class="text-gray-500 text-[10px] block mt-0.5">Recurring Monthly Income</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Silver -->
+                <div class="bg-brand-graphite border border-brand-glass-border rounded-2xl p-6 text-center space-y-3 hover:border-brand-gold/30 transition-all duration-300 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-lg">🥈 Silver</span>
+                            <span class="text-brand-gold font-bold">25%</span>
+                        </div>
+                        <div class="py-4">
+                            <span class="text-gray-500 text-[10px] uppercase font-bold tracking-wider block">40 Subscribers</span>
+                            <span class="text-3xl font-black text-white block mt-1 font-mono">£1,990</span>
+                            <span class="text-gray-500 text-[10px] block mt-0.5">Recurring Monthly Income</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Gold -->
+                <div class="bg-brand-graphite border border-brand-glass-border rounded-2xl p-6 text-center space-y-3 hover:border-brand-gold/30 transition-all duration-300 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-lg">🥇 Gold</span>
+                            <span class="text-brand-gold font-bold">50%</span>
+                        </div>
+                        <div class="py-4">
+                            <span class="text-gray-500 text-[10px] uppercase font-bold tracking-wider block">75 Subscribers</span>
+                            <span class="text-3xl font-black text-white block mt-1 font-mono">£7,462</span>
+                            <span class="text-gray-500 text-[10px] block mt-0.5">Recurring Monthly Income</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Premium -->
+                <div class="bg-brand-graphite border-2 border-brand-gold shadow-gold-glow rounded-2xl p-6 text-center space-y-3 hover:scale-[1.02] transition-all duration-300 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-lg">💎 Premium</span>
+                            <span class="text-brand-gold font-bold">50%</span>
+                        </div>
+                        <div class="py-4">
+                            <span class="text-gray-500 text-[10px] uppercase font-bold tracking-wider block">100 Subscribers</span>
+                            <span class="text-3xl font-black text-brand-gold block mt-1 font-mono">£9,950</span>
+                            <span class="text-gray-500 text-[10px] block mt-0.5">Lifetime Recurring Commission</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p class="text-[10px] text-gray-500 font-mono text-center">These are examples only based on average professional plan volumes.</p>
+        </div>
+
+        <!-- Future Partner Dashboard Preview -->
+        <div class="space-y-10">
+            <div class="text-center max-w-3xl mx-auto space-y-3">
+                <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Future Partner Dashboard Preview</h2>
+                <p class="text-sm text-gray-400">Take an initial visual tour of our bespoke reporting dashboard currently in design.</p>
+            </div>
+
+            <div class="relative bg-brand-graphite border border-brand-glass-border shadow-glass-shadow rounded-2xl overflow-hidden max-w-5xl mx-auto">
+                <!-- Under Construction Overlaid Translucent Badge -->
+                <div class="absolute inset-0 bg-[#0A192F]/80 backdrop-blur-sm z-30 flex flex-col items-center justify-center text-center p-6 space-y-4">
+                    <div class="px-4 py-1.5 bg-brand-gold text-brand-matte rounded-full text-xs font-bold font-mono tracking-widest uppercase flex items-center gap-1.5 animate-pulse">
+                        <i data-lucide="construction" class="w-4 h-4"></i> COMING SOON
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-bold text-white">Backend Under Construction</h4>
+                        <p class="text-xs text-gray-400 max-w-md mx-auto mt-1">This dashboard represents the future visual-only reporting workspace being wired up behind our secure API portal.</p>
+                    </div>
+                </div>
+
+                <!-- Static Mock Sidebar / Layout -->
+                <div class="flex h-[320px] opacity-25">
+                    <!-- Sidebar Mock -->
+                    <div class="w-48 bg-[#152035] border-r border-brand-glass-border/30 p-4 space-y-4 flex flex-col justify-between">
+                        <div class="space-y-3 text-[11px] font-semibold text-gray-400">
+                            <span class="text-white text-[9px] uppercase tracking-wider block font-bold">Partner Hub</span>
+                            <div class="flex items-center gap-2 text-brand-gold bg-brand-gold-muted/10 p-1.5 rounded"><i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i> Dashboard</div>
+                            <div class="flex items-center gap-2"><i data-lucide="users" class="w-3.5 h-3.5"></i> Referrals</div>
+                            <div class="flex items-center gap-2"><i data-lucide="user-check" class="w-3.5 h-3.5"></i> Subscribers</div>
+                            <div class="flex items-center gap-2"><i data-lucide="piggy-bank" class="w-3.5 h-3.5"></i> Commission</div>
+                            <div class="flex items-center gap-2"><i data-lucide="megaphone" class="w-3.5 h-3.5"></i> Marketing Resources</div>
+                            <div class="flex items-center gap-2"><i data-lucide="credit-card" class="w-3.5 h-3.5"></i> Payments</div>
+                        </div>
+                        <div class="text-[11px] text-gray-500 flex items-center gap-2"><i data-lucide="settings" class="w-3.5 h-3.5"></i> Settings</div>
+                    </div>
+
+                    <!-- Main Panel Mock -->
+                    <div class="flex-1 p-6 space-y-6 overflow-y-auto">
+                        <div class="flex justify-between items-center">
+                            <h4 class="text-sm font-bold text-white">Performance Analytics Overview</h4>
+                            <span class="text-[10px] text-brand-gold font-bold font-mono">Referral ID: Q-PARTNER-402</span>
+                        </div>
+                        <!-- Metric Cards Mock -->
+                        <div class="grid grid-cols-4 gap-4">
+                            <div class="bg-brand-matte/50 border border-brand-glass-border/30 p-3 rounded-xl">
+                                <span class="text-[9px] uppercase text-gray-500 font-bold block">Active Subscribers</span>
+                                <span class="text-xl font-bold text-white block mt-1">18</span>
+                            </div>
+                            <div class="bg-brand-matte/50 border border-brand-glass-border/30 p-3 rounded-xl">
+                                <span class="text-[9px] uppercase text-gray-500 font-bold block">Monthly Commission</span>
+                                <span class="text-xl font-bold text-brand-gold block mt-1">£358.20</span>
+                            </div>
+                            <div class="bg-brand-matte/50 border border-brand-glass-border/30 p-3 rounded-xl">
+                                <span class="text-[9px] uppercase text-gray-500 font-bold block">Lifetime Earnings</span>
+                                <span class="text-xl font-bold text-white block mt-1">£2,149.20</span>
+                            </div>
+                            <div class="bg-brand-matte/50 border border-brand-glass-border/30 p-3 rounded-xl">
+                                <span class="text-[9px] uppercase text-gray-500 font-bold block">Pending Payments</span>
+                                <span class="text-xl font-bold text-green-400 block mt-1">£358.20</span>
+                            </div>
+                        </div>
+                        <!-- Conversion Rate Mock -->
+                        <div class="bg-brand-matte/50 border border-brand-glass-border/30 p-4 rounded-xl flex justify-between items-center">
+                            <div>
+                                <span class="text-[10px] uppercase text-gray-500 block font-bold">Conversion Rate</span>
+                                <span class="text-xs text-gray-300 font-semibold block mt-0.5">3.4% (Direct Traffic conversion)</span>
+                            </div>
+                            <div class="w-48 bg-brand-matte h-1.5 rounded-full overflow-hidden">
+                                <div class="h-full bg-brand-gold" style="width: 34%"></div>
+                            </div>
+                        </div>
+                        <!-- Referral Link Generator Mock -->
+                        <div class="bg-brand-matte/50 border border-brand-glass-border/30 p-4 rounded-xl space-y-1.5">
+                            <span class="text-[10px] uppercase text-gray-500 block font-bold">Your Unique Referral Link</span>
+                            <div class="flex items-center gap-2">
+                                <input readonly type="text" value="https://quantisai.com/ref?code=PARTNER_402" class="flex-1 bg-brand-matte border border-brand-glass-border text-xs px-3 py-1.5 rounded-lg text-gray-400 focus:outline-none">
+                                <button disabled class="px-4 py-1.5 bg-brand-gold text-brand-matte text-xs font-bold rounded-lg cursor-not-allowed">Copy</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="space-y-10 max-w-4xl mx-auto">
+            <div class="text-center space-y-3">
+                <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Frequently Asked Questions</h2>
+                <p class="text-sm text-gray-400">Everything you need to know about the QuantisAI Partner Programme.</p>
+            </div>
+
+            <div class="space-y-4" id="partner-faq-accordion">
+                <!-- Q1 -->
+                <div class="border border-brand-glass-border rounded-xl bg-brand-graphite overflow-hidden">
+                    <button class="w-full px-6 py-4 flex justify-between items-center text-left hover:bg-brand-glass-hover transition-all focus:outline-none" onclick="togglePartnerFAQ(1)">
+                        <span class="text-sm font-semibold text-white">How do I become a partner?</span>
+                        <i data-lucide="chevron-down" id="faq-chevron-1" class="w-4 h-4 text-gray-400 transition-transform duration-200"></i>
+                    </button>
+                    <div id="faq-answer-1" class="hidden px-6 pb-5 text-xs text-gray-400 leading-relaxed border-t border-brand-glass-border/30 pt-4">
+                        To apply, click the "Become a Partner" button to open the Coming Soon modal. Once our full Partner Portal launches, you can complete a registration form detailing your industry presence. Our operations desk reviews applications within 24 hours to set up your partner credentials.
+                    </div>
+                </div>
+                <!-- Q2 -->
+                <div class="border border-brand-glass-border rounded-xl bg-brand-graphite overflow-hidden">
+                    <button class="w-full px-6 py-4 flex justify-between items-center text-left hover:bg-brand-glass-hover transition-all focus:outline-none" onclick="togglePartnerFAQ(2)">
+                        <span class="text-sm font-semibold text-white">How do promotions work?</span>
+                        <i data-lucide="chevron-down" id="faq-chevron-2" class="w-4 h-4 text-gray-400 transition-transform duration-200"></i>
+                    </button>
+                    <div id="faq-answer-2" class="hidden px-6 pb-5 text-xs text-gray-400 leading-relaxed border-t border-brand-glass-border/30 pt-4">
+                        Every partner starts at the Bronze level. As soon as you refer a specified threshold of active subscribers (e.g., 25 for Silver and 50 for Gold), our automated promotion engine upgrades your profile. Upgraded tiers pay higher commissions instantly for the subsequent billing periods.
+                    </div>
+                </div>
+                <!-- Q3 -->
+                <div class="border border-brand-glass-border rounded-xl bg-brand-graphite overflow-hidden">
+                    <button class="w-full px-6 py-4 flex justify-between items-center text-left hover:bg-brand-glass-hover transition-all focus:outline-none" onclick="togglePartnerFAQ(3)">
+                        <span class="text-sm font-semibold text-white">When are commissions paid?</span>
+                        <i data-lucide="chevron-down" id="faq-chevron-3" class="w-4 h-4 text-gray-400 transition-transform duration-200"></i>
+                    </button>
+                    <div id="faq-answer-3" class="hidden px-6 pb-5 text-xs text-gray-400 leading-relaxed border-t border-brand-glass-border/30 pt-4">
+                        Commissions are compiled on the last calendar day of each month and distributed within 15 days of the following month (Net-15 terms). Payments can be wire-transferred directly to your designated bank account or processed via secure payment merchants.
+                    </div>
+                </div>
+                <!-- Q4 -->
+                <div class="border border-brand-glass-border rounded-xl bg-brand-graphite overflow-hidden">
+                    <button class="w-full px-6 py-4 flex justify-between items-center text-left hover:bg-brand-glass-hover transition-all focus:outline-none" onclick="togglePartnerFAQ(4)">
+                        <span class="text-sm font-semibold text-white">How are referrals tracked?</span>
+                        <i data-lucide="chevron-down" id="faq-chevron-4" class="w-4 h-4 text-gray-400 transition-transform duration-200"></i>
+                    </button>
+                    <div id="faq-answer-4" class="hidden px-6 pb-5 text-xs text-gray-400 leading-relaxed border-t border-brand-glass-border/30 pt-4">
+                        Once authorized, you receive a unique affiliate link. When users click this link, a cookie is saved to their browser for 90 days. If they register or purchase any subscription plan within this period, their account is permanently mapped to your dashboard.
+                    </div>
+                </div>
+                <!-- Q5 -->
+                <div class="border border-brand-glass-border rounded-xl bg-brand-graphite overflow-hidden">
+                    <button class="w-full px-6 py-4 flex justify-between items-center text-left hover:bg-brand-glass-hover transition-all focus:outline-none" onclick="togglePartnerFAQ(5)">
+                        <span class="text-sm font-semibold text-white">Can I upgrade my tier?</span>
+                        <i data-lucide="chevron-down" id="faq-chevron-5" class="w-4 h-4 text-gray-400 transition-transform duration-200"></i>
+                    </button>
+                    <div id="faq-answer-5" class="hidden px-6 pb-5 text-xs text-gray-400 leading-relaxed border-t border-brand-glass-border/30 pt-4">
+                        You don't need to manually apply for upgrades! Once the Partner Portal launches, our system scans active referred subscription statistics daily. Your tier will automatically transition, and a confirmation email notification will be triggered.
+                    </div>
+                </div>
+                <!-- Q6 -->
+                <div class="border border-brand-glass-border rounded-xl bg-brand-graphite overflow-hidden">
+                    <button class="w-full px-6 py-4 flex justify-between items-center text-left hover:bg-brand-glass-hover transition-all focus:outline-none" onclick="togglePartnerFAQ(6)">
+                        <span class="text-sm font-semibold text-white">What makes Premium different?</span>
+                        <i data-lucide="chevron-down" id="faq-chevron-6" class="w-4 h-4 text-gray-400 transition-transform duration-200"></i>
+                    </button>
+                    <div id="faq-answer-6" class="hidden px-6 pb-5 text-xs text-gray-400 leading-relaxed border-t border-brand-glass-border/30 pt-4">
+                        Unlike the Bronze, Silver, and Gold tiers which have a 12-month commission limit per referral, Premium Partners earn commissions for as long as their referred customers remain subscribed. This elite tier is reserve-invited for enterprise affiliates, universities, and national representatives.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Final Call To Action -->
+        <div class="relative bg-gradient-to-r from-brand-gold to-[#A28321] rounded-2xl p-8 md:p-12 text-center max-w-5xl mx-auto space-y-6 overflow-hidden shadow-gold-glow">
+            <!-- Background Radial Glow -->
+            <div class="absolute inset-0 bg-radial-glow opacity-30 pointer-events-none"></div>
+            <div class="relative space-y-4 max-w-3xl mx-auto">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-brand-matte leading-tight">Build a Recurring Income with QuantisAI</h2>
+                <p class="text-brand-matte/80 text-sm md:text-base leading-relaxed">
+                    Join our Partner Programme and grow with the leading AI platform for quantity surveying and construction professionals.
+                </p>
+                <div class="flex flex-wrap justify-center gap-4 pt-4">
+                    <button class="partner-trigger px-8 py-3.5 rounded-xl bg-brand-matte text-white hover:bg-brand-dark font-extrabold text-sm tracking-wider uppercase transition-all duration-300">
+                        Become a Partner
+                    </button>
+                    <button class="partner-trigger px-8 py-3.5 rounded-xl bg-transparent border border-brand-matte/40 text-brand-matte hover:bg-brand-matte/10 font-extrabold text-sm tracking-wider uppercase transition-all duration-300">
+                        Partner Sign In
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Backend Preparation and Technical Mapping -->
+        <!--
+        TODO: Future Backend Integration Blueprint
+        This page has been structured and designed for direct connection with future backend microservices:
+
+        1. Authentication Services
+           - Connect with JWT or OAuth2 secure protocols.
+           - Route to '/api/v1/auth/partner/login' and '/api/v1/auth/partner/register'.
+
+        2. Partner Registration and Verification
+           - Validate registration payloads, trigger email verification loops via SendGrid/SES.
+           - Endpoint: '/api/v1/partners/profile/create'.
+
+        3. Referral Link Generation & Cookie Tracking
+           - Generate cryptographically secure tracking links.
+           - Set 90-day browser cookies using local express middleware.
+           - Route: '/api/v1/referrals/generate-link'.
+
+        4. Subscriber & Referral Database
+           - Map users to referring Partner IDs in PostgreSQL/MongoDB tables.
+           - Endpoint: '/api/v1/partners/analytics/subscribers'.
+
+        5. Automated Promotion Engine
+           - Periodic cron job scanning subscriber thresholds to execute tier changes.
+           - Trigger email triggers upon promotion events.
+
+        6. Commission Calculator and Financial Ledger
+           - Apply waste-offset modifications, compute 10%/25%/50% payouts dynamically.
+           - Stripe Billing / Connect integration for automated monthly Net-15 distributions.
+           - Support PayPal and direct Bank Transfer Payout APIs.
+
+        7. Admin Panel & Notifications
+           - Expose metrics to global QuantisAI administrators for verification.
+        -->
+    </section>
+
+    <!-- Main Landing Content Wrapper -->
+    <main id="landing-page-wrapper" class="relative z-10">
             <!-- Hero Section -->
         <section class="relative pt-12 pb-24 md:pt-20 md:pb-32 overflow-hidden">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1881,6 +2565,66 @@
 
     </main>
 
+    <!-- Dedicated Partner Coming Soon Modal -->
+    <div id="partner-modal" class="fixed inset-0 z-50 hidden bg-brand-matte/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-brand-graphite border border-brand-glass-border rounded-2xl w-full max-w-xl shadow-glass-shadow overflow-hidden flex flex-col max-h-[85vh]">
+            <!-- Modal Header -->
+            <div class="px-6 py-4 border-b border-brand-glass-border flex items-center justify-between bg-[#1e1e24]">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-brand-gold-muted border border-brand-gold-border flex items-center justify-center text-brand-gold">
+                        <i data-lucide="construction" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-white">Partner Portal Coming Soon</h3>
+                        <p class="text-[11px] text-gray-400">The QuantisAI Partner Platform is currently under construction.</p>
+                    </div>
+                </div>
+                <button onclick="closePartnerModal()" class="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-brand-glass-hover transition-all">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-6 overflow-y-auto space-y-6 text-sm text-gray-300 leading-relaxed">
+                <!-- Under Construction Badge and Illustration -->
+                <div class="flex flex-col items-center justify-center text-center space-y-3 bg-brand-matte/40 border border-brand-glass-border/60 rounded-xl p-4">
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-brand-gold/10 text-brand-gold border border-brand-gold/20 rounded-full text-[10px] font-bold font-mono">
+                        <i data-lucide="construction" class="w-3.5 h-3.5"></i> UNDER CONSTRUCTION
+                    </span>
+                    <div class="w-16 h-12 flex items-center justify-center text-brand-gold">
+                        <i data-lucide="monitor-play" class="w-12 h-12"></i>
+                    </div>
+                    <p class="text-xs text-gray-400 max-w-sm">We are building an ultra-premium, modular dashboard to track your performance, subscriptions, and commissions.</p>
+                </div>
+
+                <div class="space-y-3">
+                    <p class="text-xs font-bold text-white uppercase tracking-wider">Soon you'll be able to:</p>
+                    <ul class="grid grid-cols-2 gap-2 text-xs text-gray-400">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-gold shrink-0"></i> Register as a Partner</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-gold shrink-0"></i> Sign in securely</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-gold shrink-0"></i> Access your Dashboard</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-gold shrink-0"></i> View referrals</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-gold shrink-0"></i> Track active subscribers</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-gold shrink-0"></i> Monitor monthly commissions</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-gold shrink-0"></i> Download marketing resources</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-gold shrink-0"></i> Receive monthly payouts</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-gold shrink-0"></i> Manage your profile</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="px-6 py-4 border-t border-brand-glass-border bg-[#18181c] flex items-center justify-between text-xs">
+                <button onclick="closePartnerModal()" class="px-4 py-2 bg-transparent border border-brand-glass-border hover:bg-brand-glass-hover font-bold rounded-lg transition-all" style="color: #FFFFFF !important;">
+                    Close
+                </button>
+                <button onclick="notifyMePartner()" class="px-4 py-2 bg-brand-gold text-brand-matte hover:bg-brand-gold-hover font-bold rounded-lg transition-all flex items-center gap-1.5">
+                    <i data-lucide="bell" class="w-4 h-4"></i> Notify Me
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Dedicated Construction Law Detail Modal -->
     <div id="law-detail-modal" class="fixed inset-0 z-50 hidden bg-brand-matte/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-brand-graphite border border-brand-glass-border rounded-2xl w-full max-w-3xl shadow-glass-shadow overflow-hidden flex flex-col max-h-[85vh]">
@@ -2000,6 +2744,7 @@
                     <a href="#" class="hover:text-brand-gold transition-colors">Home</a>
                     <a href="#features" class="hover:text-brand-gold transition-colors">Features</a>
                     <a href="#pricing" class="hover:text-brand-gold transition-colors">Pricing</a>
+                    <a href="/partner" id="footer-nav-partner-btn" class="hover:text-brand-gold transition-colors">Partner</a>
                     <a href="#" class="hover:text-brand-gold transition-colors">Privacy Policy</a>
                     <a href="#" class="hover:text-brand-gold transition-colors">Terms of Service</a>
                     <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="hover:text-brand-gold transition-colors flex items-center gap-1">

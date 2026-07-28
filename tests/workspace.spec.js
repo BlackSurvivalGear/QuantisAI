@@ -354,4 +354,46 @@ test.describe('QuantisAI Workspace Integration Suite', () => {
         }
     });
 
+    test('should load Partner page, verify content, toggle modal and FAQ accordion', async ({ page }) => {
+        // Navigate to /partner
+        await page.evaluate(() => {
+            history.pushState(null, '', '/partner');
+            handleRouting();
+        });
+
+        // Verify partner section is visible
+        const partnerSection = page.locator('#partner-section');
+        await expect(partnerSection).toBeVisible();
+        await expect(partnerSection).toContainText('Become a QuantisAI Partner');
+        await expect(partnerSection).toContainText('Bronze Partner');
+        await expect(partnerSection).toContainText('Premium Partner');
+
+        // Check if there is an under construction banner
+        await expect(partnerSection).toContainText('Backend Under Construction');
+
+        // Click "Become a Partner" to open Coming Soon Modal
+        const becomePartnerBtn = page.locator('button:has-text("Become a Partner")').first();
+        await becomePartnerBtn.click();
+
+        // Verify Partner Modal is visible
+        const partnerModal = page.locator('#partner-modal');
+        await expect(partnerModal).toBeVisible();
+        await expect(partnerModal).toContainText('Partner Portal Coming Soon');
+        await expect(partnerModal).toContainText('Register as a Partner');
+
+        // Click Close on Modal
+        const closeModalBtn = partnerModal.locator('button:has-text("Close")');
+        await closeModalBtn.click();
+        await expect(partnerModal).toBeHidden();
+
+        // Verify FAQ accordion toggle
+        const faqAnswer = page.locator('#faq-answer-1');
+        await expect(faqAnswer).toBeHidden();
+
+        const faqButton = page.locator('button:has-text("How do I become a partner?")');
+        await faqButton.click();
+        await expect(faqAnswer).toBeVisible();
+        await expect(faqAnswer).toContainText('Once our full Partner Portal launches');
+    });
+
 });
