@@ -512,7 +512,7 @@ function handleRouting() {
     }
 }
 
-// Switch views between Landing and AI Workspace
+// Switch views between Landing and AI Agent
 function toggleView(showWorkspace, updateHistory = true) {
     const landingSections = document.getElementById('landing-page-wrapper');
     const workspaceSection = document.getElementById('ai-workspace-section');
