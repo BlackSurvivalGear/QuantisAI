@@ -131,11 +131,92 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Bind Partner Navigation Click Handlers
+    const partnerNavBtn = document.getElementById('nav-partner-btn');
+    const mobilePartnerNavBtn = document.getElementById('mobile-nav-partner-btn');
+    const footerPartnerNavBtn = document.getElementById('footer-nav-partner-btn');
+
+    if (partnerNavBtn) {
+        partnerNavBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            togglePartnerPage(true);
+        });
+    }
+    if (mobilePartnerNavBtn) {
+        mobilePartnerNavBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            togglePartnerPage(true);
+        });
+    }
+    if (footerPartnerNavBtn) {
+        footerPartnerNavBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            togglePartnerPage(true);
+        });
+    }
+
+    // Bind partner triggers for Coming Soon Modal
+    bindPartnerTriggers();
+
     // Client-side Routing Initial Trigger & Popstate registration
     handleRouting();
     window.addEventListener('popstate', handleRouting);
 
 });
+
+// Bind Partner Coming Soon modal click listeners
+function bindPartnerTriggers() {
+    // Dynamic binding because elements can be in both sections
+    document.addEventListener('click', (e) => {
+        if (e.target && (e.target.classList.contains('partner-trigger') || e.target.closest('.partner-trigger'))) {
+            e.preventDefault();
+            openPartnerModal();
+        }
+    });
+}
+
+// Partner Modal Toggles
+function openPartnerModal() {
+    const modal = document.getElementById('partner-modal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        initLucide();
+    }
+}
+
+function closePartnerModal() {
+    const modal = document.getElementById('partner-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+    }
+}
+
+function notifyMePartner() {
+    showToast('Subscription Active', "We'll notify you as soon as the QuantisAI Partner Portal goes live!");
+    closePartnerModal();
+}
+
+// Partner FAQ Accordion Toggles
+function togglePartnerFAQ(faqId) {
+    const answer = document.getElementById(`faq-answer-${faqId}`);
+    const chevron = document.getElementById(`faq-chevron-${faqId}`);
+
+    if (answer && chevron) {
+        const isHidden = answer.classList.contains('hidden');
+        if (isHidden) {
+            answer.classList.remove('hidden');
+            chevron.style.transform = 'rotate(180deg)';
+        } else {
+            answer.classList.add('hidden');
+            chevron.style.transform = 'rotate(0deg)';
+        }
+    }
+}
+
+window.openPartnerModal = openPartnerModal;
+window.closePartnerModal = closePartnerModal;
+window.notifyMePartner = notifyMePartner;
+window.togglePartnerFAQ = togglePartnerFAQ;
 
 /* Initialize Lucide icons helper */
 function initLucide() {
@@ -401,6 +482,8 @@ function getBasePath() {
         path = path.slice(0, -10);
     } else if (path.endsWith('/construction-law')) {
         path = path.slice(0, -17);
+    } else if (path.endsWith('/partner')) {
+        path = path.slice(0, -8);
     } else if (path.endsWith('/index.html')) {
         path = path.slice(0, -11);
     }
@@ -421,6 +504,8 @@ function handleRouting() {
     } else if (path.endsWith('/construction-law')) {
         toggleView(true, false);
         switchWorkspaceTab('construction-law', false);
+    } else if (path.endsWith('/partner')) {
+        togglePartnerPage(true, false);
     } else {
         // Default to landing page
         toggleView(false, false);
@@ -431,14 +516,21 @@ function handleRouting() {
 function toggleView(showWorkspace, updateHistory = true) {
     const landingSections = document.getElementById('landing-page-wrapper');
     const workspaceSection = document.getElementById('ai-workspace-section');
+    const partnerSection = document.getElementById('partner-section');
     const heroBtn = document.getElementById('nav-home-btn');
+    const partnerBtn = document.getElementById('nav-partner-btn');
 
     if (showWorkspace) {
         if (landingSections) landingSections.classList.add('hidden');
+        if (partnerSection) partnerSection.classList.add('hidden');
         if (workspaceSection) workspaceSection.classList.remove('hidden');
         if (heroBtn) {
             heroBtn.classList.remove('text-brand-gold', 'font-semibold');
             heroBtn.classList.add('text-gray-300');
+        }
+        if (partnerBtn) {
+            partnerBtn.classList.remove('text-brand-gold', 'font-semibold');
+            partnerBtn.classList.add('text-gray-300');
         }
         showToast('Workspace Active', 'Welcome to the sovereign AI Quantity Surveyor platform.');
         updateProjectReviewPanelStats();
@@ -451,9 +543,61 @@ function toggleView(showWorkspace, updateHistory = true) {
     } else {
         if (landingSections) landingSections.classList.remove('hidden');
         if (workspaceSection) workspaceSection.classList.add('hidden');
+        if (partnerSection) partnerSection.classList.add('hidden');
         if (heroBtn) {
             heroBtn.classList.add('text-brand-gold', 'font-semibold');
             heroBtn.classList.remove('text-gray-300');
+        }
+        if (partnerBtn) {
+            partnerBtn.classList.remove('text-brand-gold', 'font-semibold');
+            partnerBtn.classList.add('text-gray-300');
+        }
+        if (updateHistory) {
+            const basePath = getBasePath();
+            history.pushState({ view: 'landing' }, '', basePath + '/');
+        }
+    }
+}
+
+// Toggle Partner Page
+function togglePartnerPage(showPartner, updateHistory = true) {
+    const landingSections = document.getElementById('landing-page-wrapper');
+    const workspaceSection = document.getElementById('ai-workspace-section');
+    const partnerSection = document.getElementById('partner-section');
+    const heroBtn = document.getElementById('nav-home-btn');
+    const partnerBtn = document.getElementById('nav-partner-btn');
+
+    if (showPartner) {
+        if (landingSections) landingSections.classList.add('hidden');
+        if (workspaceSection) workspaceSection.classList.add('hidden');
+        if (partnerSection) partnerSection.classList.remove('hidden');
+
+        if (heroBtn) {
+            heroBtn.classList.remove('text-brand-gold', 'font-semibold');
+            heroBtn.classList.add('text-gray-300');
+        }
+        if (partnerBtn) {
+            partnerBtn.classList.add('text-brand-gold', 'font-semibold');
+            partnerBtn.classList.remove('text-gray-300');
+        }
+        showToast('Partner Portal', 'Explore the QuantisAI Partner Programme.');
+        initLucide();
+
+        if (updateHistory) {
+            const basePath = getBasePath();
+            history.pushState({ view: 'partner' }, '', basePath + '/partner');
+        }
+    } else {
+        if (landingSections) landingSections.classList.remove('hidden');
+        if (workspaceSection) workspaceSection.classList.add('hidden');
+        if (partnerSection) partnerSection.classList.add('hidden');
+        if (heroBtn) {
+            heroBtn.classList.add('text-brand-gold', 'font-semibold');
+            heroBtn.classList.remove('text-gray-300');
+        }
+        if (partnerBtn) {
+            partnerBtn.classList.remove('text-brand-gold', 'font-semibold');
+            partnerBtn.classList.add('text-gray-300');
         }
         if (updateHistory) {
             const basePath = getBasePath();
