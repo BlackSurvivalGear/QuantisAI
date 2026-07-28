@@ -17,6 +17,78 @@ function isValValid(val) {
 }
 window.isValValid = isValValid;
 
+function getResolvedMetadata() {
+    const uploadedFiles = window.uploadedFiles || [];
+    const p = window.activeProject || {};
+    const stageOutputs = (window.BQAIPipeline && window.BQAIPipeline.state) ? window.BQAIPipeline.state.stageOutputs : {};
+
+    // 1. OCR Extracted Metadata
+    // Source 1A: Regex scanned from uploaded files
+    let ocrExtracted = {};
+    if (window.BQAIPipeline && window.BQAIPipeline.AIRunner && typeof window.BQAIPipeline.AIRunner.extractMetadataFromText === 'function') {
+        ocrExtracted = window.BQAIPipeline.AIRunner.extractMetadataFromText(uploadedFiles, {});
+    }
+
+    // Source 1B: From the metadata-extraction stage output if it has run
+    const metaStageOutput = stageOutputs["metadata-extraction"]?.metadata || {};
+
+    const isPopulated = (val) => {
+        return typeof val === 'string' && val.trim() !== '' && isValValid(val);
+    };
+
+    const resolveField = (key, pKey) => {
+        // Priority 1: OCR Extracted Metadata
+        if (ocrExtracted && isPopulated(ocrExtracted[key])) {
+            return ocrExtracted[key];
+        }
+        if (metaStageOutput && isPopulated(metaStageOutput[key])) {
+            return metaStageOutput[key];
+        }
+
+        // Priority 2: User-entered Project Information (read directly from UI inputs first)
+        const uiIdMap = {
+            projectName: 'project-name',
+            clientName: 'project-client',
+            siteAddress: 'project-site',
+            quoteNumber: 'project-quote-no',
+            projectDescription: 'workspace-project-description',
+            specificationLevel: 'workspace-project-specification',
+            region: 'project-region',
+            currency: 'project-currency'
+        };
+        const uiEl = document.getElementById(uiIdMap[key]);
+        if (uiEl && isPopulated(uiEl.value)) {
+            return uiEl.value;
+        }
+
+        // Priority 3: Existing saved project values
+        if (p && isPopulated(p[pKey])) {
+            return p[pKey];
+        }
+
+        // Priority 4: Default placeholders
+        if (key === 'region') return 'London';
+        if (key === 'currency') return 'GBP';
+        if (key === 'specificationLevel') return 'Premium';
+        return "Not Extracted";
+    };
+
+    return {
+        projectName: resolveField('projectName', 'projectName'),
+        clientName: resolveField('clientName', 'clientName'),
+        siteAddress: resolveField('siteAddress', 'siteAddress'),
+        quoteNumber: resolveField('quoteNumber', 'quoteNumber'),
+        region: resolveField('region', 'region'),
+        currency: resolveField('currency', 'currency'),
+        projectDescription: resolveField('projectDescription', 'projectDescription'),
+        specificationLevel: resolveField('specificationLevel', 'specificationLevel'),
+        drawingReference: resolveField('drawingReference', 'drawingReference'),
+        revision: resolveField('revision', 'revision'),
+        drawingDate: resolveField('drawingDate', 'drawingDate')
+    };
+}
+window.getResolvedMetadata = getResolvedMetadata;
+
 function updateAIDebugConsole(fields) {
     const elMap = {
         extractedText: 'debug-extracted-text',
@@ -337,15 +409,16 @@ window.BQAIPipeline = {
                 if (!data.metadata || typeof data.metadata !== "object") {
                     data.metadata = {};
                 }
+                const resolved = getResolvedMetadata();
                 const defaults = {
-                    projectName: isValValid(p.projectName) ? p.projectName : "Not Extracted",
-                    clientName: isValValid(p.clientName) ? p.clientName : "Not Extracted",
-                    siteAddress: isValValid(p.siteAddress) ? p.siteAddress : "Not Extracted",
-                    quoteNumber: isValValid(p.quoteNumber) ? p.quoteNumber : "Not Extracted",
-                    region: p.region || "London",
-                    currency: p.currency || "GBP",
-                    projectDescription: p.projectDescription || "",
-                    specificationLevel: p.specificationLevel || "Premium"
+                    projectName: resolved.projectName,
+                    clientName: resolved.clientName,
+                    siteAddress: resolved.siteAddress,
+                    quoteNumber: resolved.quoteNumber,
+                    region: resolved.region,
+                    currency: resolved.currency,
+                    projectDescription: resolved.projectDescription,
+                    specificationLevel: resolved.specificationLevel
                 };
                 for (const [k, v] of Object.entries(defaults)) {
                     if (!(k in data.metadata) || !isValValid(data.metadata[k])) {
@@ -359,11 +432,12 @@ window.BQAIPipeline = {
                 if (!data.metadata || typeof data.metadata !== "object") {
                     data.metadata = {};
                 }
+                const resolved = getResolvedMetadata();
                 const defaults = {
-                    projectName: isValValid(p.projectName) ? p.projectName : "Not Extracted",
-                    clientName: isValValid(p.clientName) ? p.clientName : "Not Extracted",
-                    siteAddress: isValValid(p.siteAddress) ? p.siteAddress : "Not Extracted",
-                    quoteNumber: isValValid(p.quoteNumber) ? p.quoteNumber : "Not Extracted"
+                    projectName: resolved.projectName,
+                    clientName: resolved.clientName,
+                    siteAddress: resolved.siteAddress,
+                    quoteNumber: resolved.quoteNumber
                 };
                 for (const [k, v] of Object.entries(defaults)) {
                     if (!(k in data.metadata) || !isValValid(data.metadata[k])) {
@@ -379,13 +453,14 @@ window.BQAIPipeline = {
                 if (!data.project || typeof data.project !== "object") {
                     data.project = {};
                 }
+                const resolved = getResolvedMetadata();
                 const projDefaults = {
-                    projectName: isValValid(p.projectName) ? p.projectName : "Not Extracted",
-                    clientName: isValValid(p.clientName) ? p.clientName : "Not Extracted",
-                    siteAddress: isValValid(p.siteAddress) ? p.siteAddress : "Not Extracted",
-                    quoteNumber: isValValid(p.quoteNumber) ? p.quoteNumber : "Not Extracted",
-                    projectDescription: p.projectDescription || "",
-                    region: p.region || "London"
+                    projectName: resolved.projectName,
+                    clientName: resolved.clientName,
+                    siteAddress: resolved.siteAddress,
+                    quoteNumber: resolved.quoteNumber,
+                    projectDescription: resolved.projectDescription,
+                    region: resolved.region
                 };
                 for (const [k, v] of Object.entries(projDefaults)) {
                     if (!(k in data.project) || !isValValid(data.project[k])) {
@@ -926,32 +1001,24 @@ window.BQAIPipeline = {
                 }
 
                 case "update-project-state": {
-                    let metaOut = inputData["metadata-extraction"]?.metadata;
-                    if (!metaOut) {
-                        metaOut = this.extractMetadataFromText(inputData.uploadedFiles, {});
-                    }
-
+                    const resolved = getResolvedMetadata();
                     const p = window.activeProject || {};
-                    const getVal = (extVal, existingVal) => {
-                        if (isValValid(extVal)) return extVal;
-                        if (isValValid(existingVal)) return existingVal;
-                        return "Not Extracted";
-                    };
 
                     window.activeProject = {
                         id: p.id || ("project-" + Date.now() + "-" + Math.random().toString(36).substring(2, 9)),
-                        projectName: getVal(metaOut?.projectName, p.projectName),
-                        clientName: getVal(metaOut?.clientName, p.clientName),
-                        siteAddress: getVal(metaOut?.siteAddress, p.siteAddress),
-                        quoteNumber: getVal(metaOut?.quoteNumber, p.quoteNumber),
-                        region: metaOut?.region || p.region || "London",
-                        currency: metaOut?.currency || p.currency || "GBP",
-                        projectDescription: metaOut?.projectDescription || p.projectDescription || "",
-                        specificationLevel: metaOut?.specificationLevel || p.specificationLevel || "Premium",
-                        drawingReference: getVal(metaOut?.drawingReference, p.drawingReference),
-                        revision: getVal(metaOut?.revision, p.revision),
-                        drawingDate: getVal(metaOut?.drawingDate, p.drawingDate),
-                        metadataSource: "Uploaded Document"
+                        projectName: resolved.projectName,
+                        clientName: resolved.clientName,
+                        siteAddress: resolved.siteAddress,
+                        quoteNumber: resolved.quoteNumber,
+                        region: resolved.region,
+                        currency: resolved.currency,
+                        projectDescription: resolved.projectDescription,
+                        specificationLevel: resolved.specificationLevel,
+                        drawingReference: resolved.drawingReference,
+                        revision: resolved.revision,
+                        drawingDate: resolved.drawingDate,
+                        metadataSource: "Uploaded Document",
+                        financials: p.financials || {}
                     };
 
                     if (typeof syncActiveProjectToUI === 'function') {
@@ -1533,28 +1600,24 @@ window.BQAIPipeline = {
 
                 // Run side-effects of replacing project state if document-intelligence is completed
                 if (stage.id === "document-intelligence" && result.data && result.data.project) {
-                    const diProj = result.data.project;
+                    const resolved = getResolvedMetadata();
                     const p = window.activeProject || {};
-                    const getVal = (extVal, existingVal) => {
-                        if (isValValid(extVal)) return extVal;
-                        if (isValValid(existingVal)) return existingVal;
-                        return "Not Extracted";
-                    };
 
                     window.activeProject = {
                         id: p.id || ("project-" + Date.now() + "-" + Math.random().toString(36).substring(2, 9)),
-                        projectName: getVal(diProj.projectName, p.projectName),
-                        clientName: getVal(diProj.clientName, p.clientName),
-                        siteAddress: getVal(diProj.siteAddress, p.siteAddress),
-                        quoteNumber: getVal(diProj.quoteNumber, p.quoteNumber),
-                        region: diProj.region || p.region || "London",
-                        currency: diProj.currency || "GBP",
-                        projectDescription: diProj.projectDescription || p.projectDescription || "",
-                        specificationLevel: diProj.specificationLevel || p.specificationLevel || "Premium",
-                        drawingReference: getVal(diProj.drawingReference, p.drawingReference),
-                        revision: getVal(diProj.revision, p.revision),
-                        drawingDate: getVal(diProj.drawingDate, p.drawingDate),
-                        metadataSource: "Document Intelligence"
+                        projectName: resolved.projectName,
+                        clientName: resolved.clientName,
+                        siteAddress: resolved.siteAddress,
+                        quoteNumber: resolved.quoteNumber,
+                        region: resolved.region,
+                        currency: resolved.currency,
+                        projectDescription: resolved.projectDescription,
+                        specificationLevel: resolved.specificationLevel,
+                        drawingReference: resolved.drawingReference,
+                        revision: resolved.revision,
+                        drawingDate: resolved.drawingDate,
+                        metadataSource: "Document Intelligence",
+                        financials: p.financials || {}
                     };
                     if (typeof syncActiveProjectToUI === 'function') {
                         syncActiveProjectToUI();

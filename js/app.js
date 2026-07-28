@@ -555,6 +555,23 @@ window.activeProject = null;
 
 function syncActiveProjectToUI() {
     if (!window.activeProject) return;
+
+    // Resolve with precedence
+    const resolved = typeof getResolvedMetadata === 'function' ? getResolvedMetadata() : {};
+    if (resolved && Object.keys(resolved).length > 0) {
+        window.activeProject.projectName = resolved.projectName;
+        window.activeProject.clientName = resolved.clientName;
+        window.activeProject.siteAddress = resolved.siteAddress;
+        window.activeProject.quoteNumber = resolved.quoteNumber;
+        window.activeProject.region = resolved.region;
+        window.activeProject.currency = resolved.currency;
+        window.activeProject.projectDescription = resolved.projectDescription;
+        window.activeProject.specificationLevel = resolved.specificationLevel;
+        window.activeProject.drawingReference = resolved.drawingReference;
+        window.activeProject.revision = resolved.revision;
+        window.activeProject.drawingDate = resolved.drawingDate;
+    }
+
     const proj = window.activeProject;
 
     const fields = {
@@ -2273,10 +2290,11 @@ function renderCharteredQSReportFromJSON(data, type) {
     const vatText = getCanonicalOrDOM('vatCost', 'calc-vat-cost');
     const grandTotalText = getCanonicalOrDOM('grandTotal', 'calc-grand-total');
 
-    const projName = document.getElementById('project-name').value || 'Unspecified Project';
-    const clientName = document.getElementById('project-client').value || 'Unspecified Client';
-    const siteAddress = document.getElementById('project-site').value || 'Unspecified Site Address';
-    const quoteNo = document.getElementById('project-quote-no').value || 'Unspecified Quote No.';
+    const resolvedProj = typeof getResolvedMetadata === 'function' ? getResolvedMetadata() : {};
+    const projName = (resolvedProj.projectName && isValValid(resolvedProj.projectName)) ? resolvedProj.projectName : (document.getElementById('project-name').value || 'Unspecified Project');
+    const clientName = (resolvedProj.clientName && isValValid(resolvedProj.clientName)) ? resolvedProj.clientName : (document.getElementById('project-client').value || 'Unspecified Client');
+    const siteAddress = (resolvedProj.siteAddress && isValValid(resolvedProj.siteAddress)) ? resolvedProj.siteAddress : (document.getElementById('project-site').value || 'Unspecified Site Address');
+    const quoteNo = (resolvedProj.quoteNumber && isValValid(resolvedProj.quoteNumber)) ? resolvedProj.quoteNumber : (document.getElementById('project-quote-no').value || 'Unspecified Quote No.');
     const quoteDate = document.getElementById('project-date').value || 'Unspecified Date';
 
     const execSummary = data.ExecutiveSummary || "No Executive Summary provided by AI.";
@@ -3857,6 +3875,52 @@ async function runBQAIPipelineOrchestrator(startStageId = null) {
             renderBOQTable();
         }
 
+        // Validate Project Name, Client, Site Address, Project Number
+        const proj = window.activeProject || {};
+        const missing = [];
+        if (!isValValid(proj.projectName)) missing.push("Project Name");
+        if (!isValValid(proj.clientName)) missing.push("Client Name");
+        if (!isValValid(proj.siteAddress)) missing.push("Site Address");
+        if (!isValValid(proj.quoteNumber)) missing.push("Project Number");
+
+        if (missing.length > 0) {
+            const viewport = document.getElementById('output-content-wrapper');
+            if (viewport) {
+                viewport.innerHTML = `
+                    <div class="p-6 bg-yellow-500/10 border border-yellow-500/30 rounded-xl space-y-4 text-center">
+                        <div class="w-12 h-12 rounded-full bg-yellow-500/20 border border-yellow-500/40 text-yellow-400 flex items-center justify-center mx-auto">
+                            <i data-lucide="shield-alert" class="w-6 h-6"></i>
+                        </div>
+                        <div class="space-y-1.5">
+                            <h4 class="text-white font-bold text-base">Metadata Validation Warning</h4>
+                            <p class="text-xs text-gray-400 max-w-md mx-auto">The following required project metadata is missing or invalid:</p>
+                            <div class="flex flex-wrap justify-center gap-2 pt-1">
+                                ${missing.map(m => `<span class="px-2.5 py-1 text-[11px] font-mono font-bold bg-yellow-500/20 text-yellow-400 rounded-lg">${m}</span>`).join('')}
+                            </div>
+                            <p class="text-xs text-gray-400 max-w-md mx-auto pt-2">Please populate these fields in the <strong>Project Information</strong> panel or upload a document that contains these details to resolve this warning.</p>
+                        </div>
+                    </div>
+                `;
+                initLucide();
+            }
+            if (consoleDot) consoleDot.className = "w-2.5 h-2.5 rounded-full bg-yellow-400";
+            if (consoleText) {
+                consoleText.textContent = "WARNING";
+                consoleText.className = "text-[10px] font-bold uppercase tracking-wider text-yellow-400 animate-pulse";
+            }
+            if (devStatus) {
+                devStatus.textContent = "VALIDATION WARNING";
+                devStatus.className = "text-yellow-400 font-bold";
+            }
+            if (devJSONValid) {
+                devJSONValid.textContent = "✗ Validation Warning";
+                devJSONValid.className = "text-yellow-400 font-bold";
+            }
+            renderPipelineDeveloperLogs();
+            showToast('Validation Warning', 'Required metadata is missing. Report generation halted.');
+            return;
+        }
+
         // Render Report
         const projectType = detectProjectType();
         const template = internalPromptTemplates[projectType];
@@ -4276,10 +4340,11 @@ function generateCharteredQSReport(type, template) {
     const vatText = getCanonicalOrDOM('vatCost', 'calc-vat-cost');
     const grandTotalText = getCanonicalOrDOM('grandTotal', 'calc-grand-total');
 
-    const projName = document.getElementById('project-name').value || 'Unspecified Project';
-    const clientName = document.getElementById('project-client').value || 'Unspecified Client';
-    const siteAddress = document.getElementById('project-site').value || 'Unspecified Site Address';
-    const quoteNo = document.getElementById('project-quote-no').value || 'Unspecified Quote No.';
+    const resolvedProj = typeof getResolvedMetadata === 'function' ? getResolvedMetadata() : {};
+    const projName = (resolvedProj.projectName && isValValid(resolvedProj.projectName)) ? resolvedProj.projectName : (document.getElementById('project-name').value || 'Unspecified Project');
+    const clientName = (resolvedProj.clientName && isValValid(resolvedProj.clientName)) ? resolvedProj.clientName : (document.getElementById('project-client').value || 'Unspecified Client');
+    const siteAddress = (resolvedProj.siteAddress && isValValid(resolvedProj.siteAddress)) ? resolvedProj.siteAddress : (document.getElementById('project-site').value || 'Unspecified Site Address');
+    const quoteNo = (resolvedProj.quoteNumber && isValValid(resolvedProj.quoteNumber)) ? resolvedProj.quoteNumber : (document.getElementById('project-quote-no').value || 'Unspecified Quote No.');
     const quoteDate = document.getElementById('project-date').value || 'Unspecified Date';
 
     // Calculate totals breakdown for display
