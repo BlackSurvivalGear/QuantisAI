@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const path = require('path');
 
-test.describe('QuantisAI Workspace Integration Suite', () => {
+test.describe('QuantisAI Agent Integration Suite', () => {
 
     test.beforeEach(async ({ page }) => {
         // Go to the local page (assuming server is running on port 3000)
@@ -13,11 +13,11 @@ test.describe('QuantisAI Workspace Integration Suite', () => {
         await expect(page).toHaveTitle(/QuantisAI/);
 
         // Verify landing buttons
-        const startBtn = page.locator('text=Get Started in AI Workspace');
+        const startBtn = page.locator('text=Get Started in AI Agent');
         await expect(startBtn).toBeVisible();
     });
 
-    test('should transition to AI Workspace and verify elements', async ({ page }) => {
+    test('should transition to AI Agent and verify elements', async ({ page }) => {
         // Navigate to Workspace
         const workspaceBtn = page.locator('#nav-workspace-btn');
         await expect(workspaceBtn).toBeVisible();
