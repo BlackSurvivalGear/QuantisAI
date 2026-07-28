@@ -354,4 +354,40 @@ test.describe('QuantisAI Workspace Integration Suite', () => {
         }
     });
 
+    test('should display metadata validation warning when required metadata is missing', async ({ page }) => {
+        // Navigate to Workspace
+        await page.locator('#nav-workspace-btn').click();
+
+        // Clear input values
+        await page.locator('#project-name').fill('');
+        await page.locator('#project-client').fill('');
+        await page.locator('#project-site').fill('');
+        await page.locator('#project-quote-no').fill('');
+
+        // Put a simulated file that has no metadata text
+        await page.evaluate(() => {
+            uploadedFiles = [
+                { id: 'f-empty', name: 'blank_drawings.pdf', size: 1000000, formattedSize: '1 MB', type: 'drawing', pages: 1, processingStatus: 'Analysis Complete', confidenceScore: 90, classification: "Architectural Drawings", revision: "Rev A", drawingNumber: "", extractedText: "No metadata text here" }
+            ];
+            renderUploadedFilesList();
+            renderDocumentRegisterAndReadiness();
+            saveWorkspaceToLocalStorage();
+        });
+
+        // Click Generate Professional Quote
+        const generateBtn = page.locator('#generate-quote-btn');
+        await generateBtn.click();
+
+        // Wait for generation to run
+        await page.waitForTimeout(6000);
+
+        // Verify that metadata validation warning panel is visible in output content wrapper
+        const report = page.locator('#output-content-wrapper');
+        await expect(report).toContainText('Metadata Validation Warning');
+        await expect(report).toContainText('Project Name');
+        await expect(report).toContainText('Client Name');
+        await expect(report).toContainText('Site Address');
+        await expect(report).toContainText('Project Number');
+    });
+
 });
