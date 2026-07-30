@@ -107,12 +107,12 @@ test.describe('QuantisAI Agent Integration Suite', () => {
         const settingsTabBtn = page.locator('#tab-btn-ai-settings');
         await settingsTabBtn.click();
 
-        // Verify OpenAI settings card exists
-        const openaiCard = page.locator('text=OpenAI').first();
+        // Verify OpenAI settings card exists in settings grid
+        const openaiCard = page.locator('#ai-providers-grid :text("OpenAI")').first();
         await expect(openaiCard).toBeVisible();
 
         // Click "Test API Connection"
-        const testBtn = page.locator('text=Test API Connection').first();
+        const testBtn = page.locator('#ai-providers-grid button:has-text("Test API Connection")').first();
         await testBtn.click();
 
         // Wait for connection status box
@@ -134,8 +134,8 @@ test.describe('QuantisAI Agent Integration Suite', () => {
         const settingsTabBtn = page.locator('#tab-btn-ai-settings');
         await settingsTabBtn.click();
 
-        // Verify Kimi AI settings card exists
-        const kimiCard = page.locator('text=Kimi AI').first();
+        // Verify Kimi AI settings card exists in settings grid
+        const kimiCard = page.locator('#ai-providers-grid :text("Kimi AI")').first();
         await expect(kimiCard).toBeVisible();
 
         // Verify separate inputs for API Endpoint and Secret Key exist
@@ -143,7 +143,7 @@ test.describe('QuantisAI Agent Integration Suite', () => {
         await expect(endpointInput).toBeVisible();
 
         // Click Kimi's "Test API Connection"
-        const kimiTestBtn = page.locator('button[onclick="testProviderConnection(\'kimi\')"]');
+        const kimiTestBtn = page.locator('#ai-providers-grid button[onclick="testProviderConnection(\'kimi\')"]');
         await kimiTestBtn.click();
 
         // Wait for connection status box
@@ -426,6 +426,82 @@ test.describe('QuantisAI Agent Integration Suite', () => {
         await faqButton.click();
         await expect(faqAnswer).toBeVisible();
         await expect(faqAnswer).toContainText('Once our full Partner Portal launches');
+    });
+
+    test('should render AI Engine Selector on Construction Law page and support full workflow', async ({ page }) => {
+        // Navigate to Workspace
+        await page.locator('#nav-workspace-btn').click();
+
+        // Switch to Construction Law tab
+        await page.locator('#tab-btn-construction-law').click();
+
+        // 1. Verify AI Engine Selector card is visible
+        const selectorCard = page.locator('#ai-engine-selector-card');
+        await expect(selectorCard).toBeVisible();
+        await expect(selectorCard).toContainText('AI Legal Engine');
+        await expect(selectorCard).toContainText('Choose which AI will analyse this contract.');
+
+        // 2. Verify Kimi AI contains the recommendation badge and tooltip
+        const kimiSelectorCard = selectorCard.locator('#ai-selector-providers-list > div').filter({ hasText: 'Kimi AI' }).first();
+        await expect(kimiSelectorCard).toBeVisible();
+        await expect(kimiSelectorCard).toContainText('Recommended for Construction Law');
+
+        // 3. Verify Kimi AI is selected by default for legal analysis
+        await expect(kimiSelectorCard).toHaveClass(/border-blue-500/);
+
+        // 4. Test selecting another provider (e.g. OpenAI)
+        const openaiSelectorCard = selectorCard.locator('#ai-selector-providers-list > div').filter({ hasText: 'OpenAI' }).first();
+        await expect(openaiSelectorCard).toBeVisible();
+        await openaiSelectorCard.click();
+
+        // Verify OpenAI is now selected (blue outline/checkmark)
+        await expect(openaiSelectorCard).toHaveClass(/border-blue-500/);
+        await expect(kimiSelectorCard).not.toHaveClass(/border-blue-500/);
+
+        // Verify local storage is updated with the selected engine
+        const savedEngineStr = await page.evaluate(() => localStorage.getItem('quantis_ai_selected_engine_construction-law'));
+        expect(savedEngineStr).not.toBeNull();
+        const savedEngine = JSON.parse(savedEngineStr);
+        expect(savedEngine.selectedProviderId).toBe('openai');
+
+        // 5. Test collapsible Advanced Settings
+        const advButton = page.locator('text=Advanced AI Settings');
+        await expect(advButton).toBeVisible();
+
+        const advPanel = page.locator('#advanced-selector-panel');
+        await expect(advPanel).toBeHidden();
+
+        // Toggle advanced settings
+        await advButton.click();
+        await expect(advPanel).toBeVisible();
+
+        // Verify provider select matches OpenAI
+        const provSelect = page.locator('#adv-selector-provider');
+        await expect(provSelect).toHaveValue('openai');
+
+        // Choose Kimi again via Advanced Settings
+        await provSelect.selectOption('kimi');
+        await expect(kimiSelectorCard).toHaveClass(/border-blue-500/);
+
+        // 6. Test Active Engine display during Analysis loading screen
+        // In order to enable "Analyse Contract" button, we simulate a contract upload
+        await page.evaluate(() => {
+            handleContractUpload(new File(["test content"], "AI_Contract_Review_Test_Contract.docx", { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" }));
+        });
+
+        const analyseBtn = page.locator('#analyse-contract-btn');
+        await expect(analyseBtn).not.toBeDisabled();
+        await analyseBtn.click();
+
+        // Verify loading state is shown and displays the active engine
+        const loadingState = page.locator('#analysis-loading-state');
+        await expect(loadingState).toBeVisible();
+
+        const activeEngineDiv = page.locator('#analysis-active-engine');
+        await expect(activeEngineDiv).toBeVisible();
+        await expect(activeEngineDiv).toContainText('Using:');
+        await expect(activeEngineDiv).toContainText('Kimi AI');
+        await expect(activeEngineDiv).toContainText('kimi-k3');
     });
 
 });

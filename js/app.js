@@ -4864,10 +4864,16 @@ function askLawAI() {
     }
 
     // Show Loader State
+    const state = window.AIEngineSelector ? window.AIEngineSelector.state : { selectedProviderId: 'kimi', selectedModel: 'kimi-k3' };
+    const provider = window.AIEngineSelector ? window.AIEngineSelector.getSelectedProvider() : null;
+    const provName = provider ? provider.name : "Kimi AI";
+    const modelName = state.selectedModel;
+
     responseBox.innerHTML = `
         <div class="flex flex-col items-center justify-center py-12 text-center text-brand-gold space-y-3">
             <i data-lucide="scale" class="w-8 h-8 animate-spin text-brand-gold"></i>
-            <p class="font-semibold text-xs text-white">Consulting Sovereign AI Legal Engine...</p>
+            <p class="font-semibold text-xs text-white">Consulting ${provName.includes('Kimi') ? '⭐ ' : ''}${provName} Legal Engine...</p>
+            <p class="text-[10px] text-gray-400 font-mono">Engine: ${modelName}</p>
             <p class="text-[10px] text-gray-500 max-w-xs">Analyzing UK precedents, Housing Grants Act, JCT/NEC statutory guidelines...</p>
         </div>
     `;
@@ -5301,6 +5307,11 @@ function initContractReviewWorkspace() {
             handleContractUpload(fileInput.files[0]);
         }
     });
+
+    // Initialize the AI Engine Selector
+    if (window.AIEngineSelector) {
+        window.AIEngineSelector.init('construction-law');
+    }
 }
 
 // Validate and process uploaded contract file
@@ -5479,6 +5490,21 @@ function triggerContractAnalysis() {
     if (placeholderState) placeholderState.classList.add('hidden');
     if (reportState) reportState.classList.add('hidden');
     loadingState.classList.remove('hidden');
+
+    // Show active engine
+    const activeEngineDiv = document.getElementById('analysis-active-engine');
+    if (activeEngineDiv && window.AIEngineSelector) {
+        const state = window.AIEngineSelector.state;
+        const provider = window.AIEngineSelector.getSelectedProvider();
+        const provName = provider ? provider.name : "Simulated Local Core";
+        const modelName = state.selectedModel;
+        activeEngineDiv.className = "mt-3 text-xs font-semibold text-blue-400 bg-blue-500/5 border border-blue-500/20 p-3 rounded-lg flex flex-col items-start gap-0.5 w-full max-w-sm text-left";
+        activeEngineDiv.innerHTML = `
+            <span class="text-gray-500 font-normal uppercase text-[8px] tracking-wider">Using:</span>
+            <span class="font-extrabold text-white text-xs flex items-center gap-1">${provName.includes('Kimi') ? '⭐ ' : ''}${provName}</span>
+            <span class="font-mono text-[10px] text-gray-400">${modelName}</span>
+        `;
+    }
 
     // Reset progress steps UI
     const steps = [
@@ -5902,3 +5928,230 @@ function exportLawReport(format) {
         showToast("Export Successful", `The complete AI Legal report has been successfully compiled and downloaded as a .${format === 'word' ? 'docx' : format} file.`);
     }, 1500);
 }
+
+/* --- REUSABLE AI ENGINE SELECTOR COMPONENT --- */
+const AIEngineSelector = {
+    state: {
+        selectedProviderId: 'kimi',
+        selectedModel: 'kimi-k3',
+        temperature: 0.1,
+        maxTokens: 4000
+    },
+    moduleKey: 'construction-law',
+
+    init(moduleKey = 'construction-law') {
+        this.moduleKey = moduleKey;
+        this.loadSelection();
+        this.render();
+    },
+
+    loadSelection() {
+        const saved = localStorage.getItem(`quantis_ai_selected_engine_${this.moduleKey}`);
+        if (saved) {
+            try {
+                this.state = JSON.parse(saved);
+            } catch (e) {
+                console.error("Error loading selected engine state:", e);
+            }
+        } else {
+            // Apply Recommendation Matrix defaults
+            if (this.moduleKey === 'construction-law' || this.moduleKey === 'contract-review') {
+                this.state.selectedProviderId = 'kimi';
+                this.state.selectedModel = 'kimi-k3';
+            } else if (this.moduleKey === 'boq' || this.moduleKey === 'takeoff') {
+                this.state.selectedProviderId = 'openai';
+                this.state.selectedModel = 'gpt-4o-mini';
+            } else if (this.moduleKey === 'estimates' || this.moduleKey === 'specification') {
+                this.state.selectedProviderId = 'anthropic';
+                this.state.selectedModel = 'claude-3-5-sonnet';
+            } else {
+                this.state.selectedProviderId = 'kimi';
+                this.state.selectedModel = 'kimi-k3';
+            }
+            this.state.temperature = 0.1;
+            this.state.maxTokens = 4000;
+        }
+
+        // Automatic selection rule
+        const enabledProviders = aiProviders.filter(p => p.enabled);
+        if (enabledProviders.length > 0) {
+            const hasKimiEnabled = enabledProviders.some(p => p.id === 'kimi');
+            if (hasKimiEnabled) {
+                if (this.moduleKey === 'construction-law' || this.moduleKey === 'contract-review') {
+                    this.state.selectedProviderId = 'kimi';
+                    const kimiProv = enabledProviders.find(p => p.id === 'kimi');
+                    this.state.selectedModel = kimiProv.selectedModel || kimiProv.defaultModel || 'kimi-k3';
+                } else {
+                    const isPrevEnabled = enabledProviders.some(p => p.id === this.state.selectedProviderId);
+                    if (!isPrevEnabled) {
+                        this.state.selectedProviderId = enabledProviders[0].id;
+                        this.state.selectedModel = enabledProviders[0].selectedModel || enabledProviders[0].defaultModel;
+                    }
+                }
+            } else {
+                // If Kimi is unavailable, automatically choose the next enabled provider
+                const isPrevEnabled = enabledProviders.some(p => p.id === this.state.selectedProviderId);
+                if (!isPrevEnabled) {
+                    this.state.selectedProviderId = enabledProviders[0].id;
+                    this.state.selectedModel = enabledProviders[0].selectedModel || enabledProviders[0].defaultModel;
+                }
+            }
+        } else {
+            // Fallback default
+            if (!this.state.selectedProviderId) {
+                this.state.selectedProviderId = 'kimi';
+                this.state.selectedModel = 'kimi-k3';
+            }
+        }
+
+        this.saveSelection();
+    },
+
+    saveSelection() {
+        localStorage.setItem(`quantis_ai_selected_engine_${this.moduleKey}`, JSON.stringify(this.state));
+    },
+
+    getSelectedProvider() {
+        return aiProviders.find(p => p.id === this.state.selectedProviderId) || null;
+    },
+
+    render() {
+        const listContainer = document.getElementById('ai-selector-providers-list');
+        if (!listContainer) return;
+
+        const enabledProviders = aiProviders.filter(p => p.enabled);
+        const displayProviders = enabledProviders.length > 0 ? enabledProviders : aiProviders;
+
+        listContainer.innerHTML = '';
+
+        displayProviders.forEach(prov => {
+            const isSelected = prov.id === this.state.selectedProviderId;
+            const isKimi = prov.id === 'kimi';
+
+            const card = document.createElement('div');
+            card.className = `p-3 rounded-xl bg-brand-matte/40 border cursor-pointer transition-all duration-300 flex items-center justify-between ${isSelected ? 'border-blue-500 bg-blue-500/5 shadow-gold-glow-sm' : 'border-brand-glass-border hover:border-gray-500'}`;
+            card.onclick = () => this.selectProvider(prov.id);
+
+            let logoIcon = prov.logo || 'sparkles';
+
+            card.innerHTML = `
+                <div class="flex items-center gap-2.5 truncate max-w-[85%]">
+                    <div class="w-7 h-7 rounded bg-brand-matte border border-brand-glass-border flex items-center justify-center text-brand-gold shrink-0">
+                        <i data-lucide="${logoIcon}" class="w-4 h-4 text-blue-400"></i>
+                    </div>
+                    <div class="truncate">
+                        <div class="flex items-center gap-1.5 flex-wrap">
+                            <span class="font-bold text-xs text-white">${prov.id === 'kimi' ? '⭐ ' : ''}${prov.name}</span>
+                            ${isKimi ? `
+                                <span class="px-1.5 py-0.5 rounded text-[8px] font-bold bg-blue-500/15 text-blue-400 border border-blue-500/30 flex items-center gap-0.5 group relative" style="color: #60A5FA !important;">
+                                    Recommended for Construction Law
+                                    <!-- Tooltip -->
+                                    <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 hidden group-hover:block w-48 p-2 rounded text-[9px] font-normal leading-normal shadow-lg z-50 text-center" style="background-color: var(--color-bg-dark) !important; border: 1px solid var(--color-glass-border) !important; color: #FFFFFF !important;">
+                                        Excellent at legal reasoning, long documents and clause interpretation.
+                                    </span>
+                                </span>
+                            ` : ''}
+                        </div>
+                        <p class="text-[9px] text-gray-500 font-mono truncate">${prov.selectedModel || prov.defaultModel || ''}</p>
+                    </div>
+                </div>
+                <div class="w-4 h-4 rounded-full flex items-center justify-center shrink-0 ${isSelected ? 'bg-blue-500 text-white' : 'border border-gray-600'}">
+                    ${isSelected ? '<i data-lucide="check" class="w-2.5 h-2.5"></i>' : ''}
+                </div>
+            `;
+
+            listContainer.appendChild(card);
+        });
+
+        this.renderAdvancedSettings();
+        initLucide();
+    },
+
+    selectProvider(providerId) {
+        const prov = aiProviders.find(p => p.id === providerId);
+        if (!prov) return;
+
+        this.state.selectedProviderId = providerId;
+        this.state.selectedModel = prov.selectedModel || prov.defaultModel;
+        this.saveSelection();
+        this.render();
+
+        showToast("Provider Selected", `AI Legal Engine set to ${prov.name}`);
+    },
+
+    renderAdvancedSettings() {
+        const provSelect = document.getElementById('adv-selector-provider');
+        const modelSelect = document.getElementById('adv-selector-model');
+        const tempInput = document.getElementById('adv-selector-temp');
+        const tempVal = document.getElementById('adv-selector-temp-val');
+        const tokensInput = document.getElementById('adv-selector-tokens');
+
+        if (!provSelect || !modelSelect) return;
+
+        const enabledProviders = aiProviders.filter(p => p.enabled);
+        const displayProviders = enabledProviders.length > 0 ? enabledProviders : aiProviders;
+
+        provSelect.innerHTML = displayProviders.map(p => `
+            <option value="${p.id}" ${p.id === this.state.selectedProviderId ? 'selected' : ''}>${p.name}</option>
+        `).join('');
+
+        const currentProv = aiProviders.find(p => p.id === this.state.selectedProviderId);
+        if (currentProv) {
+            modelSelect.innerHTML = currentProv.models.map(m => `
+                <option value="${m}" ${m === this.state.selectedModel ? 'selected' : ''}>${m}</option>
+            `).join('');
+        }
+
+        if (tempInput) {
+            tempInput.value = this.state.temperature;
+            if (tempVal) tempVal.innerText = this.state.temperature;
+        }
+        if (tokensInput) {
+            tokensInput.value = this.state.maxTokens;
+        }
+    }
+};
+
+function toggleAdvancedSelectorSettings() {
+    const panel = document.getElementById('advanced-selector-panel');
+    const chevron = document.getElementById('advanced-selector-chevron');
+    if (panel) {
+        panel.classList.toggle('hidden');
+        if (chevron) {
+            if (panel.classList.contains('hidden')) {
+                chevron.style.transform = 'rotate(0deg)';
+            } else {
+                chevron.style.transform = 'rotate(180deg)';
+            }
+        }
+    }
+}
+
+function onAdvancedProviderChange(value) {
+    AIEngineSelector.selectProvider(value);
+}
+
+function onAdvancedModelChange(value) {
+    AIEngineSelector.state.selectedModel = value;
+    AIEngineSelector.saveSelection();
+    AIEngineSelector.render();
+}
+
+function onAdvancedTempChange(value) {
+    AIEngineSelector.state.temperature = parseFloat(value);
+    const tempVal = document.getElementById('adv-selector-temp-val');
+    if (tempVal) tempVal.innerText = value;
+    AIEngineSelector.saveSelection();
+}
+
+function onAdvancedTokensChange(value) {
+    AIEngineSelector.state.maxTokens = parseInt(value) || 4000;
+    AIEngineSelector.saveSelection();
+}
+
+window.AIEngineSelector = AIEngineSelector;
+window.toggleAdvancedSelectorSettings = toggleAdvancedSelectorSettings;
+window.onAdvancedProviderChange = onAdvancedProviderChange;
+window.onAdvancedModelChange = onAdvancedModelChange;
+window.onAdvancedTempChange = onAdvancedTempChange;
+window.onAdvancedTokensChange = onAdvancedTokensChange;
