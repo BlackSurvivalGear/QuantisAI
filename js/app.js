@@ -464,14 +464,15 @@ const ukRegionsData = {
 window.ukRegionsData = ukRegionsData;
 
 const defaultProviders = [
-    { id: 'openai', name: 'OpenAI', logo: 'brain-circuit', enabled: false, apiKey: '', defaultModel: 'gpt-4o-mini', models: ['gpt-4o', 'gpt-4o-mini', 'o1-preview', 'o1-mini'] },
-    { id: 'anthropic', name: 'Anthropic Claude', logo: 'sparkles', enabled: false, apiKey: '', defaultModel: 'claude-3-5-sonnet', models: ['claude-3-5-sonnet', 'claude-3-haiku', 'claude-3-opus'] },
-    { id: 'gemini', name: 'Google Gemini', logo: 'cpu', enabled: false, apiKey: '', defaultModel: 'gemini-1.5-flash', models: ['gemini-1.5-pro', 'gemini-1.5-flash'] },
-    { id: 'xai', name: 'xAI Grok', logo: 'terminal', enabled: false, apiKey: '', defaultModel: 'grok-beta', models: ['grok-beta', 'grok-2'] },
-    { id: 'openrouter', name: 'OpenRouter', logo: 'workflow', enabled: false, apiKey: '', defaultModel: 'meta-llama/llama-3.1-70b-instruct', models: ['meta-llama/llama-3.1-70b-instruct', 'google/gemini-pro-1.5'] },
-    { id: 'mistral', name: 'Mistral AI', logo: 'wand-2', enabled: false, apiKey: '', defaultModel: 'mistral-large-latest', models: ['mistral-large-latest', 'codestral-latest'] },
-    { id: 'deepseek', name: 'DeepSeek', logo: 'fingerprint', enabled: false, apiKey: '', defaultModel: 'deepseek-chat', models: ['deepseek-chat', 'deepseek-coder'] },
-    { id: 'ollama', name: 'Ollama (Local)', logo: 'laptop', enabled: false, apiKey: 'http://localhost:11434', defaultModel: 'llama3', models: ['llama3', 'mistral', 'codellama', 'qwen2.5'] }
+    { id: 'openai', name: 'OpenAI', logo: 'brain-circuit', enabled: false, apiKey: '', endpoint: 'https://api.openai.com/v1', defaultModel: 'gpt-4o-mini', selectedModel: 'gpt-4o-mini', models: ['gpt-4o', 'gpt-4o-mini', 'o1-preview', 'o1-mini'] },
+    { id: 'anthropic', name: 'Anthropic Claude', logo: 'sparkles', enabled: false, apiKey: '', endpoint: 'https://api.anthropic.com/v1', defaultModel: 'claude-3-5-sonnet', selectedModel: 'claude-3-5-sonnet', models: ['claude-3-5-sonnet', 'claude-3-haiku', 'claude-3-opus'] },
+    { id: 'gemini', name: 'Google Gemini', logo: 'cpu', enabled: false, apiKey: '', endpoint: 'https://generativelanguage.googleapis.com/v1beta', defaultModel: 'gemini-1.5-flash', selectedModel: 'gemini-1.5-flash', models: ['gemini-1.5-pro', 'gemini-1.5-flash'] },
+    { id: 'xai', name: 'xAI Grok', logo: 'terminal', enabled: false, apiKey: '', endpoint: 'https://api.x.ai/v1', defaultModel: 'grok-beta', selectedModel: 'grok-beta', models: ['grok-beta', 'grok-2'] },
+    { id: 'openrouter', name: 'OpenRouter', logo: 'workflow', enabled: false, apiKey: '', endpoint: 'https://openrouter.ai/api/v1', defaultModel: 'meta-llama/llama-3.1-70b-instruct', selectedModel: 'meta-llama/llama-3.1-70b-instruct', models: ['meta-llama/llama-3.1-70b-instruct', 'google/gemini-pro-1.5'] },
+    { id: 'mistral', name: 'Mistral AI', logo: 'wand-2', enabled: false, apiKey: '', endpoint: 'https://api.mistral.ai/v1', defaultModel: 'mistral-large-latest', selectedModel: 'mistral-large-latest', models: ['mistral-large-latest', 'codestral-latest'] },
+    { id: 'deepseek', name: 'DeepSeek', logo: 'fingerprint', enabled: false, apiKey: '', endpoint: 'https://api.deepseek.com', defaultModel: 'deepseek-chat', selectedModel: 'deepseek-chat', models: ['deepseek-chat', 'deepseek-coder'] },
+    { id: 'ollama', name: 'Ollama (Local)', logo: 'laptop', enabled: false, apiKey: 'http://localhost:11434', endpoint: 'http://localhost:11434', defaultModel: 'llama3', selectedModel: 'llama3', models: ['llama3', 'mistral', 'codellama', 'qwen2.5'] },
+    { id: 'kimi', name: 'Kimi AI', logo: 'moon', enabled: false, apiKey: '', endpoint: 'https://api.moonshot.ai/v1', defaultModel: 'kimi-k3', selectedModel: 'kimi-k3', models: ['kimi-k3', 'kimi-k2.7-code', 'kimi-k2.6'] }
 ];
 
 // Helper to extract the base path prefix (e.g. for GitHub Pages /repository-name/)
@@ -1210,7 +1211,14 @@ function initAIProviders() {
             aiProviders = defaultProviders.map(def => {
                 const found = data.find(item => item.id === def.id);
                 if (found) {
-                    return { ...def, enabled: found.enabled, apiKey: found.apiKey, defaultModel: found.defaultModel || def.defaultModel };
+                    return {
+                        ...def,
+                        enabled: found.enabled,
+                        apiKey: found.apiKey,
+                        endpoint: found.endpoint !== undefined ? found.endpoint : (found.apiKey && def.id === 'ollama' ? found.apiKey : def.endpoint),
+                        defaultModel: found.defaultModel || found.selectedModel || def.defaultModel,
+                        selectedModel: found.selectedModel || found.defaultModel || def.selectedModel
+                    };
                 }
                 return def;
             });
@@ -1254,10 +1262,21 @@ function renderAIProviders() {
             </div>
 
             <div class="space-y-3 pt-1">
+                ${prov.id === 'kimi' ? `
+                <div>
+                    <label class="block text-[9px] font-bold text-gray-400 uppercase tracking-wider mb-1">API Endpoint</label>
+                    <input type="text" value="${prov.endpoint || 'https://api.moonshot.ai/v1'}" onchange="updateProviderEndpoint('${prov.id}', this.value)" class="w-full bg-brand-graphite border border-brand-glass-border focus:border-brand-gold text-white rounded-lg px-2.5 py-1.5 text-xs focus:outline-none transition-colors font-mono text-left" placeholder="https://api.moonshot.ai/v1">
+                </div>
+                <div>
+                    <label class="block text-[9px] font-bold text-gray-400 uppercase tracking-wider mb-1">Secret Key</label>
+                    <input type="password" value="${prov.apiKey || ''}" onchange="updateProviderKey('${prov.id}', this.value)" class="w-full bg-brand-graphite border border-brand-glass-border focus:border-brand-gold text-white rounded-lg px-2.5 py-1.5 text-xs focus:outline-none transition-colors font-mono" placeholder="sk-...••••">
+                </div>
+                ` : `
                 <div>
                     <label class="block text-[9px] font-bold text-gray-400 uppercase tracking-wider mb-1">API Endpoint / Secret Key</label>
                     <input type="password" value="${prov.apiKey || ''}" onchange="updateProviderKey('${prov.id}', this.value)" class="w-full bg-brand-graphite border border-brand-glass-border focus:border-brand-gold text-white rounded-lg px-2.5 py-1.5 text-xs focus:outline-none transition-colors font-mono" placeholder="${prov.id === 'ollama' ? 'e.g. http://localhost:11434' : 'sk-...••••'}">
                 </div>
+                `}
                 <div>
                     <label class="block text-[9px] font-bold text-gray-400 uppercase tracking-wider mb-1">Target Model Selector</label>
                     <select onchange="updateProviderModel('${prov.id}', this.value)" class="w-full bg-brand-graphite border border-brand-glass-border focus:border-brand-gold text-white rounded-lg px-2.5 py-1.5 text-xs focus:outline-none transition-colors">
@@ -1306,8 +1325,21 @@ function updateProviderKey(id, value) {
     const prov = aiProviders.find(p => p.id === id);
     if (prov) {
         prov.apiKey = value;
+        if (id === 'ollama') {
+            prov.endpoint = value;
+        }
         saveAISettings();
         showToast('Credentials Updated', `${prov.name} security key stored locally.`);
+    }
+}
+
+// Update API endpoint field
+function updateProviderEndpoint(id, value) {
+    const prov = aiProviders.find(p => p.id === id);
+    if (prov) {
+        prov.endpoint = value;
+        saveAISettings();
+        showToast('Endpoint Updated', `${prov.name} API endpoint set to ${value}`);
     }
 }
 
@@ -1316,6 +1348,7 @@ function updateProviderModel(id, value) {
     const prov = aiProviders.find(p => p.id === id);
     if (prov) {
         prov.defaultModel = value;
+        prov.selectedModel = value;
         saveAISettings();
         showToast('Model Updated', `${prov.name} configured to use model: ${value}`);
     }
@@ -1399,6 +1432,11 @@ function testProviderConnection(id) {
             body = { model: prov.defaultModel, messages: [{ role: 'user', content: 'respond only with the word "Success".' }] };
         } else if (prov.id === 'deepseek') {
             endpoint = 'https://api.deepseek.com/chat/completions';
+            headers['Authorization'] = `Bearer ${prov.apiKey}`;
+            body = { model: prov.defaultModel, messages: [{ role: 'user', content: 'respond only with the word "Success".' }], max_tokens: 5 };
+        } else if (prov.id === 'kimi') {
+            const baseEp = prov.endpoint || 'https://api.moonshot.ai/v1';
+            endpoint = `${baseEp.replace(/\/$/, '')}/chat/completions`;
             headers['Authorization'] = `Bearer ${prov.apiKey}`;
             body = { model: prov.defaultModel, messages: [{ role: 'user', content: 'respond only with the word "Success".' }], max_tokens: 5 };
         }
@@ -2790,6 +2828,20 @@ function executeAIProviderRequest(provider, prompt) {
             };
             break;
 
+        case 'kimi':
+            const baseEp = provider.endpoint || 'https://api.moonshot.ai/v1';
+            endpoint = `${baseEp.replace(/\/$/, '')}/chat/completions`;
+            headers['Authorization'] = `Bearer ${provider.apiKey}`;
+            body = {
+                model: provider.defaultModel,
+                messages: [
+                    { role: 'system', content: 'You are an elite UK Quantity Surveyor Chartered Estimator. You must output strictly valid JSON matching the requested schema.' },
+                    { role: 'user', content: prompt }
+                ],
+                temperature: 0.1
+            };
+            break;
+
         case 'ollama':
             endpoint = `${provider.apiKey}/api/generate`;
             body = {
@@ -2843,7 +2895,7 @@ function executeAIProviderRequest(provider, prompt) {
 
         // Extract raw content depending on provider response formatting
         let rawText = '';
-        if (provider.id === 'openai' || provider.id === 'xai' || provider.id === 'openrouter' || provider.id === 'mistral' || provider.id === 'deepseek') {
+        if (provider.id === 'openai' || provider.id === 'xai' || provider.id === 'openrouter' || provider.id === 'mistral' || provider.id === 'deepseek' || provider.id === 'kimi') {
             rawText = data.choices[0].message.content;
         } else if (provider.id === 'anthropic') {
             rawText = data.content[0].text;

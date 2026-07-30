@@ -664,6 +664,18 @@ window.BQAIPipeline = {
                             { role: "user", content: mergedPrompt }
                         ]
                     };
+                } else if (providerSetting.id === "kimi") {
+                    const baseEp = providerSetting.endpoint || 'https://api.moonshot.ai/v1';
+                    endpoint = `${baseEp.replace(/\/$/, '')}/chat/completions`;
+                    headers["Authorization"] = `Bearer ${providerSetting.apiKey}`;
+                    body = {
+                        model: providerSetting.defaultModel,
+                        messages: [
+                            { role: "system", content: systemPrompt },
+                            { role: "user", content: mergedPrompt }
+                        ],
+                        temperature: 0.1
+                    };
                 } else {
                     throw new Error(`Provider ${providerSetting.id} not yet supported in direct workflow execution.`);
                 }
@@ -719,7 +731,7 @@ window.BQAIPipeline = {
 
                 let rawText = "";
 
-                if (providerSetting.id === "openai" || providerSetting.id === "xai") {
+                if (providerSetting.id === "openai" || providerSetting.id === "xai" || providerSetting.id === "kimi") {
                     rawText = jsonRes.choices[0].message.content;
                 } else if (providerSetting.id === "anthropic") {
                     rawText = jsonRes.content[0].text;

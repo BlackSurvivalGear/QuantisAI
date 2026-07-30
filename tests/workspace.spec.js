@@ -126,6 +126,38 @@ test.describe('QuantisAI Agent Integration Suite', () => {
         expect(feedbackText).toContain('Model:');
     });
 
+    test('should render and test connection for Kimi AI provider', async ({ page }) => {
+        // Navigate to Workspace
+        await page.locator('#nav-workspace-btn').click();
+
+        // Switch to AI Settings tab
+        const settingsTabBtn = page.locator('#tab-btn-ai-settings');
+        await settingsTabBtn.click();
+
+        // Verify Kimi AI settings card exists
+        const kimiCard = page.locator('text=Kimi AI').first();
+        await expect(kimiCard).toBeVisible();
+
+        // Verify separate inputs for API Endpoint and Secret Key exist
+        const endpointInput = page.locator('input[placeholder="https://api.moonshot.ai/v1"]');
+        await expect(endpointInput).toBeVisible();
+
+        // Click Kimi's "Test API Connection"
+        const kimiTestBtn = page.locator('button[onclick="testProviderConnection(\'kimi\')"]');
+        await kimiTestBtn.click();
+
+        // Wait for connection status box
+        const statusBox = page.locator('#conn-feedback-kimi');
+        await expect(statusBox).toBeVisible();
+
+        // Wait for connection completion (success simulated)
+        await page.waitForTimeout(2000);
+        const feedbackText = await statusBox.textContent();
+        expect(feedbackText).toContain('✓ Connected');
+        expect(feedbackText).toContain('Provider: Kimi AI');
+        expect(feedbackText).toContain('Model: kimi-k3');
+    });
+
     test('should run simulated quote generation progress checklists and QS report', async ({ page }) => {
         // Navigate to Workspace
         await page.locator('#nav-workspace-btn').click();
