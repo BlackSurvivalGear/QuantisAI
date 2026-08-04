@@ -463,30 +463,35 @@ const ukRegionsData = {
 };
 window.ukRegionsData = ukRegionsData;
 
-const defaultProviders = [
-    // WESTERN AI
-    { id: 'openai', name: 'OpenAI', ecosystem: 'western', logo: 'brain-circuit', enabled: false, apiKey: '', endpoint: 'https://api.openai.com/v1', defaultModel: 'gpt-4o-mini', selectedModel: 'gpt-4o-mini', models: ['gpt-4o', 'gpt-4o-mini', 'o1-preview', 'o1-mini'] },
-    { id: 'anthropic', name: 'Anthropic Claude', ecosystem: 'western', logo: 'sparkles', enabled: false, apiKey: '', endpoint: 'https://api.anthropic.com/v1', defaultModel: 'claude-3-5-sonnet', selectedModel: 'claude-3-5-sonnet', models: ['claude-3-5-sonnet', 'claude-3-haiku', 'claude-3-opus'] },
-    { id: 'gemini', name: 'Google Gemini', ecosystem: 'western', logo: 'cpu', enabled: false, apiKey: '', endpoint: 'https://generativelanguage.googleapis.com/v1beta', defaultModel: 'gemini-1.5-flash', selectedModel: 'gemini-1.5-flash', models: ['gemini-1.5-pro', 'gemini-1.5-flash'] },
-    { id: 'xai', name: 'xAI Grok', ecosystem: 'western', logo: 'terminal', enabled: false, apiKey: '', endpoint: 'https://api.x.ai/v1', defaultModel: 'grok-beta', selectedModel: 'grok-beta', models: ['grok-beta', 'grok-2'] },
-    { id: 'mistral', name: 'Mistral AI', ecosystem: 'western', logo: 'wand-2', enabled: false, apiKey: '', endpoint: 'https://api.mistral.ai/v1', defaultModel: 'mistral-large-latest', selectedModel: 'mistral-large-latest', models: ['mistral-large-latest', 'codestral-latest'] },
-    { id: 'cohere', name: 'Cohere', ecosystem: 'western', logo: 'layers', enabled: false, apiKey: '', endpoint: 'https://api.cohere.ai/v1', defaultModel: 'command-r-plus', selectedModel: 'command-r-plus', models: ['command-r-plus', 'command-r'] },
-    { id: 'perplexity', name: 'Perplexity AI', ecosystem: 'western', logo: 'search', enabled: false, apiKey: '', endpoint: 'https://api.perplexity.ai', defaultModel: 'sonar-pro', selectedModel: 'sonar-pro', models: ['sonar-pro', 'sonar'] },
-    { id: 'openrouter', name: 'OpenRouter', ecosystem: 'western', logo: 'workflow', enabled: false, apiKey: '', endpoint: 'https://openrouter.ai/api/v1', defaultModel: 'meta-llama/llama-3.1-70b-instruct', selectedModel: 'meta-llama/llama-3.1-70b-instruct', models: ['meta-llama/llama-3.1-70b-instruct', 'google/gemini-pro-1.5'] },
-    { id: 'ollama', name: 'Ollama (Local)', ecosystem: 'western', logo: 'laptop', enabled: false, apiKey: 'http://localhost:11434', endpoint: 'http://localhost:11434', defaultModel: 'llama3', selectedModel: 'llama3', models: ['llama3', 'mistral', 'codellama', 'qwen2.5'] },
-    { id: 'metallama', name: 'Meta Llama', ecosystem: 'western', logo: 'database', enabled: false, apiKey: '', endpoint: 'https://api.llama-api.com', defaultModel: 'llama3.1-70b', selectedModel: 'llama3.1-70b', models: ['llama3.1-70b', 'llama3.1-8b'] },
+const westernProviders = [
+    { id: 'openai', name: 'OpenAI', logo: 'brain-circuit', enabled: false, apiKey: '', endpoint: 'https://api.openai.com/v1', defaultModel: 'gpt-4o-mini', selectedModel: 'gpt-4o-mini', models: ['gpt-4o', 'gpt-4o-mini', 'o1-preview', 'o1-mini'] },
+    { id: 'anthropic', name: 'Anthropic Claude', logo: 'sparkles', enabled: false, apiKey: '', endpoint: 'https://api.anthropic.com/v1', defaultModel: 'claude-3-5-sonnet', selectedModel: 'claude-3-5-sonnet', models: ['claude-3-5-sonnet', 'claude-3-haiku', 'claude-3-opus'] },
+    { id: 'gemini', name: 'Google Gemini', logo: 'cpu', enabled: false, apiKey: '', endpoint: 'https://generativelanguage.googleapis.com/v1beta', defaultModel: 'gemini-1.5-flash', selectedModel: 'gemini-1.5-flash', models: ['gemini-1.5-pro', 'gemini-1.5-flash'] },
+    { id: 'xai', name: 'xAI Grok', logo: 'terminal', enabled: false, apiKey: '', endpoint: 'https://api.x.ai/v1', defaultModel: 'grok-beta', selectedModel: 'grok-beta', models: ['grok-beta', 'grok-2'] },
+    { id: 'openrouter', name: 'OpenRouter', logo: 'workflow', enabled: false, apiKey: '', endpoint: 'https://openrouter.ai/api/v1', defaultModel: 'meta-llama/llama-3.1-70b-instruct', selectedModel: 'meta-llama/llama-3.1-70b-instruct', models: ['meta-llama/llama-3.1-70b-instruct', 'google/gemini-pro-1.5'] },
+    { id: 'mistral', name: 'Mistral AI', logo: 'wand-2', enabled: false, apiKey: '', endpoint: 'https://api.mistral.ai/v1', defaultModel: 'mistral-large-latest', selectedModel: 'mistral-large-latest', models: ['mistral-large-latest', 'codestral-latest'] },
+    { id: 'ollama', name: 'Ollama (Local)', logo: 'laptop', enabled: false, apiKey: 'http://localhost:11434', endpoint: 'http://localhost:11434', defaultModel: 'llama3', selectedModel: 'llama3', models: ['llama3', 'mistral', 'codellama', 'qwen2.5'] },
+    { id: 'cohere', name: 'Cohere', logo: 'layers', enabled: false, apiKey: '', endpoint: 'https://api.cohere.ai/v1', defaultModel: 'command-r-plus', selectedModel: 'command-r-plus', models: ['command-r-plus', 'command-r'] },
+    { id: 'perplexity', name: 'Perplexity AI', logo: 'search', enabled: false, apiKey: '', endpoint: 'https://api.perplexity.ai', defaultModel: 'sonar-pro', selectedModel: 'sonar-pro', models: ['sonar-pro', 'sonar'] },
+    { id: 'metallama', name: 'Meta Llama', logo: 'database', enabled: false, apiKey: '', endpoint: 'https://api.llama-api.com', defaultModel: 'llama3.1-70b', selectedModel: 'llama3.1-70b', models: ['llama3.1-70b', 'llama3.1-8b'] }
+];
 
-    // CHINESE AI
-    { id: 'deepseek', name: 'DeepSeek AI', ecosystem: 'chinese', logo: 'fingerprint', enabled: false, apiKey: '', endpoint: 'https://api.deepseek.com', defaultModel: 'deepseek-chat', selectedModel: 'deepseek-chat', models: ['deepseek-chat', 'deepseek-coder'] },
-    { id: 'qwen', name: 'Qwen (Alibaba Cloud)', ecosystem: 'chinese', logo: 'cloud', enabled: false, apiKey: '', endpoint: 'https://dashscope.aliyuncs.com/compatible-mode/v1', defaultModel: 'qwen-max', selectedModel: 'qwen-max', models: ['qwen-max', 'qwen-plus', 'qwen-turbo'] },
-    { id: 'kimi', name: 'Kimi (Moonshot AI)', ecosystem: 'chinese', logo: 'moon', enabled: false, apiKey: '', endpoint: 'https://api.moonshot.ai/v1', defaultModel: 'kimi-k3', selectedModel: 'kimi-k3', models: ['kimi-k3', 'kimi-k2.7-code', 'kimi-k2.6'] },
-    { id: 'doubao', name: 'Doubao (ByteDance)', ecosystem: 'chinese', logo: 'music', enabled: false, apiKey: '', endpoint: 'https://ark.cn-beijing.volces.com/api/v3', defaultModel: 'doubao-pro-32k', selectedModel: 'doubao-pro-32k', models: ['doubao-pro-32k', 'doubao-lite-32k'] },
-    { id: 'glm', name: 'GLM (Zhipu AI)', ecosystem: 'chinese', logo: 'activity', enabled: false, apiKey: '', endpoint: 'https://open.bigmodel.cn/api/paas/v4', defaultModel: 'glm-4-plus', selectedModel: 'glm-4-plus', models: ['glm-4-plus', 'glm-4-flash'] },
-    { id: 'ernie', name: 'ERNIE Bot (Baidu)', ecosystem: 'chinese', logo: 'help-circle', enabled: false, apiKey: '', endpoint: 'https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop', defaultModel: 'ernie-4.0-turbo-8k', selectedModel: 'ernie-4.0-turbo-8k', models: ['ernie-4.0-turbo-8k', 'ernie-3.5-8k'] },
-    { id: 'minimax', name: 'MiniMax', ecosystem: 'chinese', logo: 'smile', enabled: false, apiKey: '', endpoint: 'https://api.minimax.chat/v1', defaultModel: 'abab6.5g', selectedModel: 'abab6.5g', models: ['abab6.5g', 'abab6.5t'] },
-    { id: 'hunyuan', name: 'Hunyuan (Tencent)', ecosystem: 'chinese', logo: 'shield', enabled: false, apiKey: '', endpoint: 'https://hunyuan.tencentcloudapi.com', defaultModel: 'hunyuan-pro', selectedModel: 'hunyuan-pro', models: ['hunyuan-pro', 'hunyuan-standard'] },
-    { id: 'yi', name: 'Yi (01.AI)', ecosystem: 'chinese', logo: 'globe-2', enabled: false, apiKey: '', endpoint: 'https://api.lingyiwanwu.com/v1', defaultModel: 'yi-large', selectedModel: 'yi-large', models: ['yi-large', 'yi-spark'] },
-    { id: 'spark', name: 'Spark (iFlytek)', ecosystem: 'chinese', logo: 'zap', enabled: false, apiKey: '', endpoint: 'https://spark-api.xfyun.cn/v3.5/chat', defaultModel: 'spark-v3.5', selectedModel: 'spark-v3.5', models: ['spark-v3.5', 'spark-v3.0'] }
+const chineseProviders = [
+    { id: 'deepseek', name: 'DeepSeek AI', logo: 'fingerprint', enabled: false, apiKey: '', endpoint: 'https://api.deepseek.com', defaultModel: 'deepseek-chat', selectedModel: 'deepseek-chat', models: ['deepseek-chat', 'deepseek-coder'] },
+    { id: 'kimi', name: 'Kimi (Moonshot AI)', logo: 'moon', enabled: false, apiKey: '', endpoint: 'https://api.moonshot.ai/v1', defaultModel: 'kimi-k3', selectedModel: 'kimi-k3', models: ['kimi-k3', 'kimi-k2.7-code', 'kimi-k2.6'] },
+    { id: 'qwen', name: 'Qwen (Alibaba Cloud)', logo: 'cloud', enabled: false, apiKey: '', endpoint: 'https://dashscope.aliyuncs.com/compatible-mode/v1', defaultModel: 'qwen-max', selectedModel: 'qwen-max', models: ['qwen-max', 'qwen-plus', 'qwen-turbo'] },
+    { id: 'doubao', name: 'Doubao (ByteDance)', logo: 'music', enabled: false, apiKey: '', endpoint: 'https://ark.cn-beijing.volces.com/api/v3', defaultModel: 'doubao-pro-32k', selectedModel: 'doubao-pro-32k', models: ['doubao-pro-32k', 'doubao-lite-32k'] },
+    { id: 'glm', name: 'GLM (Zhipu AI)', logo: 'activity', enabled: false, apiKey: '', endpoint: 'https://open.bigmodel.cn/api/paas/v4', defaultModel: 'glm-4-plus', selectedModel: 'glm-4-plus', models: ['glm-4-plus', 'glm-4-flash'] },
+    { id: 'ernie', name: 'ERNIE Bot (Baidu)', logo: 'help-circle', enabled: false, apiKey: '', endpoint: 'https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop', defaultModel: 'ernie-4.0-turbo-8k', selectedModel: 'ernie-4.0-turbo-8k', models: ['ernie-4.0-turbo-8k', 'ernie-3.5-8k'] },
+    { id: 'minimax', name: 'MiniMax', logo: 'smile', enabled: false, apiKey: '', endpoint: 'https://api.minimax.chat/v1', defaultModel: 'abab6.5g', selectedModel: 'abab6.5g', models: ['abab6.5g', 'abab6.5t'] },
+    { id: 'hunyuan', name: 'Hunyuan (Tencent)', logo: 'shield', enabled: false, apiKey: '', endpoint: 'https://hunyuan.tencentcloudapi.com', defaultModel: 'hunyuan-pro', selectedModel: 'hunyuan-pro', models: ['hunyuan-pro', 'hunyuan-standard'] },
+    { id: 'yi', name: 'Yi (01.AI)', logo: 'globe-2', enabled: false, apiKey: '', endpoint: 'https://api.lingyiwanwu.com/v1', defaultModel: 'yi-large', selectedModel: 'yi-large', models: ['yi-large', 'yi-spark'] },
+    { id: 'spark', name: 'Spark (iFlytek)', logo: 'zap', enabled: false, apiKey: '', endpoint: 'https://spark-api.xfyun.cn/v3.5/chat', defaultModel: 'spark-v3.5', selectedModel: 'spark-v3.5', models: ['spark-v3.5', 'spark-v3.0'] }
+];
+
+const defaultProviders = [
+    ...westernProviders.map(p => ({ ...p, ecosystem: 'western' })),
+    ...chineseProviders.map(p => ({ ...p, ecosystem: 'chinese' }))
 ];
 
 // Helper to extract the base path prefix (e.g. for GitHub Pages /repository-name/)
@@ -1253,7 +1258,7 @@ function saveAISettings() {
 
 let activeEcosystem = 'western';
 
-function switchEcosystem(ecosystem) {
+function setEcosystem(ecosystem) {
     activeEcosystem = ecosystem;
 
     const btnWestern = document.getElementById('ecosystem-toggle-western');
@@ -1271,6 +1276,11 @@ function switchEcosystem(ecosystem) {
 
     renderAIProviders();
 }
+window.setEcosystem = setEcosystem;
+
+function switchEcosystem(ecosystem) {
+    setEcosystem(ecosystem);
+}
 window.switchEcosystem = switchEcosystem;
 
 // Render Settings Providers dynamically
@@ -1280,10 +1290,14 @@ function renderAIProviders() {
 
     grid.innerHTML = '';
 
-    // Filter by the active ecosystem
-    const filtered = aiProviders.filter(prov => prov.ecosystem === activeEcosystem);
+    const ecosystem = activeEcosystem;
+    const providers =
+        ecosystem === "western"
+            ? westernProviders
+            : chineseProviders;
 
-    filtered.forEach(prov => {
+    providers.forEach(bp => {
+        const prov = aiProviders.find(p => p.id === bp.id) || { ...bp, ecosystem: ecosystem };
         const div = document.createElement('div');
         div.className = `p-5 rounded-2xl bg-brand-matte border transition-all duration-300 ${prov.enabled ? 'border-brand-gold shadow-gold-glow-sm' : 'border-brand-glass-border'}`;
 
