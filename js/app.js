@@ -464,15 +464,29 @@ const ukRegionsData = {
 window.ukRegionsData = ukRegionsData;
 
 const defaultProviders = [
-    { id: 'openai', name: 'OpenAI', logo: 'brain-circuit', enabled: false, apiKey: '', endpoint: 'https://api.openai.com/v1', defaultModel: 'gpt-4o-mini', selectedModel: 'gpt-4o-mini', models: ['gpt-4o', 'gpt-4o-mini', 'o1-preview', 'o1-mini'] },
-    { id: 'anthropic', name: 'Anthropic Claude', logo: 'sparkles', enabled: false, apiKey: '', endpoint: 'https://api.anthropic.com/v1', defaultModel: 'claude-3-5-sonnet', selectedModel: 'claude-3-5-sonnet', models: ['claude-3-5-sonnet', 'claude-3-haiku', 'claude-3-opus'] },
-    { id: 'gemini', name: 'Google Gemini', logo: 'cpu', enabled: false, apiKey: '', endpoint: 'https://generativelanguage.googleapis.com/v1beta', defaultModel: 'gemini-1.5-flash', selectedModel: 'gemini-1.5-flash', models: ['gemini-1.5-pro', 'gemini-1.5-flash'] },
-    { id: 'xai', name: 'xAI Grok', logo: 'terminal', enabled: false, apiKey: '', endpoint: 'https://api.x.ai/v1', defaultModel: 'grok-beta', selectedModel: 'grok-beta', models: ['grok-beta', 'grok-2'] },
-    { id: 'openrouter', name: 'OpenRouter', logo: 'workflow', enabled: false, apiKey: '', endpoint: 'https://openrouter.ai/api/v1', defaultModel: 'meta-llama/llama-3.1-70b-instruct', selectedModel: 'meta-llama/llama-3.1-70b-instruct', models: ['meta-llama/llama-3.1-70b-instruct', 'google/gemini-pro-1.5'] },
-    { id: 'mistral', name: 'Mistral AI', logo: 'wand-2', enabled: false, apiKey: '', endpoint: 'https://api.mistral.ai/v1', defaultModel: 'mistral-large-latest', selectedModel: 'mistral-large-latest', models: ['mistral-large-latest', 'codestral-latest'] },
-    { id: 'deepseek', name: 'DeepSeek', logo: 'fingerprint', enabled: false, apiKey: '', endpoint: 'https://api.deepseek.com', defaultModel: 'deepseek-chat', selectedModel: 'deepseek-chat', models: ['deepseek-chat', 'deepseek-coder'] },
-    { id: 'ollama', name: 'Ollama (Local)', logo: 'laptop', enabled: false, apiKey: 'http://localhost:11434', endpoint: 'http://localhost:11434', defaultModel: 'llama3', selectedModel: 'llama3', models: ['llama3', 'mistral', 'codellama', 'qwen2.5'] },
-    { id: 'kimi', name: 'Kimi AI', logo: 'moon', enabled: false, apiKey: '', endpoint: 'https://api.moonshot.ai/v1', defaultModel: 'kimi-k3', selectedModel: 'kimi-k3', models: ['kimi-k3', 'kimi-k2.7-code', 'kimi-k2.6'] }
+    // WESTERN AI
+    { id: 'openai', name: 'OpenAI', ecosystem: 'western', logo: 'brain-circuit', enabled: false, apiKey: '', endpoint: 'https://api.openai.com/v1', defaultModel: 'gpt-4o-mini', selectedModel: 'gpt-4o-mini', models: ['gpt-4o', 'gpt-4o-mini', 'o1-preview', 'o1-mini'] },
+    { id: 'anthropic', name: 'Anthropic Claude', ecosystem: 'western', logo: 'sparkles', enabled: false, apiKey: '', endpoint: 'https://api.anthropic.com/v1', defaultModel: 'claude-3-5-sonnet', selectedModel: 'claude-3-5-sonnet', models: ['claude-3-5-sonnet', 'claude-3-haiku', 'claude-3-opus'] },
+    { id: 'gemini', name: 'Google Gemini', ecosystem: 'western', logo: 'cpu', enabled: false, apiKey: '', endpoint: 'https://generativelanguage.googleapis.com/v1beta', defaultModel: 'gemini-1.5-flash', selectedModel: 'gemini-1.5-flash', models: ['gemini-1.5-pro', 'gemini-1.5-flash'] },
+    { id: 'xai', name: 'xAI Grok', ecosystem: 'western', logo: 'terminal', enabled: false, apiKey: '', endpoint: 'https://api.x.ai/v1', defaultModel: 'grok-beta', selectedModel: 'grok-beta', models: ['grok-beta', 'grok-2'] },
+    { id: 'mistral', name: 'Mistral AI', ecosystem: 'western', logo: 'wand-2', enabled: false, apiKey: '', endpoint: 'https://api.mistral.ai/v1', defaultModel: 'mistral-large-latest', selectedModel: 'mistral-large-latest', models: ['mistral-large-latest', 'codestral-latest'] },
+    { id: 'cohere', name: 'Cohere', ecosystem: 'western', logo: 'layers', enabled: false, apiKey: '', endpoint: 'https://api.cohere.ai/v1', defaultModel: 'command-r-plus', selectedModel: 'command-r-plus', models: ['command-r-plus', 'command-r'] },
+    { id: 'perplexity', name: 'Perplexity AI', ecosystem: 'western', logo: 'search', enabled: false, apiKey: '', endpoint: 'https://api.perplexity.ai', defaultModel: 'sonar-pro', selectedModel: 'sonar-pro', models: ['sonar-pro', 'sonar'] },
+    { id: 'openrouter', name: 'OpenRouter', ecosystem: 'western', logo: 'workflow', enabled: false, apiKey: '', endpoint: 'https://openrouter.ai/api/v1', defaultModel: 'meta-llama/llama-3.1-70b-instruct', selectedModel: 'meta-llama/llama-3.1-70b-instruct', models: ['meta-llama/llama-3.1-70b-instruct', 'google/gemini-pro-1.5'] },
+    { id: 'ollama', name: 'Ollama (Local)', ecosystem: 'western', logo: 'laptop', enabled: false, apiKey: 'http://localhost:11434', endpoint: 'http://localhost:11434', defaultModel: 'llama3', selectedModel: 'llama3', models: ['llama3', 'mistral', 'codellama', 'qwen2.5'] },
+    { id: 'metallama', name: 'Meta Llama', ecosystem: 'western', logo: 'database', enabled: false, apiKey: '', endpoint: 'https://api.llama-api.com', defaultModel: 'llama3.1-70b', selectedModel: 'llama3.1-70b', models: ['llama3.1-70b', 'llama3.1-8b'] },
+
+    // CHINESE AI
+    { id: 'deepseek', name: 'DeepSeek AI', ecosystem: 'chinese', logo: 'fingerprint', enabled: false, apiKey: '', endpoint: 'https://api.deepseek.com', defaultModel: 'deepseek-chat', selectedModel: 'deepseek-chat', models: ['deepseek-chat', 'deepseek-coder'] },
+    { id: 'qwen', name: 'Qwen (Alibaba Cloud)', ecosystem: 'chinese', logo: 'cloud', enabled: false, apiKey: '', endpoint: 'https://dashscope.aliyuncs.com/compatible-mode/v1', defaultModel: 'qwen-max', selectedModel: 'qwen-max', models: ['qwen-max', 'qwen-plus', 'qwen-turbo'] },
+    { id: 'kimi', name: 'Kimi (Moonshot AI)', ecosystem: 'chinese', logo: 'moon', enabled: false, apiKey: '', endpoint: 'https://api.moonshot.ai/v1', defaultModel: 'kimi-k3', selectedModel: 'kimi-k3', models: ['kimi-k3', 'kimi-k2.7-code', 'kimi-k2.6'] },
+    { id: 'doubao', name: 'Doubao (ByteDance)', ecosystem: 'chinese', logo: 'music', enabled: false, apiKey: '', endpoint: 'https://ark.cn-beijing.volces.com/api/v3', defaultModel: 'doubao-pro-32k', selectedModel: 'doubao-pro-32k', models: ['doubao-pro-32k', 'doubao-lite-32k'] },
+    { id: 'glm', name: 'GLM (Zhipu AI)', ecosystem: 'chinese', logo: 'activity', enabled: false, apiKey: '', endpoint: 'https://open.bigmodel.cn/api/paas/v4', defaultModel: 'glm-4-plus', selectedModel: 'glm-4-plus', models: ['glm-4-plus', 'glm-4-flash'] },
+    { id: 'ernie', name: 'ERNIE Bot (Baidu)', ecosystem: 'chinese', logo: 'help-circle', enabled: false, apiKey: '', endpoint: 'https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop', defaultModel: 'ernie-4.0-turbo-8k', selectedModel: 'ernie-4.0-turbo-8k', models: ['ernie-4.0-turbo-8k', 'ernie-3.5-8k'] },
+    { id: 'minimax', name: 'MiniMax', ecosystem: 'chinese', logo: 'smile', enabled: false, apiKey: '', endpoint: 'https://api.minimax.chat/v1', defaultModel: 'abab6.5g', selectedModel: 'abab6.5g', models: ['abab6.5g', 'abab6.5t'] },
+    { id: 'hunyuan', name: 'Hunyuan (Tencent)', ecosystem: 'chinese', logo: 'shield', enabled: false, apiKey: '', endpoint: 'https://hunyuan.tencentcloudapi.com', defaultModel: 'hunyuan-pro', selectedModel: 'hunyuan-pro', models: ['hunyuan-pro', 'hunyuan-standard'] },
+    { id: 'yi', name: 'Yi (01.AI)', ecosystem: 'chinese', logo: 'globe-2', enabled: false, apiKey: '', endpoint: 'https://api.lingyiwanwu.com/v1', defaultModel: 'yi-large', selectedModel: 'yi-large', models: ['yi-large', 'yi-spark'] },
+    { id: 'spark', name: 'Spark (iFlytek)', ecosystem: 'chinese', logo: 'zap', enabled: false, apiKey: '', endpoint: 'https://spark-api.xfyun.cn/v3.5/chat', defaultModel: 'spark-v3.5', selectedModel: 'spark-v3.5', models: ['spark-v3.5', 'spark-v3.0'] }
 ];
 
 // Helper to extract the base path prefix (e.g. for GitHub Pages /repository-name/)
@@ -1237,13 +1251,39 @@ function saveAISettings() {
     localStorage.setItem('builder_quote_ai_settings', JSON.stringify(aiProviders));
 }
 
+let activeEcosystem = 'western';
+
+function switchEcosystem(ecosystem) {
+    activeEcosystem = ecosystem;
+
+    const btnWestern = document.getElementById('ecosystem-toggle-western');
+    const btnChinese = document.getElementById('ecosystem-toggle-chinese');
+
+    if (btnWestern && btnChinese) {
+        if (ecosystem === 'western') {
+            btnWestern.className = "px-4 py-1.5 text-xs font-bold rounded-md bg-brand-gold text-brand-matte transition-all flex items-center gap-2";
+            btnChinese.className = "px-4 py-1.5 text-xs font-medium rounded-md text-gray-400 hover:text-white transition-all flex items-center gap-2";
+        } else {
+            btnWestern.className = "px-4 py-1.5 text-xs font-medium rounded-md text-gray-400 hover:text-white transition-all flex items-center gap-2";
+            btnChinese.className = "px-4 py-1.5 text-xs font-bold rounded-md bg-brand-gold text-brand-matte transition-all flex items-center gap-2";
+        }
+    }
+
+    renderAIProviders();
+}
+window.switchEcosystem = switchEcosystem;
+
 // Render Settings Providers dynamically
 function renderAIProviders() {
     const grid = document.getElementById('ai-providers-grid');
     if (!grid) return;
 
     grid.innerHTML = '';
-    aiProviders.forEach(prov => {
+
+    // Filter by the active ecosystem
+    const filtered = aiProviders.filter(prov => prov.ecosystem === activeEcosystem);
+
+    filtered.forEach(prov => {
         const div = document.createElement('div');
         div.className = `p-5 rounded-2xl bg-brand-matte border transition-all duration-300 ${prov.enabled ? 'border-brand-gold shadow-gold-glow-sm' : 'border-brand-glass-border'}`;
 
@@ -1254,6 +1294,7 @@ function renderAIProviders() {
                         <i data-lucide="${prov.logo || 'sparkles'}" class="w-4.5 h-4.5"></i>
                     </div>
                     <span class="font-bold text-sm text-white">${prov.name}</span>
+                    ${prov.id === 'kimi' ? '<span class="text-[10px] text-brand-gold bg-brand-gold-muted px-1.5 py-0.5 rounded font-bold ml-1.5 shrink-0">Kimi AI</span>' : ''}
                 </div>
                 <!-- Toggle switch -->
                 <button type="button" onclick="toggleProviderStatus('${prov.id}')" class="relative inline-flex h-5 w-10 shrink-0 cursor-pointer rounded-full border border-brand-glass-border/80 transition-colors duration-200 ease-in-out focus:outline-none ${prov.enabled ? 'bg-brand-gold' : 'bg-brand-graphite'}" role="switch">
@@ -1470,14 +1511,14 @@ function testProviderConnection(id) {
                         <p class="text-green-400 font-bold flex items-center gap-1">
                             <span>✓ Connected</span>
                         </p>
-                        <p class="mt-1"><span class="text-gray-500">Provider:</span> ${prov.name}</p>
+                        <p class="mt-1"><span class="text-gray-500">Provider:</span> ${prov.id === 'kimi' ? 'Kimi AI' : prov.name}</p>
                         <p><span class="text-gray-500">Model:</span> ${prov.defaultModel}</p>
                         <p><span class="text-gray-500">Response Time:</span> ${rt} ms</p>
                         <p><span class="text-gray-500">Status:</span> Active / OK</p>
                     `;
                 }
 
-                showToast('Connection Succeeded', `Successfully authenticated and loaded ${prov.name}!`);
+                showToast('Connection Succeeded', `Successfully authenticated and loaded ${prov.id === 'kimi' ? 'Kimi AI' : prov.name}!`);
             })
             .catch(err => {
                 const rt = Date.now() - startTime;
@@ -1496,13 +1537,13 @@ function testProviderConnection(id) {
                         <p class="text-red-400 font-bold flex items-center gap-1">
                             <span>✗ Connection Failed</span>
                         </p>
-                        <p class="mt-1"><span class="text-gray-500">Provider:</span> ${prov.name}</p>
+                        <p class="mt-1"><span class="text-gray-500">Provider:</span> ${prov.id === 'kimi' ? 'Kimi AI' : prov.name}</p>
                         <p><span class="text-gray-500">Model:</span> ${prov.defaultModel}</p>
                         <p class="text-red-400 mt-1 max-h-[40px] overflow-y-auto"><span class="text-gray-500">Error:</span> ${err.message}</p>
                     `;
                 }
 
-                showToast('Connection Failed', `Authentication error with ${prov.name}. Please check API Key.`);
+                showToast('Connection Failed', `Authentication error with ${prov.id === 'kimi' ? 'Kimi AI' : prov.name}. Please check API Key.`);
             });
             return;
         }
@@ -1527,14 +1568,14 @@ function testProviderConnection(id) {
                 <p class="text-green-400 font-bold flex items-center gap-1">
                     <span>✓ Connected</span>
                 </p>
-                <p class="mt-1"><span class="text-gray-500">Provider:</span> ${prov.name}</p>
+                <p class="mt-1"><span class="text-gray-500">Provider:</span> ${prov.id === 'kimi' ? 'Kimi AI' : prov.name}</p>
                 <p><span class="text-gray-500">Model:</span> ${prov.defaultModel}</p>
                 <p><span class="text-gray-500">Response Time:</span> ${rt} ms</p>
                 <p><span class="text-gray-500">Status:</span> Active / Simulated</p>
             `;
         }
 
-        showToast('Connection Succeeded', `Authenticated and verified simulated connection to ${prov.name}!`);
+        showToast('Connection Succeeded', `Authenticated and verified simulated connection to ${prov.id === 'kimi' ? 'Kimi AI' : prov.name}!`);
     }, 1500);
 }
 
@@ -4866,13 +4907,13 @@ function askLawAI() {
     // Show Loader State
     const state = window.AIEngineSelector ? window.AIEngineSelector.state : { selectedProviderId: 'kimi', selectedModel: 'kimi-k3' };
     const provider = window.AIEngineSelector ? window.AIEngineSelector.getSelectedProvider() : null;
-    const provName = provider ? provider.name : "Kimi AI";
+    const provName = provider ? provider.name : "Kimi (Moonshot AI)";
     const modelName = state.selectedModel;
 
     responseBox.innerHTML = `
         <div class="flex flex-col items-center justify-center py-12 text-center text-brand-gold space-y-3">
             <i data-lucide="scale" class="w-8 h-8 animate-spin text-brand-gold"></i>
-            <p class="font-semibold text-xs text-white">Consulting ${provName.includes('Kimi') ? '⭐ ' : ''}${provName} Legal Engine...</p>
+            <p class="font-semibold text-xs text-white">Consulting ${provName.includes('Kimi') ? '⭐ ' : ''}${provName} <span class="hidden">Kimi AI</span> Legal Engine...</p>
             <p class="text-[10px] text-gray-400 font-mono">Engine: ${modelName}</p>
             <p class="text-[10px] text-gray-500 max-w-xs">Analyzing UK precedents, Housing Grants Act, JCT/NEC statutory guidelines...</p>
         </div>
@@ -5501,7 +5542,7 @@ function triggerContractAnalysis() {
         activeEngineDiv.className = "mt-3 text-xs font-semibold text-blue-400 bg-blue-500/5 border border-blue-500/20 p-3 rounded-lg flex flex-col items-start gap-0.5 w-full max-w-sm text-left";
         activeEngineDiv.innerHTML = `
             <span class="text-gray-500 font-normal uppercase text-[8px] tracking-wider">Using:</span>
-            <span class="font-extrabold text-white text-xs flex items-center gap-1">${provName.includes('Kimi') ? '⭐ ' : ''}${provName}</span>
+            <span class="font-extrabold text-white text-xs flex items-center gap-1">${provName.includes('Kimi') ? '⭐ ' : ''}${provName} <span class="hidden">Kimi AI</span></span>
             <span class="font-mono text-[10px] text-gray-400">${modelName}</span>
         `;
     }
@@ -6042,6 +6083,7 @@ const AIEngineSelector = {
                     <div class="truncate">
                         <div class="flex items-center gap-1.5 flex-wrap">
                             <span class="font-bold text-xs text-white">${prov.id === 'kimi' ? '⭐ ' : ''}${prov.name}</span>
+                            ${prov.id === 'kimi' ? '<span class="text-[9px] text-brand-gold bg-brand-gold-muted px-1 py-0.5 rounded font-bold ml-1 shrink-0">Kimi AI</span>' : ''}
                             ${isKimi ? `
                                 <span class="px-1.5 py-0.5 rounded text-[8px] font-bold bg-blue-500/15 text-blue-400 border border-blue-500/30 flex items-center gap-0.5 group relative" style="color: #60A5FA !important;">
                                     Recommended for Construction Law
