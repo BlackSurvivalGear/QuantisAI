@@ -1641,6 +1641,23 @@
                         </div>
                     </div>
 
+                    <!-- AI Ecosystem Toggle -->
+                    <div class="flex items-center justify-between mb-6 flex-wrap gap-4">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">AI Ecosystem:</span>
+                            <div class="bg-brand-graphite border border-brand-glass-border rounded-lg p-1 flex items-center gap-1">
+                                <button type="button" id="ecosystem-toggle-western" onclick="switchEcosystem('western')" class="px-4 py-1.5 text-xs font-bold rounded-md bg-brand-gold text-brand-matte transition-all flex items-center gap-2">
+                                    <i data-lucide="globe" class="w-3.5 h-3.5"></i>
+                                    Western AI
+                                </button>
+                                <button type="button" id="ecosystem-toggle-chinese" onclick="switchEcosystem('chinese')" class="px-4 py-1.5 text-xs font-medium rounded-md text-gray-400 hover:text-white transition-all flex items-center gap-2">
+                                    <i data-lucide="compass" class="w-3.5 h-3.5"></i>
+                                    Chinese AI
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Provider List Grid -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="ai-providers-grid">
                         <!-- Dynamic JS will inject the 9 providers: OpenAI, Claude, Gemini, Grok, OpenRouter, Mistral, DeepSeek, Ollama, Kimi AI -->

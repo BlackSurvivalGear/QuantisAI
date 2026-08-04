@@ -134,6 +134,9 @@ test.describe('QuantisAI Agent Integration Suite', () => {
         const settingsTabBtn = page.locator('#tab-btn-ai-settings');
         await settingsTabBtn.click();
 
+        // Switch to Chinese AI Ecosystem
+        await page.locator('#ecosystem-toggle-chinese').click();
+
         // Verify Kimi AI settings card exists in settings grid
         const kimiCard = page.locator('#ai-providers-grid :text("Kimi AI")').first();
         await expect(kimiCard).toBeVisible();
