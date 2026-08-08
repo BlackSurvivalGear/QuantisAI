@@ -13,7 +13,7 @@
   const currentProvider = (provider) => provider || (typeof global.getBQAIEngineProvider === 'function' ? global.getBQAIEngineProvider() : null);
 
   function fail(stage, reason, extra = {}, provider = null) {
-    return { success: true, stage, data: engine.insufficient(stage, reason, extra), tokens: 0, model: provider?.defaultModel || '' };
+    return { success: false, stage, data: engine.insufficient(stage, reason, extra), tokens: 0, model: provider?.defaultModel || '' };
   }
 
   const originalExecute = pipeline.AIRunner.execute.bind(pipeline.AIRunner);
