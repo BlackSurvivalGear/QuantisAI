@@ -3,3 +3,4 @@ document.write('<script src="js/pipeline-core.js"><\/script>');
 document.write('<script src="js/boq-engine.js"><\/script>');
 document.write('<script src="js/boq-a103-recovery.js"><\/script>');
 document.write('<script src="js/boq-hardening.js"><\/script>');
+document.write('<script src="js/boq-state-integrity.js"><\/script>');
