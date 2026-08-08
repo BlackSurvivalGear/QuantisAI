@@ -16,22 +16,96 @@
     return { success: false, stage, data: engine.insufficient(stage, reason, extra), tokens: 0, model: provider?.defaultModel || '' };
   }
 
+  function deterministicDrawingRecovery(inputData) {
+    const files = Array.isArray(inputData?.uploadedFiles) ? inputData.uploadedFiles : [];
+    for (const file of files) {
+      if (!file?.extractedText) continue;
+      const fallbackSource = {
+        drawing: file.drawingNumber || file.drawingReference || null,
+        revision: file.revision || null,
+        page: 1
+      };
+      const parsed = engine.fromExtractedText(file.extractedText, fallbackSource);
+      if (parsed?.rooms?.length || parsed?.walls?.length || parsed?.measurements?.length) {
+        parsed.source = parsed.source || fallbackSource;
+        parsed.recovery = {
+          method: 'OCR_TEXT_DETERMINISTIC_PARSE',
+          note: 'Drawing dimensions were explicitly present in extracted source text. Arithmetic was performed by DeterministicBOQEngine; no AI quantity was accepted as final arithmetic.'
+        };
+        return parsed;
+      }
+    }
+    return null;
+  }
+
   const originalExecute = pipeline.AIRunner.execute.bind(pipeline.AIRunner);
 
   pipeline.AIRunner.execute = async function (stageId, promptFile, inputData, providerSetting) {
     const provider = currentProvider(providerSetting);
 
     if (EVIDENCE_STAGES.has(stageId) && !liveProvider(provider)) {
-      return fail(stageId, 'A live AI provider is required for drawing interpretation; deterministic arithmetic cannot create geometry absent from the source data.', {}, provider);
+      if (stageId === 'drawing-interpreter') {
+        const recovered = deterministicDrawingRecovery(inputData);
+        if (recovered) {
+          const takeoff = engine.fromDrawingInterpretation(recovered);
+          recovered.numberOfRooms = recovered.rooms.length || null;
+          recovered.numberOfDoors = recovered.openings?.filter(o => o.type === 'door').length || null;
+          recovered.numberOfWindows = recovered.openings?.filter(o => o.type === 'window').length || null;
+          recovered.externalWallLength = recovered.walls.filter(w => w.external).reduce((sum, w) => sum + (Number(w.length) || 0), 0) || null;
+          recovered.internalWallLength = recovered.walls.filter(w => !w.external).reduce((sum, w) => sum + (Number(w.length) || 0), 0) || null;
+          recovered.gia = takeoff.measurements.filter(m => m.section === 'Floor Areas').reduce((sum, m) => sum + m.quantity, 0) || null;
+          recovered.confidence = takeoff.overallConfidence;
+          recovered.deterministicTakeoff = takeoff;
+          recovered.measurementState = 'DETECTED';
+          return { success: true, stage: stageId, data: recovered, tokens: 0, model: 'Deterministic OCR Parser' };
+        }
+      }
+      return fail(stageId, 'A live AI provider is required for drawing interpretation when explicit deterministic source measurements are unavailable; quantities may not be fabricated.', {}, provider);
     }
 
-    const result = await originalExecute(stageId, promptFile, inputData, providerSetting);
+    let result;
+    try {
+      result = await originalExecute(stageId, promptFile, inputData, providerSetting);
+    } catch (err) {
+      if (stageId === 'drawing-interpreter') {
+        const recovered = deterministicDrawingRecovery(inputData);
+        if (recovered) {
+          const takeoff = engine.fromDrawingInterpretation(recovered);
+          recovered.numberOfRooms = recovered.rooms.length || null;
+          recovered.numberOfDoors = recovered.openings?.filter(o => o.type === 'door').length || null;
+          recovered.numberOfWindows = recovered.openings?.filter(o => o.type === 'window').length || null;
+          recovered.externalWallLength = recovered.walls.filter(w => w.external).reduce((sum, w) => sum + (Number(w.length) || 0), 0) || null;
+          recovered.internalWallLength = recovered.walls.filter(w => !w.external).reduce((sum, w) => sum + (Number(w.length) || 0), 0) || null;
+          recovered.gia = takeoff.measurements.filter(m => m.section === 'Floor Areas').reduce((sum, m) => sum + m.quantity, 0) || null;
+          recovered.confidence = takeoff.overallConfidence;
+          recovered.deterministicTakeoff = takeoff;
+          recovered.measurementState = 'DETECTED';
+          return { success: true, stage: stageId, data: recovered, tokens: 0, model: 'Deterministic OCR Parser' };
+        }
+      }
+      throw err;
+    }
+
     if (!result || !result.success || !result.data) return result;
 
     if (stageId === 'drawing-interpreter') {
       const takeoff = engine.fromDrawingInterpretation(result.data);
       if (!takeoff.measurements.length) {
-        return fail(stageId, 'Drawing interpretation did not return explicit measurable dimensions. No quantities may be fabricated.', {
+        const recovered = deterministicDrawingRecovery(inputData);
+        if (recovered) {
+          const recoveredTakeoff = engine.fromDrawingInterpretation(recovered);
+          recovered.numberOfRooms = recovered.rooms.length || null;
+          recovered.numberOfDoors = recovered.openings?.filter(o => o.type === 'door').length || null;
+          recovered.numberOfWindows = recovered.openings?.filter(o => o.type === 'window').length || null;
+          recovered.externalWallLength = recovered.walls.filter(w => w.external).reduce((sum, w) => sum + (Number(w.length) || 0), 0) || null;
+          recovered.internalWallLength = recovered.walls.filter(w => !w.external).reduce((sum, w) => sum + (Number(w.length) || 0), 0) || null;
+          recovered.gia = recoveredTakeoff.measurements.filter(m => m.section === 'Floor Areas').reduce((sum, m) => sum + m.quantity, 0) || null;
+          recovered.confidence = recoveredTakeoff.overallConfidence;
+          recovered.deterministicTakeoff = recoveredTakeoff;
+          recovered.measurementState = 'DETECTED';
+          return { ...result, data: recovered, model: 'Deterministic OCR Parser' };
+        }
+        return fail(stageId, 'Drawing interpretation did not return explicit measurable dimensions and no deterministic dimensions could be recovered from the source text. No quantities may be fabricated.', {
           rooms: Array.isArray(result.data.rooms) ? result.data.rooms : [],
           structuralElements: Array.isArray(result.data.structuralElements) ? result.data.structuralElements : [],
           mechanicalSystems: Array.isArray(result.data.mechanicalSystems) ? result.data.mechanicalSystems : [],
@@ -117,5 +191,5 @@
     };
   }
 
-  global.QuantisAIBOQHardening = Object.freeze({ version: '1.0.0', evidenceStages: Array.from(EVIDENCE_STAGES) });
+  global.QuantisAIBOQHardening = Object.freeze({ version: '1.1.0', evidenceStages: Array.from(EVIDENCE_STAGES) });
 })(typeof window !== 'undefined' ? window : globalThis);
