@@ -186,18 +186,53 @@
     };
   }
 
+  function parseRevision(text, fallback) {
+    const match = text.match(/(?:drawing\s+)?revision\s*[:\-]?\s*([A-Z0-9-]+)/i) || text.match(/\brev\.?\s*[:\-]?\s*([A-Z0-9-]+)/i);
+    return match ? match[1].trim() : fallback || null;
+  }
+
+  function parseDrawingNumber(text, fallback) {
+    const match = text.match(/(?:drawing\s*(?:number|no\.?|reference)?|sheet)\s*[:\-]?\s*([A-Z]{1,3}-?\d{2,4})/i) || text.match(/\b(A-?\d{3})\b/i);
+    return match ? match[1].trim().replace(/^A(?=\d)/i, 'A-') : fallback || null;
+  }
+
+  function parseControlData(text) {
+    const controls = {};
+    const patterns = {
+      overallFootprint: /overall\s+footprint\s*[:\-]?\s*(\d+(?:\.\d+)?)\s*[×x]\s*(\d+(?:\.\d+)?)\s*m/i,
+      externalWallLength: /external\s+wall\s+length\s*[:\-]?\s*(\d+(?:\.\d+)?)\s*m/i,
+      grossExternalWallArea: /gross\s+external\s+wall\s+area\s*[:\-]?\s*(\d+(?:\.\d+)?)\s*m/i,
+      openingDeduction: /(?:total\s+)?opening\s+deduction\s*[:\-]?\s*(\d+(?:\.\d+)?)\s*m/i,
+      netExternalWallArea: /net\s+external\s+wall\s+area\s*[:\-]?\s*(\d+(?:\.\d+)?)\s*m/i,
+      floorArea: /floor\s+area\s*[:\-]?\s*(\d+(?:\.\d+)?)\s*m/i,
+      rooms: /\brooms\s*[:\-]?\s*(\d+)/i,
+      doors: /\bdoors\s*[:\-]?\s*(\d+)/i,
+      windows: /\bwindows\s*[:\-]?\s*(\d+)/i
+    };
+    Object.entries(patterns).forEach(([key, pattern]) => {
+      const match = text.match(pattern);
+      if (!match) return;
+      if (key === 'overallFootprint') controls[key] = { length: Number(match[1]), width: Number(match[2]) };
+      else controls[key] = Number(match[1]);
+    });
+    return controls;
+  }
+
+  function compareControl(label, actual, expected, tolerance = 0.01) {
+    if (expected === undefined || expected === null || actual === null || actual === undefined) return null;
+    const pass = Math.abs(Number(actual) - Number(expected)) <= tolerance;
+    return { label, actual: Number(actual), expected: Number(expected), pass, difference: round(Number(actual) - Number(expected), 3) };
+  }
+
   function fromExtractedText(text, fallbackSource = {}) {
     if (typeof text !== 'string' || !text.trim()) return null;
 
-    const drawingMatch = text.match(/Drawing\s*:\s*([A-Z0-9-]+)/i);
-    const revisionMatch = text.match(/Revision\s*:\s*([A-Z0-9-]+)/i);
-    const page = 1;
-    const drawing = drawingMatch ? drawingMatch[1].trim() : fallbackSource.drawing || null;
-    const revision = revisionMatch ? revisionMatch[1].trim() : fallbackSource.revision || null;
-    const source = { drawing, revision, page };
-
-    const overallMatch = text.match(/(\d+(?:\.\d+)?)\s*m\s*[×x]\s*(\d+(?:\.\d+)?)\s*m\s+OVERALL/i);
-    const wallHeightMatch = text.match(/WALL\s+HEIGHT\s*:\s*(\d+(?:\.\d+)?)\s*m/i);
+    const drawing = parseDrawingNumber(text, fallbackSource.drawing || null);
+    const revision = parseRevision(text, fallbackSource.revision || null);
+    const source = { drawing, revision, page: 1 };
+    const controls = parseControlData(text);
+    const overallMatch = text.match(/(\d+(?:\.\d+)?)\s*m?\s*[×x]\s*(\d+(?:\.\d+)?)\s*m?\s+OVERALL/i);
+    const wallHeightMatch = text.match(/WALL\s+HEIGHT\s*[:\-]?\s*(\d+(?:\.\d+)?)\s*m/i);
     if (!overallMatch || !wallHeightMatch) return null;
 
     const length = Number(overallMatch[1]);
@@ -205,32 +240,55 @@
     const wallHeight = Number(wallHeightMatch[1]);
     if (!(length > 0 && width > 0 && wallHeight > 0)) return null;
 
+    const page2Index = text.search(/(?:^|\n)\s*(?:Page\s*2\b|A-?201\s+ROOF\s*\/\s*SECTION|ROOF\s*\/\s*SECTION\s*\/\s*CONSTRUCTION)/i);
+    const page1Text = page2Index >= 0 ? text.slice(0, page2Index) : text;
+    const page2Text = page2Index >= 0 ? text.slice(page2Index) : '';
+
     const openings = [];
-    const openingRegex = /\b(D\d+|W\d+)\b\s+[^\n\r]*?(\d+(?:\.\d+)?)\s*[×x]\s*(\d+(?:\.\d+)?)\s*m²?/gi;
-    let match;
-    while ((match = openingRegex.exec(text)) !== null) {
+    const openingLines = page1Text.split(/\r?\n/);
+    const openingRegex = /^\s*(D\d+|W\d+)\b[^\n\r]*?(\d+(?:\.\d+)?)\s*[×x]\s*(\d+(?:\.\d+)?)/i;
+    openingLines.forEach(line => {
+      const match = line.match(openingRegex);
+      if (!match) return;
       const id = match[1].toUpperCase();
       const openingWidth = Number(match[2]);
       const openingHeight = Number(match[3]);
-      if (openingWidth > 0 && openingHeight > 0) {
-        openings.push({
-          id,
-          type: id.startsWith('D') ? 'door' : 'window',
-          width: openingWidth,
-          height: openingHeight,
-          source
-        });
-      }
-    }
+      if (!(openingWidth > 0 && openingHeight > 0)) return;
+      openings.push({ id, type: id.startsWith('D') ? 'door' : 'window', width: openingWidth, height: openingHeight, source: { ...source, page: 1 } });
+    });
 
-    const roomNames = ['LIVING / DINING', 'KITCHEN', 'BEDROOM 1', 'BEDROOM 2'];
+    const roomDefinitions = [
+      ['LIVING / DINING', /LIVING\s*\/\s*DINING/],
+      ['KITCHEN', /KITCHEN/],
+      ['MASTER BED', /MASTER\s+BED(?:ROOM)?/],
+      ['ENSUITE', /ENSUITE/],
+      ['BEDROOM 2', /BEDROOM\s*2/],
+      ['BEDROOM 3', /BEDROOM\s*3/],
+      ['STUDY', /STUDY/],
+      ['UTILITY', /UTILITY/]
+    ];
     const rooms = [];
-    roomNames.forEach(name => {
-      const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      const roomMatch = text.match(new RegExp(`${escaped}\\s+(\\d+(?:\\.\\d+)?)\\s*m?\\s*[×x]\\s*(\\d+(?:\\.\\d+)?)\\s*m`, 'i'));
-      if (roomMatch) {
-        rooms.push({ name, length: Number(roomMatch[1]), width: Number(roomMatch[2]), source, evidenceConfidence: 1 });
-      }
+    roomDefinitions.forEach(([name, labelPattern]) => {
+      const match = page1Text.match(new RegExp(labelPattern.source + '\\s+(\\d+(?:\\.\\d+)?)\\s*m?\\s*[×x]\\s*(\\d+(?:\\.\\d+)?)\\s*m?', 'i'));
+      if (!match) return;
+      rooms.push({ name, length: Number(match[1]), width: Number(match[2]), source: { ...source, page: 1 }, evidenceConfidence: 1 });
+    });
+
+    const structuralElements = [];
+    const structuralRegex = /^\s*(S\d+)\b([^\n\r]*?)(\d+(?:\.\d+)?)\s*m\b/gi;
+    page2Text.split(/\r?\n/).forEach(line => {
+      const match = line.match(structuralRegex);
+      if (!match) return;
+      structuralElements.push({ id: match[1].toUpperCase(), description: match[2].trim(), length: Number(match[3]), unit: 'm', source: { ...source, page: 2 }, evidenceConfidence: 1 });
+    });
+
+    const constructionInfo = {};
+    const knownConstructionKeys = new Set(['External wall', 'Floor', 'Roof', 'Insulation', 'Ceiling', 'Internal partitions', 'Finishes']);
+    page2Text.split(/\r?\n/).forEach(line => {
+      const match = line.match(/^\s*([^:]{2,35}):\s*(.+)$/);
+      if (!match) return;
+      const key = match[1].trim();
+      if (knownConstructionKeys.has(key)) constructionInfo[key] = match[2].trim();
     });
 
     const perimeter = 2 * (length + width);
@@ -239,18 +297,43 @@
       status: 'success',
       confidence: 1,
       source,
+      pagesProcessed: page2Index >= 0 ? 2 : 1,
       rooms,
-      walls: [{ external: true, length: perimeter, height: wallHeight, openings, source, evidenceConfidence: 1 }],
       openings,
-      structuralElements: [],
+      walls: [{ external: true, length: perimeter, height: wallHeight, openings, source: { ...source, page: 1 }, evidenceConfidence: 1 }],
+      structuralElements,
+      constructionInfo,
       mechanicalSystems: [],
       electricalSystems: [],
       measurements: [
-        { type: 'area', description: 'Overall floor area', length, width, unit: 'm²', section: 'Floor Areas', source, evidenceConfidence: 1 },
-        { type: 'linear', description: 'External wall perimeter', length: perimeter, unit: 'm', section: 'External Walls', source, evidenceConfidence: 1 }
-      ]
+        { type: 'area', description: 'Overall floor area', length, width, unit: 'm²', section: 'Floor Areas', source: { ...source, page: 1 }, evidenceConfidence: 1 },
+        { type: 'linear', description: 'External wall perimeter', length: perimeter, unit: 'm', section: 'External Walls', source: { ...source, page: 1 }, evidenceConfidence: 1 }
+      ],
+      controlData: controls
     };
 
+    const roomArea = rooms.reduce((sum, room) => sum + rectangleArea(room.length, room.width), 0);
+    const wallGross = rectangleArea(perimeter, wallHeight);
+    const wallNet = wallNetArea(perimeter, wallHeight, openings);
+    const openingDeduction = wallGross === null || wallNet === null ? null : round(wallGross - wallNet, 3);
+    data.controlValidation = {
+      footprint: controls.overallFootprint ? {
+        length: compareControl('Overall length', length, controls.overallFootprint.length),
+        width: compareControl('Overall width', width, controls.overallFootprint.width)
+      } : null,
+      roomCount: compareControl('Rooms', rooms.length, controls.rooms, 0),
+      doorCount: compareControl('Doors', openings.filter(o => o.type === 'door').length, controls.doors, 0),
+      windowCount: compareControl('Windows', openings.filter(o => o.type === 'window').length, controls.windows, 0),
+      floorArea: compareControl('Floor area', roomArea, controls.floorArea),
+      externalWallLength: compareControl('External wall length', perimeter, controls.externalWallLength),
+      grossExternalWallArea: compareControl('Gross external wall area', wallGross, controls.grossExternalWallArea),
+      openingDeduction: compareControl('Opening deduction', openingDeduction, controls.openingDeduction),
+      netExternalWallArea: compareControl('Net external wall area', wallNet, controls.netExternalWallArea)
+    };
+    data.recovery = {
+      method: 'OCR_TEXT_DETERMINISTIC_PARSE',
+      note: 'All recovered quantities are calculated from explicit source dimensions. QS control values are used only for validation, never as replacement quantities.'
+    };
     return data;
   }
 
